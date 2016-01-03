@@ -1196,7 +1196,7 @@
 			<key>Idle Code</key>
 			<integer>0</integer>
 			<key>Initial Text</key>
-			<string>tmux attach -t init || tmux new -s init</string>
+			<string>tmux attach -t init; tmux new -s init</string>
 			<key>Jobs to Ignore</key>
 			<array>
 				<string>rlogin</string>
