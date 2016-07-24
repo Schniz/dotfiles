@@ -1,10 +1,57 @@
-#!/usr/bin/env fish
+set --universal fish_user_paths $fish_user_paths ./node_modules/.bin
 
-export NVM_DIR=~/.nvm
-#source (brew --prefix nvm)/nvm.sh
+function dock
+	if count argv > /dev/null
+		set WHERE $argv[1]
+	else
+		set WHERE "default"
+	end
+  eval (docker-machine env $WHERE)
+end
 
-export PATH="$PATH:$HOME/.rvm/bin:$HOME/Code/vert.x-3.1.0/bin:./node_modules/.bin" # Add RVM to PATH for scripting
-#alias vim='/usr/local/Cellar/vim/7.4.488/bin/vim'
-alias vim=nvim
-# Base16 Shell
-eval sh ~/.config/base16-shell/base16-eighties.dark.sh
+function vim
+  nvim $argv
+end
+
+function home_dns
+  networksetup -setdnsservers Wi-Fi 8.8.8.8 8.8.4.4
+end
+
+function reset_dns
+  networksetup -setdnsservers Wi-Fi empty
+end
+
+function mkcd
+  mkdir $argv
+  cd $argv
+end
+
+function preview
+  qlmanage -p $argv ^ /dev/null > /dev/null
+end
+
+function swarm
+	env DOCKER_HOST=(swarm_host) docker $argv
+end
+
+function swarm_host
+	echo (echo $DOCKER_HOST | cut -s -d":" -f1,2):3376
+end
+
+function npmdeps_imported
+  grep -or "from '\([^.]\+'\)" $argv | cut -d ':' -f 2 | uniq | sed "s .*'\([^']*\)' \1 g" | uniq
+end
+
+function npmdeps
+  node -e "
+    var p = require('./package.json');
+    var devdeps = Object.keys(p.devDependencies);
+    var alldeps = Object.keys(p.dependencies);
+    var deps = alldeps.concat(devdeps).join('\n');
+    console.log(deps);
+  " | uniq
+end
+
+function dokku
+	ssh -t dokku@dokku.hagever.com -- $argv
+end
