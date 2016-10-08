@@ -1,13 +1,14 @@
 syntax on
+set relativenumber
 set backspace=indent,eol,start
 set tabstop=2
 set shiftwidth=2
 set smartindent
 set autoindent
-set expandtab
 set foldmethod=syntax
 set foldlevelstart=99
 set hlsearch
+set expandtab
 set incsearch
 set hidden
 set splitright
@@ -18,6 +19,9 @@ set autoread
 set go-=r
 let mapleader=","
 set shell=bash
+set complete+=kspell
+set foldmethod=syntax
+
 
 " hebrew {{{
 map ק e
@@ -51,6 +55,22 @@ map <leader>p "+p
 map <leader>P "+P
 map <leader>y "+y
 map Y y$
+map <leader>= gg=G``
+map <leader>/ gcc
+map <leader>. :lopen<CR><CR>
+map <leader>WW :w<CR>:e!<CR>
+map <leader>] :lnext<CR>
+map <leader>[ :lprev<CR>
+nnoremap <CR> :noh<CR>
+map <leader>t :w\|vs term://rspec\ %<CR>i
+
+" RAILS
+map <leader><leader>rel :RExtractLet<CR>
+noremap <leader>jed "jyiwGoexport default <C-R>j;<Esc>
+noremap <leader>bo :BufOnly<CR>
+
+" tern
+map <leader>gd :TernDefPreview<CR>
 
 " buffers {{{
 map gn :bn<CR>
@@ -83,10 +103,10 @@ inoremap <leader>,P <Esc>"+Pi
 map <leader>,p <Esc>"+p
 map <leader>,P <Esc>"+P
 map <C-o> :NERDTreeToggle<CR>
-map <C-j> <C-w>j
-map <C-k> <C-w>k
-map <C-h> <C-w>h
-map <C-l> <C-w>l
+noremap <C-j> <C-w>j
+noremap <C-k> <C-w>k
+noremap <C-h> <C-w>h
+noremap <C-l> <C-w>l
 vmap <leader>ty !pygmentize -f rtf -O 'fontface=Source Code Pro for Powerline,fontsize=40' -l js \| pbcopy<CR>
 
 noremap <C-left> <C-w>h
@@ -98,7 +118,8 @@ nmap <leader>c :!gcc %<CR>
 
 nmap <leader>q :noh<CR>
 nmap <leader>rc :vs ~/.vimrc<CR>
-inoremap jj <Esc>
+inoremap jk <Esc>
+map ; :
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 " map <C-right> :tabn<CR>
@@ -107,6 +128,9 @@ let g:ctrlp_cmd = 'CtrlP'
 " map <C-w> :tabclose<CR>
 " map <C-t> :tabnew<CR>
 map <leader>z za
+map <leader>or :e <C-R>=expand('%:p:h') . '/'<CR>
+map <leader>os <leader>orstyle.css<CR><CR>
+map <leader>oi <leader>orindex.js<CR><CR>
 map <leader>f :set syntax=
 map # ^
 inoremap <C-c> <Esc>
@@ -115,8 +139,7 @@ vnoremap <C-c> <Esc>
 map j gj
 map k gk
 
-autocmd FileType javascript,javascript.jsx,c,cpp,java,php autocmd BufWritePre <buffer> :%s/\s\+$//e
-
+autocmd FileType javascript,javascript.jsx,c,cpp,java,php,ruby autocmd BufWritePre <buffer> :%s/\s\+$//e
 
 set wildmode=longest,list
 set wildmenu
@@ -129,7 +152,7 @@ imap <C-up> <Esc>:m .-2<CR>i
 imap <C-down> <Esc>:m .+1<CR>i
 imap <C-t> <Esc><C-t>
 
-map <leader>lk :! npm test<CR>
+map <leader>lk :! DEBUG=joe* npm test<CR>
 map <leader>lw :! webpack<CR>
 let base16colorspace=256  " Access colors present in 256 colorspace
 
@@ -154,8 +177,7 @@ Plugin 'pangloss/vim-javascript'
 Plugin 'chriskempson/base16-vim'
 Plugin 'mxw/vim-jsx'
 Plugin 'moll/vim-node'
-Plugin 'Valloric/YouCompleteMe'
-Plugin 'bling/vim-airline'
+Plugin 'vim-airline/vim-airline'
 Plugin 'tpope/vim-fugitive'
 Plugin 'scrooloose/syntastic'
 Plugin 'tpope/vim-dispatch'
@@ -166,6 +188,20 @@ Plugin 'editorconfig/editorconfig-vim'
 Plugin 'zerowidth/vim-copy-as-rtf'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-commentary'
+Plugin 'dag/vim-fish'
+Plugin 'ternjs/tern_for_vim'
+Plugin 'tpope/vim-rails'
+Plugin 'heavenshell/vim-jsdoc'
+Plugin 'jparise/vim-graphql'
+Plugin 'flowtype/vim-flow'
+Plugin 'exu/pgsql.vim'
+Plugin 'raimondi/delimitmate'
+Plugin 'dbext.vim'
+Plugin 'vim-airline/vim-airline-themes'
+Plugin 'schickling/vim-bufonly'
+Plugin 'guns/xterm-color-table.vim'
+Plugin 'chrisbra/Colorizer'
+Plugin 'ecomba/vim-ruby-refactoring'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -186,6 +222,8 @@ let indent_guides_enable_on_vim_startup = 1
 let g:indent_guides_auto_colors = 0
 " hi IndentGuidesOdd  guibg=0   ctermbg=8
 " hi IndentGuidesEven guibg=darkgrey ctermbg=0
+
+let g:sql_type_default = 'pgsql'
 
 let javascript_enable_domhtmlcss = 1
 let g:jsx_ext_required = 0
@@ -217,12 +255,12 @@ set laststatus=2
 let g:airline#extensions#tabline#enabled = 1
 
 " syntastic
-"let g:syntastic_javascript_checkers = ['eslint']
+" let g:syntastic_javascript_checkers = ['eslint']
 "let g:syntastic_eslint_exec='/bin/echo'
 "/Users/schniz/.nvm/versions/node/v0.12.2/bin/eslint_d'
-
-let g:syntastic_javascript_checkers = ['eslint']
-let g:syntastic_javascript_eslint_exec = 'eslint_d'
+let g:syntastic_javascript_checkers = ['eslint', 'flow']
+let g:syntastic_javascript_eslint_exec = 'eslint'
+let g:syntastic_javascript_flow_exe = 'flow status --show-all-errors --json'
 
 
 set statusline+=%#warningmsg#
@@ -249,3 +287,87 @@ let g:neomake_javascript_enabled_makers = ['eslint']
 
 let g:EditorConfig_exec_path = '/usr/local/bin/editorconfig'
 let g:html_use_css = 1
+
+let g:flow#enable = 0
+
+
+" return to last position
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+endif
+
+if exists("*WriteCreatingDirs") == 0
+	function WriteCreatingDirs()
+			execute ':silent !mkdir -p %:h'
+			write
+	endfunction
+
+	command W call WriteCreatingDirs()
+endif
+
+if exists("*ToggleBackground") == 0
+	function ToggleBackground()
+		if &background == "dark"
+			set background=light
+		else
+			set background=dark
+		endif
+	endfunction
+
+	command BG call ToggleBackground()
+endif
+
+" delimitMate
+
+let delimitMate_expand_cr = 1
+let delimitMate_expand_space = 1
+
+" highlight css colors
+let g:colorizer_auto_filetype='css,html,js,javascript.jsx'
+
+if (empty($TMUX))
+  if (has("nvim"))
+    "For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
+    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+  endif
+  "For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
+  "Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
+  " < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
+  if (has("termguicolors"))
+    set termguicolors
+  endif
+endif
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" MULTIPURPOSE TAB KEY
+" Indent if we're at the beginning of a line. Else, do completion.
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+function! InsertTabWrapper()
+    let col = col('.') - 1
+    if !col || getline('.')[col - 1] !~ '\k'
+        return "\<tab>"
+    else
+        return "\<c-p>"
+    endif
+endfunction
+inoremap <expr> <tab> InsertTabWrapper()
+
+" SPECS
+function! GetJSAlternateFile()
+  if expand('%:r') =~ '\.spec$'
+    return expand('%:r:r') . '.js'
+  else
+    return expand('%:r') . '.spec.js'
+  endif
+endfunction
+
+function! GoToAlternateFile()
+  if expand('%') =~ '\.rb$'
+    A
+    return
+  endif
+
+  execute 'edit' GetJSAlternateFile()
+endfunction
+
+map <leader>oa :call GoToAlternateFile()<CR>
