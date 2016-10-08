@@ -1,4 +1,26 @@
 set --universal fish_user_paths $fish_user_paths ./node_modules/.bin
+set -g -x GITLAB_API_ENDPOINT https://gitlab.com/api/v3
+
+function __git_last_commit_relative_time
+  set then_date (git log -n1 --format="%at" $argv)
+  set now_date (date +%s)
+  set diff_date (math $now_date-$then_date)
+
+  set diff_minutes (math $diff_date/60%60)
+  set diff_hours (math $diff_date/60/60)
+
+  if math "$diff_hours > 0" > /dev/null
+    set result $diff_hours"h"
+  end
+
+  echo $result$diff_minutes"m"
+end
+
+function git_last_commit_relative_time
+  if git_is_repo
+    __git_last_commit_relative_time $argv
+  end
+end
 
 function dock
 	if count argv > /dev/null
@@ -54,4 +76,8 @@ end
 
 function dokku
 	ssh -t dokku@dokku.hagever.com -- $argv
+end
+
+function r
+  rvm use 2.3.1
 end
