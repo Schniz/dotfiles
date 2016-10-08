@@ -1,0 +1,17 @@
+# This is Git's per-user configuration file.
+[core]
+# Please adapt and uncomment the following lines:
+  user = Gal Schlezinger
+  email = galstar@spitfire.co.il
+  editor = /usr/local/bin/nvim
+[user]
+	name = Gal Schlezinger
+	email = galstar@spitfire.co.il
+[alias]
+	ac = add . && commit
+	co = checkout
+	poh = push origin head
+	dc = diff --cached
+	bdbd = !git branch --merged | egrep -v \"(^\\*|master|dev)\" | xargs git branch -d
+[help]
+	autocorrect = 10
