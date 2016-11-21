@@ -61,8 +61,55 @@ map <leader>. :lopen<CR><CR>
 map <leader>WW :w<CR>:e!<CR>
 map <leader>] :lnext<CR>
 map <leader>[ :lprev<CR>
-nnoremap <CR> :noh<CR>
-map <leader>t :w\|vs term://rspec\ %<CR>i
+nnoremap <CR> :noh<CR><CR>
+map <leader>t :w\|call RunRubyTest()<CR>i
+
+" Ruby spec toggles {{{
+function! SpecPath()
+  if expand('%.') =~ "^spec\/"
+    return expand('%')
+  elseif expand('%.') =~ "^app\/"
+    return "spec/" . strpart(expand('%:r'), 4) . "_spec.rb"
+  else
+    return "spec/" . expand('%:r') . "_spec.rb"
+  endif
+endfunction
+
+function! RubyImplPath()
+  let tmp_part = strpart(expand('%:r'), 5)
+  let tmp_without_spec = strpart(tmp_part, 0, len(tmp_part) - 5) . ".rb"
+
+  if expand('%') =~ "^spec\/lib\/"
+    return tmp_without_spec
+  else
+    return "app/" . tmp_without_spec
+  endif
+endfunction
+
+function! ToggleSpec()
+  if expand('%:r') =~ "^spec\/"
+    execute "edit " . RubyImplPath()
+  else
+    execute "edit " . SpecPath()
+  endif
+endfunction
+
+function! RunSpec()
+  execute "vs term://rspec\\ " . SpecPath()
+endfunction
+
+function! RunCucumber()
+  execute "vs term://cucumber\\ " . expand('%')
+endfunction
+
+function! RunRubyTest()
+  if expand('%:e') == "feature"
+    call RunCucumber()
+  else
+    call RunSpec()
+  endif
+endfunction
+" }}}
 
 " RAILS
 map <leader><leader>rel :RExtractLet<CR>
@@ -279,10 +326,10 @@ nmap <leader>R :set relativenumber!<CR>
 let g:markdown_fenced_languages = ['html', 'css', 'erb=eruby', 'javascript.jsx', 'javascript', 'js=javascript.jsx', 'json=javascript', 'ruby', 'xml']
 
 let g:neomake_javascript_eslint_maker = {
-    \ 'args': ['--verbose'],
-    \ 'errorformat': '%A%f: line %l\, col %v\, %m \(%t%*\d\)',
-    \ 'exe': 'eslint',
-    \ }
+      \ 'args': ['--verbose'],
+      \ 'errorformat': '%A%f: line %l\, col %v\, %m \(%t%*\d\)',
+      \ 'exe': 'eslint',
+      \ }
 let g:neomake_javascript_enabled_makers = ['eslint']
 
 let g:EditorConfig_exec_path = '/usr/local/bin/editorconfig'
@@ -297,24 +344,24 @@ if has("autocmd")
 endif
 
 if exists("*WriteCreatingDirs") == 0
-	function WriteCreatingDirs()
-			execute ':silent !mkdir -p %:h'
-			write
-	endfunction
+  function WriteCreatingDirs()
+    execute ':silent !mkdir -p %:h'
+    write
+  endfunction
 
-	command W call WriteCreatingDirs()
+  command W call WriteCreatingDirs()
 endif
 
 if exists("*ToggleBackground") == 0
-	function ToggleBackground()
-		if &background == "dark"
-			set background=light
-		else
-			set background=dark
-		endif
-	endfunction
+  function ToggleBackground()
+    if &background == "dark"
+      set background=light
+    else
+      set background=dark
+    endif
+  endfunction
 
-	command BG call ToggleBackground()
+  command BG call ToggleBackground()
 endif
 
 " delimitMate
@@ -343,12 +390,12 @@ endif
 " Indent if we're at the beginning of a line. Else, do completion.
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 function! InsertTabWrapper()
-    let col = col('.') - 1
-    if !col || getline('.')[col - 1] !~ '\k'
-        return "\<tab>"
-    else
-        return "\<c-p>"
-    endif
+  let col = col('.') - 1
+  if !col || getline('.')[col - 1] !~ '\k'
+    return "\<tab>"
+  else
+    return "\<c-p>"
+  endif
 endfunction
 inoremap <expr> <tab> InsertTabWrapper()
 
@@ -363,7 +410,7 @@ endfunction
 
 function! GoToAlternateFile()
   if expand('%') =~ '\.rb$'
-    A
+    call ToggleSpec()
     return
   endif
 
@@ -371,3 +418,4 @@ function! GoToAlternateFile()
 endfunction
 
 map <leader>oa :call GoToAlternateFile()<CR>
+imap <leader><leader>cf <C-R>=expand('%:p:h:t')<CR>

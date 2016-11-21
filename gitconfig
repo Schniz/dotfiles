@@ -13,5 +13,6 @@
 	poh = push origin head
 	dc = diff --cached
 	bdbd = !git branch --merged | egrep -v \"(^\\*|master|dev)\" | xargs git branch -d
+	c = commit -m
 [help]
 	autocorrect = 10
