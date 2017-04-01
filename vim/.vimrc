@@ -62,7 +62,8 @@ map <leader>WW :w<CR>:e!<CR>
 map <leader>] :lnext<CR>
 map <leader>[ :lprev<CR>
 nnoremap <CR> :noh<CR><CR>
-map <leader>t :w\|call RunRubyTest()<CR>i
+map <leader>t :w\|call RunRubyTest()<CR>
+map <leader>p :CtrlPTag<CR>
 
 " Ruby spec toggles {{{
 function! SpecPath()
@@ -95,7 +96,8 @@ function! ToggleSpec()
 endfunction
 
 function! RunSpec()
-  execute "vs term://rspec\\ " . SpecPath()
+  "execute "vs term://rspec\\ " . SpecPath()
+  execute "vs term://rspec\\ --color\\ " . t:last_test_file
 endfunction
 
 function! RunCucumber()
@@ -103,10 +105,20 @@ function! RunCucumber()
 endfunction
 
 function! RunRubyTest()
-  if expand('%:e') == "feature"
-    call RunCucumber()
+  let in_test_file = match(expand("%"), '\(.feature\|_spec.rb\|test_.*\.py\|_test.py\)$') != -1
+
+  if !in_test_file && !exists('t:last_test_file')
+    return
+  elseif in_test_file
+    let t:last_test_file = expand("%")
+  end
+
+  if match(t:last_test_file, '\.feature$') != -1
+    execute "vs term://cucumber\\ " . t:last_test_file
+    normal i
   else
     call RunSpec()
+    normal i
   endif
 endfunction
 " }}}
@@ -226,7 +238,7 @@ Plugin 'mxw/vim-jsx'
 Plugin 'moll/vim-node'
 Plugin 'vim-airline/vim-airline'
 Plugin 'tpope/vim-fugitive'
-Plugin 'scrooloose/syntastic'
+" Plugin 'scrooloose/syntastic'
 Plugin 'tpope/vim-dispatch'
 Plugin 'jtratner/vim-flavored-markdown'
 Plugin 'tpope/vim-markdown'
@@ -249,6 +261,7 @@ Plugin 'schickling/vim-bufonly'
 Plugin 'guns/xterm-color-table.vim'
 Plugin 'chrisbra/Colorizer'
 Plugin 'ecomba/vim-ruby-refactoring'
+Plugin 'w0rp/ale'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -301,23 +314,22 @@ let g:airline#extensions#branch#enabled = 1
 set laststatus=2
 let g:airline#extensions#tabline#enabled = 1
 
-" syntastic
-" let g:syntastic_javascript_checkers = ['eslint']
-"let g:syntastic_eslint_exec='/bin/echo'
-"/Users/schniz/.nvm/versions/node/v0.12.2/bin/eslint_d'
-let g:syntastic_javascript_checkers = ['eslint', 'flow']
-let g:syntastic_javascript_eslint_exec = 'eslint'
-let g:syntastic_javascript_flow_exe = 'flow status --show-all-errors --json'
+" " syntastic
+" " let g:syntastic_javascript_checkers = ['eslint']
+" "let g:syntastic_eslint_exec='/bin/echo'
+" "/Users/schniz/.nvm/versions/node/v0.12.2/bin/eslint_d'
+" let g:syntastic_javascript_checkers = ['eslint', 'flow']
+" let g:syntastic_javascript_eslint_exec = 'eslint'
+" let g:syntastic_javascript_flow_exe = 'flow status --show-all-errors --json'
 
+" set statusline+=%#warningmsg#
+" set statusline+=%{SyntasticStatuslineFlag()}
+" set statusline+=%*
 
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-" let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
+" let g:syntastic_always_populate_loc_list = 1
+" let g:syntastic_auto_loc_list = 1
+" " let g:syntastic_check_on_open = 1
+" let g:syntastic_check_on_wq = 0
 
 set number
 nmap <leader>R :set relativenumber!<CR>
