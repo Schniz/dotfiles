@@ -1,5 +1,6 @@
 set --universal fish_user_paths $fish_user_paths ./node_modules/.bin
 set -g -x GITLAB_API_ENDPOINT https://gitlab.com/api/v3
+set -g -x ANDROID_HOME /usr/local/opt/android-sdk
 
 function __git_last_commit_relative_time
   set then_date (git log -n1 --format="%at" $argv)
@@ -80,4 +81,21 @@ end
 
 function r
   rvm use 2.3.1
+
+  function r
+    rails $argv
+  end
+end
+
+function rbc
+  bundle check
+  bundle install
+end
+
+function rdb
+  r db:migrate
+end
+
+function f
+  fg
 end
