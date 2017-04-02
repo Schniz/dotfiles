@@ -431,3 +431,6 @@ endfunction
 
 map <leader>oa :call GoToAlternateFile()<CR>
 imap <leader><leader>cf <C-R>=expand('%:p:h:t')<CR>
+
+command! -nargs=* Yarn execute "term yarn " . <q-args>
+command! -nargs=* Npm execute "term npm " . <q-args>
