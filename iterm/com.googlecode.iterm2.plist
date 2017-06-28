@@ -894,6 +894,8 @@
 	<integer>0</integer>
 	<key>HotkeyCode</key>
 	<integer>0</integer>
+	<key>HotkeyMigratedFromSingleToMulti</key>
+	<true/>
 	<key>HotkeyModifiers</key>
 	<integer>0</integer>
 	<key>IRMemory</key>
@@ -966,15 +968,15 @@
 	<key>NSWindow Frame SUStatusFrame</key>
 	<string>313 657 400 129 0 0 1440 877 </string>
 	<key>NSWindow Frame SUUpdateAlert</key>
-	<string>970 770 620 392 0 0 2560 1418 </string>
+	<string>530 478 620 392 0 0 1680 1028 </string>
 	<key>NSWindow Frame SharedPreferences</key>
 	<string>267 202 937 465 0 0 1680 1028 </string>
 	<key>NSWindow Frame UKCrashReporter</key>
 	<string>127 443 592 584 0 0 1680 1027 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>965 208 914 894 0 0 2560 1418 </string>
+	<string>4 548 650 477 0 0 1680 1028 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
-	<string>154 108 842 387 0 0 1680 1028 </string>
+	<string>196 -380 890 657 0 0 1680 1028 </string>
 	<key>New Bookmarks</key>
 	<array>
 		<dict>
@@ -4068,7 +4070,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2017-03-17T20:44:53Z</date>
+	<date>2017-06-27T20:23:54Z</date>
 	<key>SavePasteHistory</key>
 	<false/>
 	<key>ShowBookmarkName</key>
@@ -4118,6 +4120,6 @@
 	<key>findRegex_iTerm</key>
 	<false/>
 	<key>iTerm Version</key>
-	<string>3.0.14</string>
+	<string>3.1.beta.5</string>
 </dict>
 </plist>
