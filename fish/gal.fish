@@ -99,3 +99,11 @@ end
 function f
   fg
 end
+
+function remind_me
+  osascript ~/dotfiles/applescripts/remind_me.scpt "$argv"
+end
+
+function rmt
+  osascript ~/dotfiles/applescripts/remind_me.scpt "$argv"
+end
