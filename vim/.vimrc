@@ -64,6 +64,8 @@ map <leader>[ :lprev<CR>
 nnoremap <CR> :noh<CR><CR>
 map <leader>t :w\|call RunRubyTest()<CR>
 map <leader>p :CtrlPTag<CR>
+map <leader>T :%!prettier --stdin<CR>
+inoremap <leader><leader>c<CR> export default class MyComponent extends React.Component {<CR>render() {<CR>return ();<CR>}<CR>}<Up><Up><End><Left><Left>
 
 " Ruby spec toggles {{{
 function! SpecPath()
@@ -149,7 +151,7 @@ tnoremap <Esc> <C-\><C-n>
 tnoremap <C-c><C-c> <C-\><C-n>:bd!<CR>
 map <leader>X :split term://node\ index.js<CR>
 map <leader><leader>X :split term://node\ index.js
-map <leader>T :split term://npm\ test<CR>
+" map <leader>T :split term://npm\ test<CR>
 map <leader><leader>T :split term://DEBUG=joe*\ npm\ test<CR>
 inoremap ,,f function() {<CR>}<Esc>O
 
