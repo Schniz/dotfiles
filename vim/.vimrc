@@ -65,6 +65,7 @@ nnoremap <CR> :noh<CR><CR>
 map <leader>t :w\|call RunRubyTest()<CR>
 map <leader>p :CtrlPTag<CR>
 map <leader>T :%!prettier --stdin<CR>
+
 inoremap <leader><leader>c<CR> export default class MyComponent extends React.Component {<CR>render() {<CR>return ();<CR>}<CR>}<Up><Up><End><Left><Left>
 
 " Ruby spec toggles {{{
@@ -240,30 +241,22 @@ Plugin 'mxw/vim-jsx'
 Plugin 'moll/vim-node'
 Plugin 'vim-airline/vim-airline'
 Plugin 'tpope/vim-fugitive'
-" Plugin 'scrooloose/syntastic'
-Plugin 'tpope/vim-dispatch'
 Plugin 'jtratner/vim-flavored-markdown'
 Plugin 'tpope/vim-markdown'
-Plugin 'benekastah/neomake'
-Plugin 'editorconfig/editorconfig-vim'
-Plugin 'zerowidth/vim-copy-as-rtf'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-commentary'
 Plugin 'dag/vim-fish'
 Plugin 'ternjs/tern_for_vim'
 Plugin 'tpope/vim-rails'
-Plugin 'heavenshell/vim-jsdoc'
 Plugin 'jparise/vim-graphql'
 Plugin 'flowtype/vim-flow'
-Plugin 'exu/pgsql.vim'
 Plugin 'raimondi/delimitmate'
-Plugin 'dbext.vim'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'schickling/vim-bufonly'
 Plugin 'guns/xterm-color-table.vim'
 Plugin 'chrisbra/Colorizer'
-Plugin 'ecomba/vim-ruby-refactoring'
 Plugin 'w0rp/ale'
+Plugin 'airblade/vim-gitgutter'
 
 call vundle#end()            " required
 filetype plugin indent on    " required

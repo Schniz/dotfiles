@@ -100,10 +100,24 @@ function f
   fg
 end
 
-function remind_me
-  osascript ~/dotfiles/applescripts/remind_me.scpt "$argv"
+function rmt
+  echo '
+    activate application "Reminders"
+    tell application "System Events" to keystroke "n" using command down
+    tell application "System Events" to keystroke "'$argv'"
+    tell application "System Events" to keystroke return
+  ' | osascript - 
 end
 
-function rmt
-  osascript ~/dotfiles/applescripts/remind_me.scpt "$argv"
+function rode
+  node -e "R=require(\'ramda\')" -i $argv
+end
+
+function evt
+  echo '
+    activate application "Calendar"
+    tell application "System Events" to keystroke "n" using command down
+    tell application "System Events" to keystroke "'(string join ' ' $argv)'"
+    tell application "System Events" to keystroke return
+  ' | osascript -
 end
