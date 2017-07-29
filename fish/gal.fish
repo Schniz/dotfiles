@@ -32,10 +32,6 @@ function dock
   eval (docker-machine env $WHERE)
 end
 
-function vim
-  nvim $argv
-end
-
 function home_dns
   networksetup -setdnsservers Wi-Fi 8.8.8.8 8.8.4.4
 end
@@ -104,13 +100,13 @@ function rmt
   echo '
     activate application "Reminders"
     tell application "System Events" to keystroke "n" using command down
-    tell application "System Events" to keystroke "'$argv'"
+    tell application "System Events" to keystroke "'(string join ' ' $argv)'"
     tell application "System Events" to keystroke return
   ' | osascript - 
 end
 
 function rode
-  node -e "R=require(\'ramda\')" -i $argv
+  node -e 'R=require("ramda")' -i $argv
 end
 
 function evt
