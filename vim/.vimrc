@@ -21,7 +21,8 @@ let mapleader=","
 set shell=bash
 set complete+=kspell
 set foldmethod=syntax
-
+set noswapfile
+set mouse=nicr
 
 " hebrew {{{
 map ק e
@@ -65,6 +66,10 @@ nnoremap <CR> :noh<CR><CR>
 map <leader>t :w\|call RunRubyTest()<CR>
 map <leader>p :CtrlPTag<CR>
 map <leader>T :%!prettier --stdin<CR>
+noremap <C-j> <C-w>j
+noremap <C-k> <C-w>k
+noremap <C-h> <C-w>h
+noremap <C-l> <C-w>l
 
 inoremap <leader><leader>c<CR> export default class MyComponent extends React.Component {<CR>render() {<CR>return ();<CR>}<CR>}<Up><Up><End><Left><Left>
 
@@ -100,11 +105,11 @@ endfunction
 
 function! RunSpec()
   "execute "vs term://rspec\\ " . SpecPath()
-  execute "vs term://rspec\\ --color\\ " . t:last_test_file
+  execute "!rspec --color " . t:last_test_file
 endfunction
 
 function! RunCucumber()
-  execute "vs term://cucumber\\ " . expand('%')
+  execute "!cucumber " . expand('%')
 endfunction
 
 function! RunRubyTest()
@@ -117,7 +122,7 @@ function! RunRubyTest()
   end
 
   if match(t:last_test_file, '\.feature$') != -1
-    execute "vs term://cucumber\\ " . t:last_test_file
+    execute "!cucumber " . t:last_test_file
     normal i
   else
     call RunSpec()
@@ -148,12 +153,7 @@ map <leader>DD :bd!<CR>
 
 " map f5
 map <M-r> <F5>
-tnoremap <Esc> <C-\><C-n>
-tnoremap <C-c><C-c> <C-\><C-n>:bd!<CR>
-map <leader>X :split term://node\ index.js<CR>
-map <leader><leader>X :split term://node\ index.js
 " map <leader>T :split term://npm\ test<CR>
-map <leader><leader>T :split term://DEBUG=joe*\ npm\ test<CR>
 inoremap ,,f function() {<CR>}<Esc>O
 
 "foldcolumn=1
@@ -165,10 +165,6 @@ inoremap <leader>,P <Esc>"+Pi
 map <leader>,p <Esc>"+p
 map <leader>,P <Esc>"+P
 map <C-o> :NERDTreeToggle<CR>
-noremap <C-j> <C-w>j
-noremap <C-k> <C-w>k
-noremap <C-h> <C-w>h
-noremap <C-l> <C-w>l
 vmap <leader>ty !pygmentize -f rtf -O 'fontface=Source Code Pro for Powerline,fontsize=40' -l js \| pbcopy<CR>
 
 noremap <C-left> <C-w>h
@@ -427,5 +423,5 @@ endfunction
 map <leader>oa :call GoToAlternateFile()<CR>
 imap <leader><leader>cf <C-R>=expand('%:p:h:t')<CR>
 
-command! -nargs=* Yarn execute "term yarn " . <q-args>
-command! -nargs=* Npm execute "term npm " . <q-args>
+command! -nargs=* Yarn execute "!yarn " . <q-args>
+command! -nargs=* Npm execute "!npm " . <q-args>
