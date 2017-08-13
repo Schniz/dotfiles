@@ -71,6 +71,10 @@ noremap <C-k> <C-w>k
 noremap <C-h> <C-w>h
 noremap <C-l> <C-w>l
 
+function! CallPrettier()
+  execute "%!prettier --print-width " . winwidth('.')
+endfunction
+
 inoremap <leader><leader>c<CR> export default class MyComponent extends React.Component {<CR>render() {<CR>return ();<CR>}<CR>}<Up><Up><End><Left><Left>
 
 " Ruby spec toggles {{{
@@ -253,6 +257,7 @@ Plugin 'guns/xterm-color-table.vim'
 Plugin 'chrisbra/Colorizer'
 Plugin 'w0rp/ale'
 Plugin 'airblade/vim-gitgutter'
+Plugin 'reasonml-editor/vim-reason'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -425,3 +430,6 @@ imap <leader><leader>cf <C-R>=expand('%:p:h:t')<CR>
 
 command! -nargs=* Yarn execute "!yarn " . <q-args>
 command! -nargs=* Npm execute "!npm " . <q-args>
+
+" Reason
+" let g:vimreason_extra_args_expr_reason = '"--print-width " . ' . "(winwidth('.') - 4)"
