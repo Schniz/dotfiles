@@ -3,16 +3,20 @@
 # Please adapt and uncomment the following lines:
   user = Gal Schlezinger
   email = galstar@spitfire.co.il
-  editor = /usr/local/bin/nvim
+  editor = vim
+	excludesfile = ~/.gitignore
 [user]
 	name = Gal Schlezinger
 	email = galstar@spitfire.co.il
 [alias]
 	ac = add . && commit
 	co = checkout
+	ffm = merge --ff-only
 	poh = push origin head
 	dc = diff --cached
 	bdbd = !git branch --merged | egrep -v \"(^\\*|master|dev)\" | xargs git branch -d
 	c = commit -m
 [help]
 	autocorrect = 10
+[gpg]
+	program = /usr/local/bin/gpg

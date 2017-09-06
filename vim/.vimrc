@@ -5,8 +5,6 @@ set tabstop=2
 set shiftwidth=2
 set smartindent
 set autoindent
-set foldmethod=syntax
-set foldlevelstart=99
 set hlsearch
 set expandtab
 set incsearch
@@ -20,9 +18,9 @@ set go-=r
 let mapleader=","
 set shell=bash
 set complete+=kspell
-set foldmethod=syntax
 set noswapfile
 set mouse=nicr
+set re=1
 
 " hebrew {{{
 map ק e
@@ -58,21 +56,22 @@ map <leader>y "+y
 map Y y$
 map <leader>= gg=G``
 map <leader>/ gcc
-map <leader>. :lopen<CR><CR>
+map <leader>. :CtrlPTag<CR>
 map <leader>WW :w<CR>:e!<CR>
 map <leader>] :lnext<CR>
 map <leader>[ :lprev<CR>
 nnoremap <CR> :noh<CR><CR>
 map <leader>t :w\|call RunRubyTest()<CR>
 map <leader>p :CtrlPTag<CR>
-map <leader>T :%!prettier --stdin<CR>
+map <leader>T :call CallPrettier()<CR>
 noremap <C-j> <C-w>j
 noremap <C-k> <C-w>k
 noremap <C-h> <C-w>h
 noremap <C-l> <C-w>l
+noremap <leader>gd g<C-]>
 
 function! CallPrettier()
-  execute "%!prettier --print-width " . winwidth('.')
+  execute "%!prettier --print-width 120"
 endfunction
 
 inoremap <leader><leader>c<CR> export default class MyComponent extends React.Component {<CR>render() {<CR>return ();<CR>}<CR>}<Up><Up><End><Left><Left>
@@ -141,7 +140,7 @@ noremap <leader>jed "jyiwGoexport default <C-R>j;<Esc>
 noremap <leader>bo :BufOnly<CR>
 
 " tern
-map <leader>gd :TernDefPreview<CR>
+" map <leader>gd :TernDefPreview<CR>
 
 " buffers {{{
 map gn :bn<CR>
@@ -195,13 +194,14 @@ map <leader>os <leader>orstyle.css<CR><CR>
 map <leader>oi <leader>orindex.js<CR><CR>
 map <leader>f :set syntax=
 map # ^
+noremap <Backspace> <C-^>
 inoremap <C-c> <Esc>
 vnoremap <C-c> <Esc>
 
 map j gj
 map k gk
 
-autocmd FileType javascript,javascript.jsx,c,cpp,java,php,ruby autocmd BufWritePre <buffer> :%s/\s\+$//e
+autocmd FileType markdown,javascript,javascript.jsx,c,cpp,java,php,ruby autocmd BufWritePre <buffer> :%s/\s\+$//e
 
 set wildmode=longest,list
 set wildmenu
@@ -233,7 +233,7 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
 Plugin 'scrooloose/nerdtree'
-Plugin 'https://github.com/kien/ctrlp.vim'
+Plugin 'https://github.com/ctrlpvim/ctrlp.vim'
 Plugin 'mattn/emmet-vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'chriskempson/base16-vim'
@@ -246,7 +246,7 @@ Plugin 'tpope/vim-markdown'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-commentary'
 Plugin 'dag/vim-fish'
-Plugin 'ternjs/tern_for_vim'
+" Plugin 'ternjs/tern_for_vim'
 Plugin 'tpope/vim-rails'
 Plugin 'jparise/vim-graphql'
 Plugin 'flowtype/vim-flow'
@@ -258,9 +258,16 @@ Plugin 'chrisbra/Colorizer'
 Plugin 'w0rp/ale'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'reasonml-editor/vim-reason'
+Plugin 'mileszs/ack.vim'
+Plugin 'bumaociyuan/vim-swift'
+Plugin 'editorconfig/editorconfig-vim'
+Plugin 'wakatime/vim-wakatime'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
+
+source ~/.vim/bundle/ack.vim/autoload/ack.vim
+source ~/.vim/bundle/ack.vim/plugin/ack.vim
 
 " To ignore plugin indent changes, instead use:
 "filetype plugin on
@@ -295,6 +302,9 @@ let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --hidden
       \ --ignore .DS_Store
       \ --ignore "**/*.pyc"
       \ -g ""'
+
+let g:ctrlp_root_markers = ['Gemfile', '.git']
+let g:ctrlp_cmd = 'CtrlP'
 
 "displayyy
 set background=dark
@@ -430,6 +440,31 @@ imap <leader><leader>cf <C-R>=expand('%:p:h:t')<CR>
 
 command! -nargs=* Yarn execute "!yarn " . <q-args>
 command! -nargs=* Npm execute "!npm " . <q-args>
+command! -nargs=* Grip execute "!grip -b " . <q-args>
 
 " Reason
 " let g:vimreason_extra_args_expr_reason = '"--print-width " . ' . "(winwidth('.') - 4)"
+
+function! TestOnDockerCompose()
+  let in_test_file = match(expand("%"), '\(.feature\|_spec.rb\|test_.*\.py\|_test.py\)$') != -1
+
+  if !in_test_file && !exists('t:last_test_file')
+    return
+  elseif in_test_file
+    let t:last_test_file = expand("%")
+  end
+
+  let test_cmd = "echo nothing to do"
+
+  if match(t:last_test_file, '\.feature$') != -1
+    let test_cmd = "cucumber " . t:last_test_file
+  else
+    let test_cmd = "rspec " . t:last_test_file
+  endif
+
+  execute "!docker-compose exec kms bash -c 'echo " . test_cmd . " >> tmp/test_watch.sock'"
+endfunction
+
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif

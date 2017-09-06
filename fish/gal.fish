@@ -117,3 +117,24 @@ function evt
     tell application "System Events" to keystroke return
   ' | osascript -
 end
+
+function dfile
+  git diff --name-only origin/develop | fzf --height 6 | sed "s@^@"(git rev-parse --show-toplevel)"/@"
+end
+
+function opendiff
+  set FILE (dfile)
+  if [ "$FILE" != "" ]
+    vim $FILE
+  end
+end
+
+function app
+  if [ "$argv" != "" ]
+    set QUERY_FZF "-q $argv"
+  end
+  set FILE (find /Applications ~/Applications -maxdepth 2 -name "*.app" | fzf $QUERY_FZF)
+  if [ "$FILE" != "" ]
+    open $FILE
+  end
+end
