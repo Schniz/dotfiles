@@ -70,8 +70,35 @@ noremap <C-h> <C-w>h
 noremap <C-l> <C-w>l
 noremap <leader>gd g<C-]>
 
+function! GetPrettierParser()
+  let file_extension = expand('%:e')
+  if file_extension == ''
+    let file_extension = expand('%:t:r')
+  endif
+
+  if file_extension == 'md'
+    return "markdown"
+  elseif file_extension == "json"
+    return "json"
+  elseif file_extension == "flow"
+    return "flow"
+  elseif file_extension == "ts"
+    return "typescript"
+  elseif file_extension == "scss"
+    return "scss"
+  elseif file_extension == "less"
+    return "less"
+  elseif file_extension == "graphql" || file_extension == "gql"
+    return "graphql"
+  elseif file_extension == "css"
+    return "css"
+  else
+    return "babylon"
+  endif
+endfunction
+
 function! CallPrettier()
-  execute "%!prettier --print-width 120"
+  execute "%!prettier --print-width 120 --parser " . GetPrettierParser()
 endfunction
 
 inoremap <leader><leader>c<CR> export default class MyComponent extends React.Component {<CR>render() {<CR>return ();<CR>}<CR>}<Up><Up><End><Left><Left>
