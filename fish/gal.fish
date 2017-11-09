@@ -1,3 +1,4 @@
+set PATH ~/bin $PATH
 set --universal fish_user_paths $fish_user_paths ./node_modules/.bin
 set -g -x GITLAB_API_ENDPOINT https://gitlab.com/api/v3
 set -g -x ANDROID_HOME /usr/local/opt/android-sdk
@@ -137,4 +138,35 @@ function app
   if [ "$FILE" != "" ]
     open $FILE
   end
+end
+
+function testify
+  set UUID (uuidgen)
+  set LISTEN_PATH /tmp/$UUID
+  mkfifo $LISTEN_PATH
+  while true
+    echo ""
+    echo ""
+    echo "listening to commands at $LISTEN_PATH"
+    cat $LISTEN_PATH | bash
+  end
+end
+
+function denv
+  echo "Running `eval (docker-machine env $argv)`"
+  eval (docker-machine env $argv)
+  echo -ne "\033]6;1;bg;red;brightness;$1\a"
+end
+
+# function psql
+#   docker run --rm -it postgres psql $argv
+# end
+#
+
+function restartvpn
+  sudo ifconfig en0 down
+  sudo ifconfig en1 down
+  sleep 5
+  sudo ifconfig en0 up
+  sudo ifconfig en1 up
 end

@@ -201,7 +201,11 @@ vnoremap <C-c> <Esc>
 map j gj
 map k gk
 
-autocmd FileType markdown,javascript,javascript.jsx,c,cpp,java,php,ruby autocmd BufWritePre <buffer> :%s/\s\+$//e
+function! RemoveTrailingWhitespace()
+  %s/\s\+$//e
+endfunction
+
+autocmd FileType python,markdown,javascript,javascript.jsx,c,cpp,java,php,ruby autocmd BufWritePre <buffer> call RemoveTrailingWhitespace()
 
 set wildmode=longest,list
 set wildmenu
@@ -262,6 +266,8 @@ Plugin 'mileszs/ack.vim'
 Plugin 'bumaociyuan/vim-swift'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'wakatime/vim-wakatime'
+Plugin 'rhysd/vim-crystal'
+Plugin 'AndrewRadev/splitjoin.vim'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -468,3 +474,5 @@ endfunction
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'
 endif
+
+let g:markdown_fenced_languages += ['python', 'py=python']

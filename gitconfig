@@ -16,6 +16,9 @@
 	dc = diff --cached
 	bdbd = !git branch --merged | egrep -v \"(^\\*|master|dev)\" | xargs git branch -d
 	c = commit -m
+  fo = fetch origin
+  pff = pull --ff-only
+  pr = !hub pull-request -b develop
 [help]
 	autocorrect = 10
 [gpg]
