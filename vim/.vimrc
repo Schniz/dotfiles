@@ -19,7 +19,7 @@ let mapleader=","
 set shell=bash
 set complete+=kspell
 set noswapfile
-set mouse=nicr
+set mouse=a " nicr
 set re=1
 
 " hebrew {{{
@@ -56,19 +56,25 @@ map <leader>y "+y
 map Y y$
 map <leader>= gg=G``
 map <leader>/ gcc
-map <leader>. :CtrlPTag<CR>
+" map <leader>. :CtrlPTag<CR>
 map <leader>WW :w<CR>:e!<CR>
 map <leader>] :lnext<CR>
 map <leader>[ :lprev<CR>
 nnoremap <CR> :noh<CR><CR>
-map <leader>t :w\|call RunRubyTest()<CR>
-map <leader>p :CtrlPTag<CR>
+" map <leader>t :w\|call RunRubyTest()<CR>
+" map <leader>p :CtrlPTag<CR>
 map <leader>T :call CallPrettier()<CR>
 noremap <C-j> <C-w>j
 noremap <C-k> <C-w>k
 noremap <C-h> <C-w>h
 noremap <C-l> <C-w>l
 noremap <leader>gd g<C-]>
+noremap <C-p> :Files<CR>
+noremap <Esc>[65;5u :Buffers<CR>
+
+" lets do magic
+autocmd FileType dot nnoremap <CR> :%w !dot -Tpng \| imgcat<CR>
+autocmd FileType sequence nnoremap <CR> :%w !diagrams sequence % %.svg && svgtopng %.svg \| imgcat<CR>
 
 function! GetPrettierParser()
   let file_extension = expand('%:e')
@@ -98,7 +104,13 @@ function! GetPrettierParser()
 endfunction
 
 function! CallPrettier()
-  execute "%!prettier --print-width 120 --parser " . GetPrettierParser()
+  let file_extension = expand('%:e')
+  if file_extension == 'rb'
+    call ale#fix#Fix()
+    return
+  endif
+
+  execute "%!prettier --trailing-comma es5 --parser " . GetPrettierParser()
 endfunction
 
 inoremap <leader><leader>c<CR> export default class MyComponent extends React.Component {<CR>render() {<CR>return ();<CR>}<CR>}<Up><Up><End><Left><Left>
@@ -208,8 +220,8 @@ nmap <leader>q :noh<CR>
 nmap <leader>rc :vs ~/.vimrc<CR>
 inoremap jk <Esc>
 map ; :
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
+" let g:ctrlp_map = '<c-p>'
+" let g:ctrlp_cmd = 'CtrlP'
 " map <C-right> :tabn<CR>
 " map <C-left> :tabp<CR>
 " map <C-n> :tabnew<CR>
@@ -232,7 +244,8 @@ function! RemoveTrailingWhitespace()
   %s/\s\+$//e
 endfunction
 
-autocmd FileType python,markdown,javascript,javascript.jsx,c,cpp,java,php,ruby autocmd BufWritePre <buffer> call RemoveTrailingWhitespace()
+autocmd FileType python set omnifunc=python3complete#Complete
+autocmd FileType python,markdown,javascript,javascript.jsx,c,cpp,java,php,ruby,yaml autocmd BufWritePre <buffer> call RemoveTrailingWhitespace()
 
 set wildmode=longest,list
 set wildmenu
@@ -251,6 +264,7 @@ let base16colorspace=256  " Access colors present in 256 colorspace
 
 " let mapleader=','
 
+set rtp+=/usr/local/opt/fzf
 
 set nocompatible              " be iMproved, required
 filetype off                  " required
@@ -264,7 +278,7 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
 Plugin 'scrooloose/nerdtree'
-Plugin 'https://github.com/ctrlpvim/ctrlp.vim'
+" Plugin 'https://github.com/ctrlpvim/ctrlp.vim'
 Plugin 'mattn/emmet-vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'chriskempson/base16-vim'
@@ -292,9 +306,15 @@ Plugin 'reasonml-editor/vim-reason'
 Plugin 'mileszs/ack.vim'
 Plugin 'bumaociyuan/vim-swift'
 Plugin 'editorconfig/editorconfig-vim'
-Plugin 'wakatime/vim-wakatime'
 Plugin 'rhysd/vim-crystal'
 Plugin 'AndrewRadev/splitjoin.vim'
+Plugin 'junegunn/fzf.vim'
+Plugin 'airblade/vim-rooter'
+Plugin 'Shougo/deoplete.nvim'
+Plugin 'roxma/nvim-yarp'
+Plugin 'roxma/vim-hug-neovim-rpc'
+Plugin 'mitsuse/autocomplete-swift'
+Plugin 'xavierchow/vim-sequence-diagram'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -327,17 +347,17 @@ let g:jsx_ext_required = 0
 let g:user_emmet_mode='a'    "enable all function in all mode.
 let g:user_emmet_expandabbr_key='<C-e>'   "This maps the expansion to Ctrl-space
 
-let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --hidden
-      \ --ignore .git
-      \ --ignore .svn
-      \ --ignore .hg
-      \ --ignore node_modules
-      \ --ignore .DS_Store
-      \ --ignore "**/*.pyc"
-      \ -g ""'
+" let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --hidden
+"       \ --ignore .git
+"       \ --ignore .svn
+"       \ --ignore .hg
+"       \ --ignore node_modules
+"       \ --ignore .DS_Store
+"       \ --ignore "**/*.pyc"
+"       \ -g ""'
 
-let g:ctrlp_root_markers = ['Gemfile', '.git']
-let g:ctrlp_cmd = 'CtrlP'
+" let g:ctrlp_root_markers = ['Gemfile', '.git']
+" let g:ctrlp_cmd = 'CtrlP'
 
 "displayyy
 set background=dark
@@ -460,12 +480,33 @@ function! GetJSAlternateFile()
 endfunction
 
 function! GoToAlternateFile()
+  if expand('%') =~ '\.cr$'
+    call crystal_lang#switch_spec_file()
+    return
+  endif
+
+  if expand('%') =~ '\.py$'
+    call TogglePythonTest()
+    return
+  endif
+
   if expand('%') =~ '\.rb$'
     call ToggleSpec()
     return
   endif
 
   execute 'edit' GetJSAlternateFile()
+endfunction
+
+function! TogglePythonTest()
+  if expand('%') =~ 'tests/'
+    let l:path = substitute(expand('%:h'), "tests/", "", "")
+    let l:filename = substitute(expand('%:t'), "^test_", "", "")
+    execute 'edit' l:path . '/' . l:filename
+  else
+    let l:test_path = 'tests/' . expand('%:h') . '/test_' . expand('%:t')
+    execute 'edit' l:test_path
+  endif
 endfunction
 
 map <leader>oa :call GoToAlternateFile()<CR>
@@ -502,4 +543,16 @@ if executable('ag')
   let g:ackprg = 'ag --vimgrep'
 endif
 
-let g:markdown_fenced_languages += ['python', 'py=python']
+let g:markdown_fenced_languages += ['python', 'py=python', 'sh=sh', 'bash=sh']
+let $FZF_DEFAULT_COMMAND = 'ag -g ""'
+
+let g:rooter_patterns = ['package.json', 'Rakefile', 'Makefile', 'requirements.txt', 'Gemfile', '.git/']
+
+let g:ale_fixers = {
+      \   'ruby': [
+      \       'rubocop',
+      \   ],
+      \   'javascript': [
+      \       'prettier',
+      \   ],
+      \}

@@ -7,7 +7,7 @@
 	excludesfile = ~/.gitignore
 [user]
 	name = Gal Schlezinger
-	email = galstar@spitfire.co.il
+	email = gal@spitfire.co.il
 [alias]
 	ac = add . && commit
 	co = checkout
@@ -23,3 +23,8 @@
 	autocorrect = 10
 [gpg]
 	program = /usr/local/bin/gpg
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true

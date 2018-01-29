@@ -1,4 +1,4 @@
-set PATH ~/bin $PATH
+set PATH ~/bin $PATH /usr/local/opt/go/libexec/bin
 set --universal fish_user_paths $fish_user_paths ./node_modules/.bin
 set -g -x GITLAB_API_ENDPOINT https://gitlab.com/api/v3
 set -g -x ANDROID_HOME /usr/local/opt/android-sdk
@@ -166,7 +166,16 @@ end
 function restartvpn
   sudo ifconfig en0 down
   sudo ifconfig en1 down
-  sleep 5
-  sudo ifconfig en0 up
+  sudo ifconfig en2 down
+  sudo route -n flush
+  sleep 0.1
+  sudo route -n flush
+  sleep 0.1
+  sudo route -n flush
+  sleep 0.1
+  sudo route -n flush
+  sleep 0.1
+  sudo ifconfig en2 up
   sudo ifconfig en1 up
+  sudo ifconfig en0 up
 end

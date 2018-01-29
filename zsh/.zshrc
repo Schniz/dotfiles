@@ -1,15 +1,29 @@
-# Path to your oh-my-zsh installation.
-export ZSH=$HOME/.oh-my-zsh
+# If you come from bash you might have to change your $PATH.
+# export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-# Set name of the theme to load.
-# Look in ~/.oh-my-zsh/themes/
-# Optionally, if you set this to "random", it'll load a random theme each
-# time that oh-my-zsh is loaded.
-#ZSH_THEME="robbyrussell"
+# Path to your oh-my-zsh installation.
+export ZSH=/Users/schniz/.oh-my-zsh
+
+# Set name of the theme to load. Optionally, if you set this to "random"
+# it'll load a random theme each time that oh-my-zsh is loaded.
+# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
+# ZSH_THEME="robbyrussell"
 ZSH_THEME="gitster"
+# ZSH_THEME="spaceship"
+
+# Set list of themes to load
+# Setting this variable when ZSH_THEME=random
+# cause zsh load theme from this variable instead of
+# looking in ~/.oh-my-zsh/themes/
+# An empty array have no effect
+# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
+
+# Uncomment the following line to use hyphen-insensitive completion. Case
+# sensitive completion must be off. _ and - will be interchangeable.
+# HYPHEN_INSENSITIVE="true"
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
 # DISABLE_AUTO_UPDATE="true"
@@ -46,13 +60,19 @@ ZSH_THEME="gitster"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git vagrant)
+plugins=(
+  git
+  zsh-syntax-highlighting
+  docker
+  docker-compose
+  z
+  zsh-autosuggestions
+)
 
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
-export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
@@ -69,7 +89,7 @@ export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/g
 # export ARCHFLAGS="-arch x86_64"
 
 # ssh
-# export SSH_KEY_PATH="~/.ssh/dsa_id"
+# export SSH_KEY_PATH="~/.ssh/rsa_id"
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
@@ -79,11 +99,70 @@ export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/g
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-export NVM_DIR=~/.nvm
-source $(brew --prefix nvm)/nvm.sh
 
-export PATH="$PATH:$HOME/.rvm/bin:$HOME/Code/vert.x-3.1.0/bin:./node_modules/.bin" # Add RVM to PATH for scripting
-alias vim='/usr/local/Cellar/vim/7.4.488/bin/vim'
-# Base16 Shell
-BASE16_SHELL="$HOME/.config/base16-shell/base16-eighties.dark.sh"
-([[ -s $BASE16_SHELL ]] && source $BASE16_SHELL) || echo "BASE16 NOT FOUND"
+function rmt() {
+  echo '
+    activate application "Reminders"
+    tell application "System Events" to keystroke "n" using command down
+    tell application "System Events" to keystroke "'$@'"
+    tell application "System Events" to keystroke return
+  ' | osascript -
+}
+
+function rode() {
+  node -e 'R=require("ramda")' -i $@
+}
+
+function evt() {
+  echo '
+    activate application "Calendar"
+    tell application "System Events" to keystroke "n" using command down
+    tell application "System Events" to keystroke "'$@'"
+    tell application "System Events" to keystroke return
+  ' | osascript -
+}
+
+function dfile() {
+  TOPLEVEL=$(git rev-parse --show-toplevel)
+  git diff --name-only origin/develop | fzf --height 6 | sed "s@^@$TOPLEVEL/@"
+}
+
+function opendiff() {
+  FILE=$(dfile)
+  if [ "$FILE" != "" ]; then
+    vim $FILE
+  fi
+}
+
+function mkcd() {
+  mkdir $1
+  cd $1
+}
+
+function restartvpn() {
+  sudo ifconfig en0 down
+  sudo ifconfig en1 down
+  sudo ifconfig en2 down
+  sudo route -n flush
+  sleep 0.1
+  sudo route -n flush
+  sleep 0.1
+  sudo route -n flush
+  sleep 0.1
+  sudo route -n flush
+  sleep 0.1
+  sudo ifconfig en2 up
+  sudo ifconfig en1 up
+  sudo ifconfig en0 up
+}
+
+alias f=fg
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/bin:$HOME/Library/Haskell/bin/:$HOME/.rvm/bin:node_modules/.bin"
+
+
+### spaceship
+export SPACESHIP_KUBECONTEXT_SHOW=false
+export SPACESHIP_CHAR_SYMBOL="✡  "
+export SPACESHIP_CHAR_COLOR_SUCCESS="blue"
