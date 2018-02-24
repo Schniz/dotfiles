@@ -1,0 +1,48 @@
+{
+  "coc.preferences.timeout": 200,
+  "coc.preferences.diagnostic.enable": true,
+  "coc.source.emoji.filetypes": [
+    "markdown",
+    "markdown.mdx"
+  ],
+  "javascript.suggestionActions.enabled": false,
+  // "coc.preferences.customSources": ["word","include"],
+
+  "languageserver": {
+    "elixir": {
+      "command": "/Users/galsc/Code/forks/elixir-ls/rel/language_server.sh",
+      "filetypes": ["elixir"]
+    },
+    "swift": {
+      "command": "sourcekit-lsp",
+      "filetypes": ["swift"]
+    },
+    "solargraph": {
+      "command": "solargraph",
+      "filetypes": ["ruby"]
+    },
+    "crystal": {
+      "filetypes": ["crystal"],
+      "command": "scry"
+    },
+    "rust": {
+      "filetypes": ["rust"],
+      /* "command": "rls" */
+      "command": "ra_lsp_server"
+    },
+    "reason": {
+      "command": "reason-language-server",
+      /* "command": "ocaml-language-server", */
+      /* "args": ["--stdio"], */
+      "filetypes": ["reason"]
+    },
+    "go": {
+      "command": "go-langserver",
+      "filetypes": ["go"],
+      "initializationOptions": {
+        "funcSnippetEnabled": true,
+        "gocodeCompletionEnabled": true
+      }
+    }
+  }
+}

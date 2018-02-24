@@ -1,0 +1,17 @@
+# name: CI
+
+# on: [push]
+
+# jobs:
+#   test:
+
+#     runs-on: macOS-latest
+
+#     steps:
+#     - uses: actions/checkout@v1
+#     - run: |
+#         $(pwd)/bootstrap/links
+#     # - name: Setup tmate session
+#     #   uses: mxschmitt/action-tmate@v1
+#     - run: ./bootstrap/homebrew
+

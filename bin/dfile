@@ -1,0 +1,5 @@
+#!/bin/bash
+
+REF=${1-origin/master}
+TOPLEVEL=$(git rev-parse --show-toplevel)
+git diff --name-only $REF | fzf -m --preview "echo {} | sed 's@^@$TOPLEVEL/@' | xargs git diff $REF --color" | sed "s@^@$TOPLEVEL/@"

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+alias f=fg
+alias vcat=vimcat
+function vim() {
+  nvim $*
+}

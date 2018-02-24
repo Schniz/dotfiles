@@ -1,0 +1,23 @@
+#!/bin/bash
+
+set -e
+
+ROOT_DIRECTORY="$(dirname "$0")/.."
+
+if ! command -v brew &> /dev/null; then
+  echo " --> Installing Homebrew"
+  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+else
+  echo " --> Homebrew exists!"
+fi
+
+echo " --> Installing Brewfile from $ROOT_DIRECTORY"
+
+pwd
+ls
+
+BREWFILE="$ROOT_DIRECTORY/Brewfile"
+echo "Brewfile contents:"
+sed 's/^/  /' < "$BREWFILE"
+
+brew bundle check "--file=$BREWFILE" || brew bundle install "--file=$BREWFILE"

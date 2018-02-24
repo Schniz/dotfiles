@@ -1,0 +1,29 @@
+{
+  "private": true,
+  "name": "npmbin",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "bs-platform": "^5.0.0",
+    "esy": "^0.5.8",
+    "fkill-cli": "^5.0.0",
+    "gatsby-cli": "^2.4.6",
+    "ndb": "^1.0.42",
+    "nodemon": "^1.17.5",
+    "now": "^13.1.3",
+    "ocaml-language-server": "^1.0.35",
+    "pesy": "^0.4.1",
+    "qnm": "^1.0.1",
+    "react-devtools": "^3.2.3",
+    "reason-cli": "3.2.0-darwin",
+    "reenv": "^0.3.0",
+    "serve": "^9.0.0",
+    "surge": "^0.20.1",
+    "svg-term": "^1.1.7",
+    "svg-term-cli": "^2.1.1",
+    "tailwindcss-language-server": "0.0.1",
+    "tern": "^0.21.0",
+    "vim-node-rpc": "^0.1.23"
+  }
+}

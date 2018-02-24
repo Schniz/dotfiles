@@ -1,0 +1,8 @@
+#!/bin/bash
+
+echo '
+  activate application "Reminders"
+  tell application "System Events" to keystroke "n" using command down
+  tell application "System Events" to keystroke "'"$*"'"
+  tell application "System Events" to keystroke return
+' | osascript -

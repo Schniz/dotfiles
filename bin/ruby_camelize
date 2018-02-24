@@ -1,0 +1,4 @@
+#!/bin/bash
+
+set -e
+echo -n "$*" | gsed 's@^\(app\|spec\)/[^/]\+/@@' | gsed 's@_spec$@@' | gsed -r 's/(\b|_)([a-z])/\U\2/g' | gsed 's@/@::@g'

@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -e
+
+ROOT_DIRECTORY="$(dirname "$0")/.."
+
+echo " --> Setup links from $ROOT_DIRECTORY"
+
+ln -vnfs "$ROOT_DIRECTORY" "$HOME/.dotfiles"
+ln -vnfs "$ROOT_DIRECTORY/.config/karabiner" "$HOME/.config/karabiner"
+ln -vnfs "$ROOT_DIRECTORY/.config/nvim" "$HOME/.config/nvim"
+ln -vnfs "$ROOT_DIRECTORY/.gitconfig" "$HOME/.gitconfig"
+ln -vnfs "$ROOT_DIRECTORY/.gitignore" "$HOME/.gitignore"
+ln -vnfs "$ROOT_DIRECTORY/.gvimrc" "$HOME/.gvimrc"
+ln -vnfs "$ROOT_DIRECTORY/.oh-my-zsh-custom" "$HOME/.oh-my-zsh-custom"
+ln -vnfs "$ROOT_DIRECTORY/.vimrc" "$HOME/.vimrc"
+ln -vnfs "$ROOT_DIRECTORY/.zshrc" "$HOME/.zshrc"
+ln -vnfs "$ROOT_DIRECTORY/Brewfile" "$HOME/Brewfile"
+ln -vnfs "$ROOT_DIRECTORY/bin" "$HOME/bin"
+ln -vnfs "$ROOT_DIRECTORY/npmbin" "$HOME/npmbin"

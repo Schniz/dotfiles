@@ -1,0 +1,6 @@
+#!/bin/bash
+
+FILE=$(dfile)
+if [ "$FILE" != "" ]; then
+  vim $(echo $FILE)
+fi

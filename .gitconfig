@@ -1,0 +1,45 @@
+# This is Git's per-user configuration file.
+[core]
+# Please adapt and uncomment the following lines:
+  user = Gal Schlezinger
+  email = galstar@spitfire.co.il
+  editor = nvim
+	excludesfile = ~/.gitignore
+[user]
+	name = Gal Schlezinger
+	email = gal@spitfire.co.il
+[alias]
+	ac = add . && commit
+	co = checkout
+	ffm = merge --ff-only
+	poh = push origin head
+	puh = push upstream head
+	dc = diff --cached
+	bdbd = !git branch --merged | egrep -v \"(^\\*|master|dev)\" | xargs git branch -d
+	pick = !git log -100 --oneline --color | fzf -m --ansi --preview 'git show --color {1}' | awk '{print $1}'
+  sw = !git pickb | xargs git co
+  swi = !git pickba | xargs git co
+  pickb = !show_branches | fzf --ansi | awk '{print $1}'
+  pickba = !show_branches | fzf --ansi | awk '{print $1}'
+	c = commit -m
+  conflicted = diff --name-only --diff-filter=U
+  fo = fetch -p origin
+  fu = fetch -p upstream
+  pff = pull --ff-only
+  pr = !hub pull-request -a Schniz
+  bpr = !hub pr show
+  cis = !hub ci-status -v
+  pr-bug = !hub pull-request -a Schniz -l bug
+  issue = !hub issue create
+  mr = !lab merge-request
+[help]
+	autocorrect = 10
+[gpg]
+	program = /usr/local/bin/gpg
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[push]
+	default = current

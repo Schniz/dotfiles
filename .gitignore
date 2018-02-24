@@ -1,0 +1,8 @@
+node_modules
+alfred
+.DS_Store
+_esy
+*.dontcommit.*
+.netrwhist
+.config/nvim/plugged
+.config/karabiner/automatic_backups
