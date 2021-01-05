@@ -1,0 +1,5 @@
+#!/bin/sh
+
+set -e
+
+brew outdated -q | fzf -m | xargs brew upgrade

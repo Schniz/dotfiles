@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Usage
+# -----
+# $ git_dirt expect-clean # - will exit with status 1 if current dir is not clean
+# $ git_dirt expect-dirty # - will exit with status 1 if current dir is not dirty
+
+EXPECTATION_ARG="$1"
+
+case "$EXPECTATION_ARG" in
+  expect-dirty | expect-clean)
+    ;;
+  *)
+    echo "Please provide either expect-dirty or expect-clean as the first argument"
+    exit 1;;
+esac
+
+FILES="$(git status --short | awk '{print $1}')"
+
+if ! grep 'M\|D\|R' &> /dev/null <<< "$FILES"; then
+  if [ "$EXPECTATION_ARG" = "expect-dirty" ]; then
+    exit 1;
+  fi
+else
+  if [ "$EXPECTATION_ARG" = "expect-clean" ]; then
+    exit 1;
+  fi
+fi

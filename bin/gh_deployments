@@ -1,0 +1,37 @@
+#!/bin/bash
+
+GIT_REV="${1-$(git rev-parse HEAD)}"
+DEPLOYMENTS=$(gh api "repos/:owner/:repo/deployments?ref=$GIT_REV")
+
+print_status() {
+  local dp_emoji
+
+  dp_status="$1"
+
+  dp_state=$(echo "$dp_status" | jq -r '.state')
+  dp_url=$(echo "$dp_status" | jq -r '.target_url')
+
+  case "$dp_state" in
+    "success")
+      dp_emoji="✅"
+      ;;
+    *)
+      dp_emoji="$dp_state"
+      ;;
+  esac
+
+  echo "$dp_emoji  $dp_url"
+}
+
+for deployment in $(echo "$DEPLOYMENTS" | jq -cr '.[]'); do
+  deployment_url=$(echo "$deployment" | jq -cr ".payload.web_url")
+
+  echo "deployment $deployment_url"
+
+  statuses_url="$(echo "$deployment" | jq -r '.statuses_url')"
+  statuses=$(gh api "$statuses_url")
+
+  for dp_status in $(echo "$statuses" | jq -cr '.[]'); do
+    echo "  $(print_status "$dp_status")"
+  done
+done
