@@ -8,6 +8,7 @@
 [user]
 	name = Gal Schlezinger
 	email = gal@spitfire.co.il
+	signingkey = 4886DBB7A895A3FC1AE1EA5848841F4E54E9772D
 [alias]
 	ac = add . && commit
 	co = checkout
@@ -29,6 +30,7 @@
   pr = !hub pull-request -a Schniz
   bpr = !hub pr show
   cis = !hub ci-status -v
+  pco = !hub pr checkout
   pr-bug = !hub pull-request -a Schniz -l bug
   issue = !hub issue create
   mr = !lab merge-request
@@ -43,3 +45,5 @@
 	required = true
 [push]
 	default = current
+[commit]
+	gpgsign = true
