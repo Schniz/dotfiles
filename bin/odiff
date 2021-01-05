@@ -2,5 +2,5 @@
 
 FILE=$(dfile)
 if [ "$FILE" != "" ]; then
-  vim $(echo $FILE)
+  nvim $(echo $FILE)
 fi
