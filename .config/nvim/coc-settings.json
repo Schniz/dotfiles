@@ -1,12 +1,36 @@
 {
-  "coc.preferences.timeout": 200,
-  "coc.preferences.diagnostic.enable": true,
+  "graphql.filetypes": [
+    "graphql"
+    /* "javascript", */
+    /* "javascriptreact", */
+    /* "typescript", */
+    /* "typescriptreact", */
+    /* "reason" */
+  ],
+  "codeLens.enable": true,
+  "eslint.enable": false,
+  "tslint.enable": false,
+  "tslint.autoFixOnSave": true,
+  "eslint.autoFixOnSave": true,
+  "coc.preferences.formatOnSaveFiletypes": ["rust", "markdown"],
+  "solargraph.useBundler": true,
   "coc.source.emoji.filetypes": [
     "markdown",
-    "markdown.mdx"
+    "markdown.mdx",
+    "markdown.ghpull",
+    "eruby"
   ],
   "javascript.suggestionActions.enabled": false,
   // "coc.preferences.customSources": ["word","include"],
+  "tailwindCSS.emmetCompletions": true,
+  "tailwindCSS.jsLanguages": [
+    "javascript",
+    "javascriptreact",
+    "reason",
+    "typescriptreact",
+    "typescript.jsx",
+    "javascript.jsx"
+  ],
 
   "languageserver": {
     "elixir": {
@@ -17,23 +41,23 @@
       "command": "sourcekit-lsp",
       "filetypes": ["swift"]
     },
-    "solargraph": {
-      "command": "solargraph",
-      "filetypes": ["ruby"]
-    },
+    /* "solargraph": { */
+    /*   "command": "solargraph", */
+    /*   "filetypes": ["ruby"] */
+    /* }, */
     "crystal": {
       "filetypes": ["crystal"],
       "command": "scry"
     },
-    "rust": {
-      "filetypes": ["rust"],
-      /* "command": "rls" */
-      "command": "ra_lsp_server"
-    },
+    /* "rust": { */
+    /*   "filetypes": ["rust"], */
+    /*   /1* "command": "rls" *1/ */
+    /*   "command": "rust-analyzer" */
+    /* }, */
     "reason": {
       "command": "reason-language-server",
       /* "command": "ocaml-language-server", */
-      /* "args": ["--stdio"], */
+      "args": ["--stdio"],
       "filetypes": ["reason"]
     },
     "go": {
