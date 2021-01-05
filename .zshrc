@@ -114,10 +114,10 @@ export PATH="$HOME/.rbenv/bin:/usr/local/opt/python/libexec/bin:$PATH"
 eval "$(rbenv init -)"
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/bin:$HOME/Library/Haskell/bin/:$GOPATH:$HOME/.rvm/bin:$HOME/Code/go/bin:$HOME/.gpkg/bin:node_modules/.bin:../node_modules/.bin:../../node_modules/.bin:/usr/local/opt/llvm/bin"
+export PATH="$PATH:$HOME/bin:$HOME/Library/Haskell/bin/:$GOPATH:$HOME/.rvm/bin:$HOME/Code/go/bin:$HOME/.gpkg/bin:node_modules/.bin:../node_modules/.bin:../../node_modules/.bin:../../../node_modules/.bin:/usr/local/opt/llvm/bin"
 
 # fnm
-eval "`fnm env --multi --use-on-cd`"
+eval "$(fnm env --use-on-cd)"
 
 # if [ "$NVM_DIR" = "" ]; then
 #   export NVM_DIR=~/.nvm
@@ -169,3 +169,5 @@ function fuck() {
 
 fpath+=~/.zfunc
 compinit
+
+if [ ! "$TMUX" = "" ]; then export TERM=xterm-256color; fi
