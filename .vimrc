@@ -47,6 +47,8 @@ set exrc
 set enc=utf-8
 set fileencoding=utf-8
 set fileencodings=ucs-bom,utf8,prc
+set undofile
+set undodir=~/.vim/undodir
 " Prevent Vim from clobbering the scrollback buffer. See
 " http://www.shallowsky.com/linux/noaltscreen.html
 set t_ti= t_te=
@@ -79,12 +81,22 @@ Plug 'pbrisbin/vim-mkdir'     " Create new directories if needed
 
 Plug 'junegunn/fzf.vim'    " Fuzzy file finder with fzf
 Plug 'airblade/vim-rooter' " Find the project root
-Plug 'w0rp/ale'            " Linter
+" Plug 'w0rp/ale'            " Linter
 Plug 'neoclide/coc.nvim', {'branch': 'release'}   " Language Server Client
 Plug 'SirVer/ultisnips'    " Snippets for LSP
 
+" Database
+Plug 'tpope/vim-dadbod'   " Comment/uncomment
+
+" Nginx
+Plug 'chr4/nginx.vim'
+
+" Svelte
+Plug 'leafOfTree/vim-svelte-plugin'
+
 " Git
 Plug 'tpope/vim-fugitive'     " Git functions
+Plug 'tpope/vim-rhubarb'      " GitHub integration for fugitive.vim
 Plug 'airblade/vim-gitgutter' " Shows git changes in file
 
 " Swift
@@ -94,6 +106,7 @@ Plug 'keith/swift.vim'
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
 Plug 'moll/vim-node'
+Plug 'Quramy/vim-js-pretty-template'
 
 " Markdown
 Plug 'jtratner/vim-flavored-markdown'
@@ -102,7 +115,9 @@ Plug 'jez/vim-github-hub'
 Plug 'jxnblk/vim-mdx-js'
 
 " " Ruby
-" Plug 'tpope/vim-rails'
+Plug 'tpope/vim-rails'
+Plug 'slim-template/vim-slim'
+Plug 'vim-test/vim-test'
 
 " " Golang
 " Plug 'fatih/vim-go'
@@ -114,9 +129,9 @@ Plug 'dag/vim-fish'
 Plug 'HerringtonDarkholme/yats.vim'
 Plug 'neoclide/jsonc.vim'
 
-" Reason
-Plug 'jordwalke/vim-reasonml'
-Plug 'figitaki/vim-dune'
+" " Reason
+" Plug 'jordwalke/vim-reasonml'
+" Plug 'figitaki/vim-dune'
 
 " " Elixir
 " Plugin 'elixir-editors/vim-elixir'
@@ -140,6 +155,9 @@ let g:airline#extensions#branch#enabled = 1
 set laststatus=2
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#languageclient#enabled = 0
+
+" Vim test
+let test#strategy = "neovim"
 
 " " Automatically remove trailing whitespace
 " function! RemoveTrailingWhitespace()
@@ -198,13 +216,13 @@ noremap <leader>T :ALEFix<CR>
 noremap <C-p> :Files<CR>
 noremap <leader><tab> :Buffers<CR>
 noremap <localleader>P :GFiles<CR>
-noremap <leader>ss :Ag <C-r>\\b<C-r><C-w>\b<CR>
+noremap <leader>ss :Rg <C-r>\\b<C-r><C-w>\b<CR>
 
 " Keymaps: for git
 autocmd FileType conf inoremap <buffer> <leader>jt <C-r>=system('jt')<CR>
 
 " FZF configuration
-let $FZF_DEFAULT_COMMAND = 'ag --ignore "*.lock" -g ""'
+let $FZF_DEFAULT_COMMAND = 'ag --ignore "*.lock" --ignore "dist" --ignore "target" -g ""'
 
 " ALE conf
 let g:ale_linters = {
@@ -223,6 +241,9 @@ let g:ale_fixers = {
       \   'reason': [
       \       'refmt',
       \   ],
+      \   'yaml': [
+      \       'prettier',
+      \   ],
       \   'markdown': [
       \       'prettier',
       \   ],
@@ -234,10 +255,10 @@ let g:ale_fixers = {
       \       'eslint',
       \   ],
       \   'scss': [
-      \       'stylelint',
+      \       'prettier',
       \   ],
       \   'css': [
-      \       'stylelint',
+      \       'prettier',
       \   ],
       \   'swift': [
       \       'swiftformat',
@@ -259,6 +280,7 @@ let g:elixir_elixir_ls_release = '/Users/galsc/Code/forks/elixir-ls/rel'
 let g:rooter_patterns = ['package.json', 'Rakefile', 'Makefile', 'shard.yml', 'requirements.txt', 'Gemfile', 'mix.exs', 'Cargo.toml', '.git/']
 
 " Rust
+autocmd FileType rust nnoremap <buffer> <leader>a :<C-u>CocAction<CR>
 autocmd FileType rust nnoremap <buffer> <leader>t :<C-u>call CocAction('doHover')<CR>
 autocmd FileType rust nnoremap <buffer> <leader>gd *``:<C-u>call CocAction('jumpDefinition')<CR>
 autocmd FileType rust nnoremap <buffer> <leader>cr *``:<C-u>call CocAction('rename')<CR>
@@ -270,16 +292,6 @@ function! ShowTypescriptTypeHint()
   echo l:ts_hint
 endfunction
 
-" Configure prettier if eslint isn't found
-function! IsEslintConfigured()
-  return system('is-eslint-configured') == "1"
-endfunction
-
-function! IsTslintConfigured()
-  return system('is-tslint-configured') == "1"
-  return filereadable('package.json') && filereadable('tslint.json')
-endfunction
-
 function! ConfigureJSALE()
   let l:tslint = trim(tolower(system('which_js_formatter tslint')))
   let l:eslint = trim(tolower(system('which_js_formatter eslint')))
@@ -289,6 +301,7 @@ endfunction
 
 " autocmd FileType typescript,javascript,typescript.jsx,javascript.jsx,json,jsonc call ConfigureJSALE()
 call ConfigureJSALE()
+autocmd BufNewFile,BufRead .eslintrc set syntax=json
 
 autocmd BufNewFile,BufRead *.tsx set filetype=typescript.jsx
 " autocmd FileType typescript,javascript,typescript.jsx,javascript.jsx nmap <buffer> <leader>t :<C-u>call ShowTypescriptTypeHint()<CR>
@@ -300,6 +313,12 @@ autocmd FileType typescript,javascript,typescript.jsx,javascript.jsx nnoremap <b
 " autocmd FileType typescript,javascript,typescript.jsx,javascript.jsx set omnifunc=tsuquyomi#complete
 let g:tsuquyomi_javascript_support = 0 "1
 
+" Ruby
+autocmd FileType ruby nnoremap <buffer> <leader>gd <Plug>(coc-definition)
+autocmd FileType ruby nnoremap <buffer> <leader>t :call CocAction("doHover")<CR>
+
+autocmd FileType ruby nnoremap <buffer> <leader>A :execute "e " . rails#buffer().alternate()<CR>
+
 " Elixir
 
 autocmd FileType elixir nnoremap <buffer> <leader>gd <Plug>(coc-definition)
@@ -307,31 +326,44 @@ autocmd FileType elixir nnoremap <buffer> <leader>t :call CocAction("doHover")<C
 
 " Reason
 
-autocmd FileType reason nnoremap <buffer> <leader>t :call CocAction("doHover")<CR>
-autocmd FileType reason nnoremap <buffer> <leader>gd *``:<C-u>call CocAction('jumpDefinition')<CR>
-autocmd FileType reason nnoremap <buffer> <leader>gr *``:<C-u>call CocAction('jumpReferences')<CR>
-autocmd FileType reason nnoremap <buffer> <leader>cr *``:<C-u>call CocAction('rename')<CR>
+" autocmd FileType reason nnoremap <buffer> <leader>t :call CocAction("doHover")<CR>
+" autocmd FileType reason nnoremap <buffer> <leader>gd *``:<C-u>call CocAction('jumpDefinition')<CR>
+" autocmd FileType reason nnoremap <buffer> <leader>gr *``:<C-u>call CocAction('jumpReferences')<CR>
+" autocmd FileType reason nnoremap <buffer> <leader>cr *``:<C-u>call CocAction('rename')<CR>
 
 " autocmd FileType reason nnoremap <buffer> <leader>t :<C-u>call LanguageClient#textDocument_hover()<CR>
 " autocmd FileType reason nnoremap <buffer> <leader>gd *``:<C-u>call LanguageClient#textDocument_definition()<CR>
-" autocmd FileType reason nnoremap <buffer> <leader>t :<C-u>MerlinTypeOf<CR>
-autocmd FileType reason nnoremap <buffer> <leader>gd *``:<C-u>call CocAction('jumpDefinition')<CR>
+" autocmd FileType reason nnoremap <buffer> <leader>gd *``:<C-u>call CocAction('jumpDefinition')<CR>
+
+" " Esy
+autocmd FileType reason nnoremap <buffer> <leader>t :<C-u>MerlinTypeOf<CR>
+autocmd FileType reason nnoremap <buffer> <leader>gd *``:<C-u>MerlinLocate<CR>
 
 " Crystal
 autocmd FileType crystal nnoremap <buffer> <leader>oa :<C-u>CrystalSpecSwitch<CR>
 autocmd FileType crystal nnoremap <buffer> <leader>T :<C-u>CrystalFormat<CR>
+
+" JSON
+autocmd FileType json,jsonc nnoremap <buffer> <leader>t :call CocAction("doHover")<CR>
 
 " Javascript config
 let javascript_enable_domhtmlcss = 1
 let g:javascript_plugin_flow = 1
 let g:jsx_ext_required = 0
 
+call jspretmpl#register_tag('ruby', 'ruby')
+call jspretmpl#register_tag('css', 'css')
+autocmd FileType javascript JsPreTmpl
+autocmd FileType javascript.jsx JsPreTmpl
+autocmd FileType typescript JsPreTmpl
+autocmd FileType typescript.jsx JsPreTmpl
+
 " Vim-emmet
 let g:user_emmet_mode='a'    "enable all function in all mode.
 let g:user_emmet_expandabbr_key='<C-e>'   "This maps the expansion to Ctrl-space
 
 " Markdown
-let g:markdown_fenced_languages = ['html', 'css', 'erb=eruby', 'javascript.jsx', 'json', 'javascript', 'js=javascript.jsx', 'json=javascript', 'ruby', 'xml', 'reason.hover.type=reason', 'reason=reason', 'ts=typescript', 'typescript', 'rust']
+let g:markdown_fenced_languages = ['html', 'css', 'erb=eruby', 'javascript.jsx', 'json', 'javascript', 'js=javascript.jsx', 'json=javascript', 'ruby', 'xml', 'ts=typescript', 'typescript', 'rust']
 
 " Return to the last position on editor
 if has("autocmd")
