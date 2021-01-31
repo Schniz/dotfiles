@@ -8,11 +8,10 @@
     /* "reason" */
   ],
   "codeLens.enable": true,
-  "eslint.enable": false,
-  "tslint.enable": false,
-  "tslint.autoFixOnSave": true,
-  "eslint.autoFixOnSave": true,
-  "coc.preferences.formatOnSaveFiletypes": ["rust", "markdown"],
+  "prettier.eslintIntegration": true,
+  /* "tslint.autoFixOnSave": true, */
+  /* "eslint.autoFixOnSave": true, */
+  "coc.preferences.formatOnSaveFiletypes": ["rust", "markdown", "typescript", "typescriptreact", "javascript", "javascriptreact", "javascript.jsx"],
   "solargraph.useBundler": true,
   "coc.source.emoji.filetypes": [
     "markdown",

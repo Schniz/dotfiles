@@ -87,6 +87,8 @@ source $ZSH/oh-my-zsh.sh
 #   export EDITOR='mvim'
 # fi
 
+export EDITOR=nvim
+
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 

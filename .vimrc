@@ -104,7 +104,8 @@ Plug 'keith/swift.vim'
 
 " JavaScript
 Plug 'pangloss/vim-javascript'
-Plug 'mxw/vim-jsx'
+" Plug 'mxw/vim-jsx'
+Plug 'MaxMEllon/vim-jsx-pretty'
 Plug 'moll/vim-node'
 Plug 'Quramy/vim-js-pretty-template'
 
@@ -158,6 +159,7 @@ let g:airline#extensions#languageclient#enabled = 0
 
 " Vim test
 let test#strategy = "neovim"
+let test#ruby#use_spring_binstub = 1
 
 " " Automatically remove trailing whitespace
 " function! RemoveTrailingWhitespace()
@@ -299,18 +301,18 @@ function! ConfigureJSALE()
   let g:ale_fixers.javascript = [l:eslint]
 endfunction
 
-" autocmd FileType typescript,javascript,typescript.jsx,javascript.jsx,json,jsonc call ConfigureJSALE()
+" autocmd FileType typescript,javascript,typescriptreact,javascript.jsx,json,jsonc call ConfigureJSALE()
 call ConfigureJSALE()
 autocmd BufNewFile,BufRead .eslintrc set syntax=json
 
-autocmd BufNewFile,BufRead *.tsx set filetype=typescript.jsx
-" autocmd FileType typescript,javascript,typescript.jsx,javascript.jsx nmap <buffer> <leader>t :<C-u>call ShowTypescriptTypeHint()<CR>
-" autocmd FileType typescript,javascript,typescript.jsx,javascript.jsx nmap <buffer> <leader>gd *``:<C-u>call tsuquyomi#definition()<CR>
-autocmd FileType typescript,javascript,typescript.jsx,javascript.jsx nnoremap <buffer> <leader>t :call CocAction("doHover")<CR>
-autocmd FileType typescript,javascript,typescript.jsx,javascript.jsx nnoremap <buffer> <leader>gd *``:<C-u>call CocAction('jumpDefinition')<CR>
-autocmd FileType typescript,javascript,typescript.jsx,javascript.jsx nnoremap <buffer> <leader>gr *``:<C-u>call CocAction('jumpReferences')<CR>
-autocmd FileType typescript,javascript,typescript.jsx,javascript.jsx nnoremap <buffer> <leader>cr *``:<C-u>call CocAction('rename')<CR>
-" autocmd FileType typescript,javascript,typescript.jsx,javascript.jsx set omnifunc=tsuquyomi#complete
+autocmd BufNewFile,BufRead *.tsx set filetype=typescriptreact
+" autocmd FileType typescript,javascript,typescriptreact,javascript.jsx nmap <buffer> <leader>t :<C-u>call ShowTypescriptTypeHint()<CR>
+" autocmd FileType typescript,javascript,typescriptreact,javascript.jsx nmap <buffer> <leader>gd *``:<C-u>call tsuquyomi#definition()<CR>
+autocmd FileType typescript,javascript,typescriptreact,javascript.jsx nnoremap <buffer> <leader>t :call CocAction("doHover")<CR>
+autocmd FileType typescript,javascript,typescriptreact,javascript.jsx nnoremap <buffer> <leader>gd *``:<C-u>call CocAction('jumpDefinition')<CR>
+autocmd FileType typescript,javascript,typescriptreact,javascript.jsx nnoremap <buffer> <leader>gr *``:<C-u>call CocAction('jumpReferences')<CR>
+autocmd FileType typescript,javascript,typescriptreact,javascript.jsx nnoremap <buffer> <leader>cr *``:<C-u>call CocAction('rename')<CR>
+" autocmd FileType typescript,javascript,typescriptreact,javascript.jsx set omnifunc=tsuquyomi#complete
 let g:tsuquyomi_javascript_support = 0 "1
 
 " Ruby
@@ -356,7 +358,7 @@ call jspretmpl#register_tag('css', 'css')
 autocmd FileType javascript JsPreTmpl
 autocmd FileType javascript.jsx JsPreTmpl
 autocmd FileType typescript JsPreTmpl
-autocmd FileType typescript.jsx JsPreTmpl
+autocmd FileType typescriptreact JsPreTmpl
 
 " Vim-emmet
 let g:user_emmet_mode='a'    "enable all function in all mode.
