@@ -49,6 +49,7 @@ set fileencoding=utf-8
 set fileencodings=ucs-bom,utf8,prc
 set undofile
 set undodir=~/.vim/undodir
+set foldmethod=syntax foldlevel=99999
 " Prevent Vim from clobbering the scrollback buffer. See
 " http://www.shallowsky.com/linux/noaltscreen.html
 set t_ti= t_te=
@@ -71,6 +72,10 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'nathanaelkane/vim-indent-guides' " Adds indentation guides
 
+" Tree sitter!
+" Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
+
+Plug 'tpope/vim-projectionist'
 Plug 'tpope/vim-commentary'   " Comment/uncomment
 Plug 'tpope/vim-surround'     " Add surroundings
 Plug 'raimondi/delimitmate'   " Adds closing parens
@@ -87,6 +92,7 @@ Plug 'SirVer/ultisnips'    " Snippets for LSP
 
 " Database
 Plug 'tpope/vim-dadbod'   " Comment/uncomment
+Plug 'pantharshit00/vim-prisma' " Prisma 2
 
 " Nginx
 Plug 'chr4/nginx.vim'
@@ -127,7 +133,7 @@ Plug 'vim-test/vim-test'
 Plug 'dag/vim-fish'
 
 " TypeScript
-Plug 'HerringtonDarkholme/yats.vim'
+" Plug 'HerringtonDarkholme/yats.vim'
 Plug 'neoclide/jsonc.vim'
 
 " " Reason
@@ -148,7 +154,7 @@ Plug 'cespare/vim-toml'
 
 call plug#end()
 
-let g:polyglot_disabled = ['javascript']
+let g:polyglot_disabled = ['javascript', 'typescript']
 
 " vim-airline
 let g:airline_powerline_fonts = 1
@@ -197,6 +203,8 @@ inoremap <silent> <C-c> <Esc>
 nnoremap <leader>= gg=G``zz
 noremap Y y$
 noremap <leader>or :e <C-R>=expand('%:p:h') . '/'<CR>
+noremap <leader>f za
+noremap <leader>l :CocDiagnostics<CR>
 
 " Keymaps: windows
 noremap <silent> <C-h> <C-w>h
@@ -212,7 +220,7 @@ nnoremap <silent> <leader>DD :bd!<CR>
 nnoremap <silent> <leader>bo :BufOnly<CR>
 
 " Keymaps: ALE
-noremap <leader>T :ALEFix<CR>
+noremap <leader>T :call CocAction('format')<CR>
 
 " Keymaps: FZF
 noremap <C-p> :Files<CR>
@@ -309,6 +317,7 @@ autocmd BufNewFile,BufRead *.tsx set filetype=typescriptreact
 " autocmd FileType typescript,javascript,typescriptreact,javascript.jsx nmap <buffer> <leader>t :<C-u>call ShowTypescriptTypeHint()<CR>
 " autocmd FileType typescript,javascript,typescriptreact,javascript.jsx nmap <buffer> <leader>gd *``:<C-u>call tsuquyomi#definition()<CR>
 autocmd FileType typescript,javascript,typescriptreact,javascript.jsx nnoremap <buffer> <leader>t :call CocAction("doHover")<CR>
+autocmd FileType typescript,javascript,typescriptreact,javascript.jsx nnoremap <buffer> <leader>a :<C-u>CocAction<CR>
 autocmd FileType typescript,javascript,typescriptreact,javascript.jsx nnoremap <buffer> <leader>gd *``:<C-u>call CocAction('jumpDefinition')<CR>
 autocmd FileType typescript,javascript,typescriptreact,javascript.jsx nnoremap <buffer> <leader>gr *``:<C-u>call CocAction('jumpReferences')<CR>
 autocmd FileType typescript,javascript,typescriptreact,javascript.jsx nnoremap <buffer> <leader>cr *``:<C-u>call CocAction('rename')<CR>
@@ -355,6 +364,7 @@ let g:jsx_ext_required = 0
 
 call jspretmpl#register_tag('ruby', 'ruby')
 call jspretmpl#register_tag('css', 'css')
+call jspretmpl#register_tag('sql', 'sql')
 autocmd FileType javascript JsPreTmpl
 autocmd FileType javascript.jsx JsPreTmpl
 autocmd FileType typescript JsPreTmpl
@@ -365,7 +375,7 @@ let g:user_emmet_mode='a'    "enable all function in all mode.
 let g:user_emmet_expandabbr_key='<C-e>'   "This maps the expansion to Ctrl-space
 
 " Markdown
-let g:markdown_fenced_languages = ['html', 'css', 'erb=eruby', 'javascript.jsx', 'json', 'javascript', 'js=javascript.jsx', 'json=javascript', 'ruby', 'xml', 'ts=typescript', 'typescript', 'rust']
+let g:markdown_fenced_languages = ['html', 'css', 'erb=eruby', 'javascript.jsx', 'json', 'javascript', 'js=javascript.jsx', 'json=javascript', 'ruby', 'xml', 'ts=typescript', 'typescript', 'rust', 'tsx=typescriptreact']
 
 " Return to the last position on editor
 if has("autocmd")
@@ -396,3 +406,24 @@ let g:indent_guides_guide_size = 1
 inoremap <expr> <TAB> "\<C-y>"
 let g:coc_snippet_next = '<TAB>'
 let g:coc_snippet_prev = '<S-TAB>'
+
+" Projectionist
+
+noremap <leader>A :A<CR>
+let g:projectionist_heuristics = {
+      \ "package.json": {
+      \   "*.spec.ts": {
+      \     "alternate": "{}.ts",
+      \     "template": ["import {open}{close} from \"./{basename}\";"]
+      \   },
+      \   "*.e2e.ts": {
+      \     "alternate": "{}.ts",
+      \     "type": "e2e"
+      \   },
+      \   "*.ts": {"alternate": "{}.spec.ts"},
+      \   "*.spec.tsx": {
+      \     "alternate": "{}.tsx",
+      \     "template": ["import {open}{close} from \"./{basename}\";"]
+      \   },
+      \   "*.tsx": {"alternate": "{}.spec.tsx"},
+      \ }}
