@@ -1,0 +1,7 @@
+#!/bin/sh
+
+if [ -f "$(git rev-parse --show-toplevel)/.git/refs/heads/master" ]; then
+  echo master
+else
+  echo main
+fi
