@@ -1,0 +1,3 @@
+#!/bin/sh
+
+docker images | grep -v "REPOSITORY" | fzf -m | awk '{print $3}' | xargs docker rmi

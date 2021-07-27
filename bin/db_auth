@@ -1,0 +1,13 @@
+#!/bin/bash
+
+if [[ -x "databases.dontcommit.json.js" ]]; then
+  JSON=$(./databases.dontcommit.json.js)
+elif [[ -x "databases.dontcommit.json" ]]; then
+  JSON=$(./databases.dontcommit.json)
+elif [[ -f "databases.dontcommit.json" ]]; then
+  JSON=$(cat databases.dontcommit.json)
+else
+  JSON='{}'
+fi
+
+echo "$JSON" | jq -r ".$1"

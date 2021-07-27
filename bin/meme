@@ -1,0 +1,84 @@
+#!/usr/bin/env PUPPETEER_PRODUCT=chrome deno run -A --unstable
+// vim: ft=javascript
+
+import puppeteer from "https://deno.land/x/puppeteer@5.5.1/mod.ts";
+import * as cmd from "https://cdn.skypack.dev/pin/cmd-ts@v0.6.8-TMjenIC770NjcBfpYzAs/mode=imports/optimized/cmd-ts.js";
+import { HttpUrl } from "https://cdn.skypack.dev/cmd-ts/dist/esm/batteries/url.js";
+
+const html = (strings, ...values) => String.raw(strings, ...values);
+const command = cmd.command({
+  name: "hello",
+  args: {
+    top: cmd.positional({ displayName: "top text" }),
+    image: cmd.positional({ type: HttpUrl, displayName: "image" }),
+    bottom: cmd.restPositionals({ displayName: "bottom text" }),
+    textAlign: cmd.option({
+      long: "text-align",
+      type: {
+        ...cmd.oneOf(["auto", "center"]),
+        defaultValue: () => "auto",
+        defaultValueIsSerializable: true,
+      },
+    }),
+    fontWeight: cmd.option({
+      long: "font-weight",
+      type: {
+        ...cmd.oneOf(["normal", "bold"]),
+        defaultValue: () => "normal",
+        defaultValueIsSerializable: true,
+      },
+    }),
+  },
+  async handler(args) {
+    const browser = await puppeteer.launch({
+      executablePath:
+        "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    });
+    const page = await browser.newPage();
+    await Deno.writeTextFile(
+      "/tmp/meme.html",
+      html`
+        <div
+          id="meme"
+          style="display: inline-block; text-align: ${args.textAlign}; font-family: Arial;"
+        >
+          <span
+            dir="auto"
+            style="display: block; font-weight: ${args.fontWeight}; font-size: 29px;"
+          >
+            ${args.top.replace(/\n/g, "<br>")}
+          </span>
+          <img src="${args.image}" style="max-width: 100vw" />
+          <span
+            dir="auto"
+            style="display: block; font-weight: ${args.fontWeight}; font-size: 29px;"
+          >
+            ${args.bottom.join(" ")}
+          </span>
+        </div>
+      `
+    );
+
+    await page.goto("file:///tmp/meme.html", { waitUntil: "networkidle0" });
+    const meme = await page.$("#meme");
+    const boundingBox = await meme.boundingBox();
+    await page.setViewport({
+      height: Math.round(boundingBox.height),
+      width: Math.round(boundingBox.width),
+      deviceScaleFactor: 1,
+    });
+    await page.screenshot({
+      path: "file.png",
+      clip: await meme.boundingBox(),
+    });
+    await page.close();
+    await browser.close();
+  },
+});
+
+cmd.run(command, Deno.args);
+
+// cmd.run(cmd.binary(command), ["", "", ...Deno.args]);
+
+/**
+ */
