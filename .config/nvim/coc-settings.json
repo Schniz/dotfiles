@@ -1,17 +1,26 @@
 {
   "graphql.filetypes": [
     "graphql"
-    /* "javascript", */
-    /* "javascriptreact", */
-    /* "typescript", */
-    /* "typescriptreact", */
-    /* "reason" */
   ],
   "codeLens.enable": true,
   "prettier.eslintIntegration": true,
-  /* "tslint.autoFixOnSave": true, */
-  /* "eslint.autoFixOnSave": true, */
-  "coc.preferences.formatOnSaveFiletypes": ["rust", "markdown", "typescript", "typescriptreact", "javascript", "javascriptreact", "javascript.jsx"],
+  "prisma.prismaFmtBinPath": "",
+  "coc.preferences.formatOnSaveFiletypes": [
+    "prisma",
+    "rust",
+    "markdown",
+    "typescript",
+    "typescriptreact",
+    "javascript",
+    "javascriptreact",
+    "javascript.jsx",
+    "json",
+    "jsonc",
+    "ruby",
+    "eruby",
+    "prisma"
+  ],
+  "solargraph.bundlerPath": "~/.rbenv/shims/bundle",
   "solargraph.useBundler": true,
   "coc.source.emoji.filetypes": [
     "markdown",
@@ -20,8 +29,8 @@
     "eruby"
   ],
   "javascript.suggestionActions.enabled": false,
-  // "coc.preferences.customSources": ["word","include"],
   "tailwindCSS.emmetCompletions": true,
+  "tailwindCSS.trace.server": "verbose",
   "tailwindCSS.jsLanguages": [
     "javascript",
     "javascriptreact",
@@ -30,42 +39,5 @@
     "typescript.jsx",
     "javascript.jsx"
   ],
-
-  "languageserver": {
-    "elixir": {
-      "command": "/Users/galsc/Code/forks/elixir-ls/rel/language_server.sh",
-      "filetypes": ["elixir"]
-    },
-    "swift": {
-      "command": "sourcekit-lsp",
-      "filetypes": ["swift"]
-    },
-    /* "solargraph": { */
-    /*   "command": "solargraph", */
-    /*   "filetypes": ["ruby"] */
-    /* }, */
-    "crystal": {
-      "filetypes": ["crystal"],
-      "command": "scry"
-    },
-    /* "rust": { */
-    /*   "filetypes": ["rust"], */
-    /*   /1* "command": "rls" *1/ */
-    /*   "command": "rust-analyzer" */
-    /* }, */
-    "reason": {
-      "command": "reason-language-server",
-      /* "command": "ocaml-language-server", */
-      "args": ["--stdio"],
-      "filetypes": ["reason"]
-    },
-    "go": {
-      "command": "go-langserver",
-      "filetypes": ["go"],
-      "initializationOptions": {
-        "funcSnippetEnabled": true,
-        "gocodeCompletionEnabled": true
-      }
-    }
-  }
+  "rust-analyzer.procMacro.enable": true
 }
