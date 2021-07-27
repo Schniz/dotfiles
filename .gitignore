@@ -7,3 +7,4 @@ _esy
 .config/nvim/plugged
 .config/karabiner/automatic_backups
 coc-settings.json
+yarn-error.log
