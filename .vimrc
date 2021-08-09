@@ -427,3 +427,8 @@ let g:projectionist_heuristics = {
       \   },
       \   "*.tsx": {"alternate": "{}.spec.tsx"},
       \ }}
+
+vnoremap <leader>j :move '>+1<CR>gv
+vnoremap <leader>k :move '<-2<CR>gv
+nnoremap <leader>j :move .+1<CR>
+nnoremap <leader>k :move .-2<CR>
