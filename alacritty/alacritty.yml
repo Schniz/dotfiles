@@ -102,7 +102,7 @@
 # Font configuration
 font:
   normal:
-    family: FuraCode Nerd Font
+    family: FiraCode Nerd Font
     style: Regular
   # Normal (roman) font face
   # normal:
