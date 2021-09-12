@@ -8,7 +8,6 @@
 [user]
   name = Gal Schlezinger
   email = gal@spitfire.co.il
-  signingkey = 4886DBB7A895A3FC1AE1EA5848841F4E54E9772D
 [alias]
   ac = add . && commit
   co = checkout
@@ -18,18 +17,16 @@
   dc = diff --cached
   bdbd = !git branch --merged | egrep -v \"(^\\*|master|dev)\" | xargs git branch -d
   pick = !git log -300 --oneline --color | fzf -m --ansi --preview 'git show --color {1}' | awk '{print $1}'
-  sw = !git pickb | xargs git co
-  swi = !git pickba | xargs git co
-  pickb = !show_branches | fzf --ansi | awk '{print $1}'
-  pickba = !show_branches | fzf --ansi | awk '{print $1}'
+  sw = !gh branch
   c = commit -m
   conflicted = diff --name-only --diff-filter=U
+  web = !gh repo view --web
   fo = fetch -p origin
   fu = fetch -p upstream
   pff = pull --ff-only
   pr = !gh pr create -a Schniz
-  bpr = !hub pr show
-  cis = !hub ci-status -v
+  bpr = !gh pr view --web
+  cis = !gh pr checks
   pco = !hub pr checkout
   pr-bug = !hub pull-request -a Schniz -l bug
   issue = !hub issue create
@@ -51,3 +48,5 @@
 	version = 2
 [init]
 	defaultBranch = main
+[include]
+  path = ~/.gitconfig.local
