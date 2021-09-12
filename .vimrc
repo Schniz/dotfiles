@@ -233,7 +233,7 @@ noremap <leader>ss :Rg <C-r>\\b<C-r><C-w>\b<CR>
 autocmd FileType conf inoremap <buffer> <leader>jt <C-r>=system('jt')<CR>
 
 " FZF configuration
-let $FZF_DEFAULT_COMMAND = 'rg --files --ignore-file "*.lock"'
+let $FZF_DEFAULT_COMMAND = 'rg --files'
 
 " ALE conf
 let g:ale_linters = {
@@ -376,7 +376,7 @@ let g:user_emmet_mode='a'    "enable all function in all mode.
 let g:user_emmet_expandabbr_key='<C-e>'   "This maps the expansion to Ctrl-space
 
 " Markdown
-let g:markdown_fenced_languages = ['html', 'css', 'erb=eruby', 'javascript.jsx', 'json', 'javascript', 'js=javascript.jsx', 'json=javascript', 'ruby', 'xml', 'ts=typescript', 'typescript', 'rust', 'tsx=typescriptreact']
+let g:markdown_fenced_languages = ['html', 'css', 'erb=eruby', 'javascript.jsx', 'json', 'javascript', 'js=javascript.jsx', 'json=javascript', 'ruby', 'xml', 'ts=typescript', 'typescript', 'rust', 'tsx=typescriptreact', 'yaml']
 
 " Return to the last position on editor
 if has("autocmd")
