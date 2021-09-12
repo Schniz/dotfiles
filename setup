@@ -3,7 +3,9 @@
 set -e
 
 ./bootstrap/links
-./bootstrap/homebrew
+# ./bootstrap/homebrew
+
+# brew install homebrew/cask-fonts/font-fira-code-nerd-font
 
 # command: (ls /Library/Fonts/Source\ Code\ Pro* &>/dev/null) || (git clone https://github.com/powerline/fonts.git --depth=1 __powerline_fonts__ && (cd __powerline_fonts__ && cp -v SourceCodePro/*.otf /Library/Fonts/) && rm -rf __powerline_fonts__)
 # description: Installing powerline fonts

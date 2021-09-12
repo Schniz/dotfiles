@@ -2,7 +2,7 @@
 
 set -e
 
-ROOT_DIRECTORY="$(dirname "$0")/.."
+ROOT_DIRECTORY="$HOME/Code/dotfiles"
 
 echo " --> Setup links from $ROOT_DIRECTORY"
 
