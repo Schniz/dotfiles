@@ -3,10 +3,10 @@ set nocompatible
 let base16colorspace=256  " Access colors present in 256 colorspace
 
 
-" fix for warning about imp module -> https://github.com/vim/vim/issues/3117#issuecomment-402622616
-if has('python3')
-  silent! python3 1
-endif
+" " fix for warning about imp module -> https://github.com/vim/vim/issues/3117#issuecomment-402622616
+" if has('python3')
+"   silent! python3 1
+" endif
 
 " Allow syntax highlighting (duh)
 syntax on
@@ -152,6 +152,10 @@ Plug 'jparise/vim-graphql'
 
 " TOML
 Plug 'cespare/vim-toml'
+
+" HTTP
+Plug 'nvim-lua/plenary.nvim'
+Plug 'NTBBloodbath/rest.nvim'
 
 call plug#end()
 
@@ -441,6 +445,15 @@ require'nvim-treesitter.configs'.setup {
     -- Using this option may slow down your editor, and you may see some duplicate highlights.
     -- Instead of true it can also be a list of languages
     additional_vim_regex_highlighting = false,
+  },
+}
+
+local parser_configs = require("nvim-treesitter.parsers").get_parser_configs()
+parser_configs.http = {
+  install_info = {
+    url = "https://github.com/NTBBloodbath/tree-sitter-http",
+    files = { "src/parser.c" },
+    branch = "main",
   },
 }
 EOF
