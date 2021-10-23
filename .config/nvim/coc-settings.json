@@ -1,11 +1,10 @@
 {
-  "graphql.filetypes": [
-    "graphql"
-  ],
+  "graphql.filetypes": ["graphql"],
   "codeLens.enable": true,
   "prettier.eslintIntegration": true,
   "prisma.prismaFmtBinPath": "",
   "coc.preferences.formatOnSaveFiletypes": [
+    "elixir",
     "prisma",
     "rust",
     "markdown",
