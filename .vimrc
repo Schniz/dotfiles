@@ -218,6 +218,7 @@ noremap <leader>gd *``:<C-u>call CocAction('jumpDefinition')<CR>
 noremap <leader>cr *``:<C-u>call CocAction('rename')<CR>
 noremap <leader>l :CocDiagnostics<CR>
 noremap <leader>gr *``:<C-u>call CocAction('jumpReferences')<CR>
+noremap <leader>T :call CocAction('format')<CR>
 
 " Keymaps: windows
 noremap <silent> <C-h> <C-w>h
@@ -232,9 +233,6 @@ nnoremap <silent> <leader>dd :bd<CR>
 nnoremap <silent> <leader>DD :bd!<CR>
 nnoremap <silent> <leader>bo :BufOnly<CR>
 
-" Keymaps: ALE
-noremap <leader>T :call CocAction('format')<CR>
-
 " Keymaps: FZF
 noremap <C-p> :Files<CR>
 noremap <leader><tab> :Buffers<CR>
@@ -243,58 +241,6 @@ noremap <leader>ss :Rg <C-r>\\b<C-r><C-w>\b<CR>
 
 " FZF configuration
 let $FZF_DEFAULT_COMMAND = 'rg --files'
-
-" ALE conf
-let g:ale_linters = {
-\   'typescript': ['tsserver'],
-\   'rust': ['cargo'],
-\   'ruby': ['standardrb', 'ruby', 'solargraph']
-\}
-
-let g:ale_fixers = {
-      \   'sh': [
-      \       'shfmt',
-      \   ],
-      \   'ruby': [
-      \       'standardrb',
-      \   ],
-      \   'reason': [
-      \       'refmt',
-      \   ],
-      \   'yaml': [
-      \       'prettier',
-      \   ],
-      \   'markdown': [
-      \       'prettier',
-      \   ],
-      \   'html': [ 'prettier' ],
-      \   'typescript': [
-      \       'tslint',
-      \   ],
-      \   'javascript': [
-      \       'eslint',
-      \   ],
-      \   'scss': [
-      \       'prettier',
-      \   ],
-      \   'css': [
-      \       'prettier',
-      \   ],
-      \   'swift': [
-      \       'swiftformat',
-      \   ],
-      \   'go': [
-      \       'goimports',
-      \   ],
-      \   'sql': [
-      \       'sqlfmt',
-      \   ],
-      \   'rust': ['rustfmt'],
-      \   'elixir': ['mix_format']
-      \}
-" let g:ale_completion_enabled = 1
-" let b:ale_set_balloons = 1
-let g:elixir_elixir_ls_release = '/Users/galsc/Code/forks/elixir-ls/rel'
 
 " Vim-Rooter
 let g:rooter_patterns = ['package.json', 'Rakefile', 'Makefile', 'shard.yml', 'requirements.txt', 'Gemfile', 'mix.exs', 'Cargo.toml', '.git/']
@@ -349,9 +295,6 @@ let macvim_skip_colorscheme = 1
 highlight Search guibg=NONE guifg=NONE ctermfg=NONE ctermbg=NONE cterm=underline gui=undercurl
 highlight IndentGuidesOdd ctermbg=NONE guibg=#333333
 highlight IndentGuidesEven ctermbg=NONE guibg=#403737
-
-" No warnings, no problems!
-highlight ALEWarning guibg=NONE
 
 let g:indent_guides_enable_on_vim_startup = 1
 let g:indent_guides_auto_colors = 0
