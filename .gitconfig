@@ -27,7 +27,7 @@
   pr = !gh pr create -a Schniz
   bpr = !gh pr view --web
   cis = !gh pr checks
-  pco = !hub pr checkout
+  pco = !gh pr checkout
   pr-bug = !hub pull-request -a Schniz -l bug
   issue = !hub issue create
   mr = !lab merge-request
