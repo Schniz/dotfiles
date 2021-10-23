@@ -84,6 +84,7 @@ Plug 'tpope/vim-repeat'
 Plug 'schickling/vim-bufonly' " Close everything but this buffer
 Plug 'sgur/vim-editorconfig'  " .editorconfig file
 Plug 'pbrisbin/vim-mkdir'     " Create new directories if needed
+Plug 'aserowy/tmux.nvim' " Move around with tmux
 
 Plug 'junegunn/fzf.vim'    " Fuzzy file finder with fzf
 Plug 'airblade/vim-rooter' " Find the project root
@@ -462,3 +463,23 @@ vnoremap <leader>j :move '>+1<CR>gv
 vnoremap <leader>k :move '<-2<CR>gv
 nnoremap <leader>j :move .+1<CR>
 nnoremap <leader>k :move .-2<CR>
+
+lua <<EOF
+  require'tmux'.setup({
+      -- overwrite default configuration
+      -- here, e.g. to enable default bindings
+      copy_sync = {
+          -- enables copy sync and overwrites all register actions to
+          -- sync registers *, +, unnamed, and 0 till 9 from tmux in advance
+          enable = false,
+      },
+      navigation = {
+          -- enables default keybindings (C-hjkl) for normal mode
+          enable_default_keybindings = true,
+      },
+      resize = {
+          -- enables default keybindings (A-hjkl) for normal mode
+          enable_default_keybindings = true,
+      }
+  })
+EOF
