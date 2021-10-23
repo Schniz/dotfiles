@@ -71,6 +71,7 @@ Plug 'chriskempson/base16-vim' " Colorscheme
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'nathanaelkane/vim-indent-guides' " Adds indentation guides
+Plug 'norcalli/nvim-colorizer.lua'
 
 " Tree sitter!
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
@@ -88,7 +89,6 @@ Plug 'aserowy/tmux.nvim' " Move around with tmux
 
 Plug 'junegunn/fzf.vim'    " Fuzzy file finder with fzf
 Plug 'airblade/vim-rooter' " Find the project root
-" Plug 'w0rp/ale'            " Linter
 Plug 'neoclide/coc.nvim', {'branch': 'release'}   " Language Server Client
 Plug 'SirVer/ultisnips'    " Snippets for LSP
 
@@ -180,7 +180,6 @@ let test#ruby#use_spring_binstub = 1
 
 autocmd BufNewFile,BufRead Brewfile set ft=ruby
 autocmd FileType json set ft=jsonc
-" autocmd FileType python,markdown,javascript,javascript.jsx,c,cpp,java,php,ruby,yaml autocmd BufWritePre <buffer> call RemoveTrailingWhitespace()
 
 """ Basic keymaps
 
@@ -210,7 +209,15 @@ nnoremap <leader>= gg=G``zz
 noremap Y y$
 noremap <leader>or :e <C-R>=expand('%:p:h') . '/'<CR>
 noremap <leader>f za
+
+" CoC
+noremap <leader>a :<C-u>CocAction<CR>
+noremap <leader>t :<C-u>call CocAction('doHover')<CR>
+noremap <leader>gd *``:<C-u>call CocAction('jumpDefinition')<CR>
+" noremap <leader>gd <Plug>(coc-definition)
+noremap <leader>cr *``:<C-u>call CocAction('rename')<CR>
 noremap <leader>l :CocDiagnostics<CR>
+noremap <leader>gr *``:<C-u>call CocAction('jumpReferences')<CR>
 
 " Keymaps: windows
 noremap <silent> <C-h> <C-w>h
@@ -233,9 +240,6 @@ noremap <C-p> :Files<CR>
 noremap <leader><tab> :Buffers<CR>
 noremap <localleader>P :GFiles<CR>
 noremap <leader>ss :Rg <C-r>\\b<C-r><C-w>\b<CR>
-
-" Keymaps: for git
-autocmd FileType conf inoremap <buffer> <leader>jt <C-r>=system('jt')<CR>
 
 " FZF configuration
 let $FZF_DEFAULT_COMMAND = 'rg --files'
@@ -295,12 +299,6 @@ let g:elixir_elixir_ls_release = '/Users/galsc/Code/forks/elixir-ls/rel'
 " Vim-Rooter
 let g:rooter_patterns = ['package.json', 'Rakefile', 'Makefile', 'shard.yml', 'requirements.txt', 'Gemfile', 'mix.exs', 'Cargo.toml', '.git/']
 
-" Rust
-autocmd FileType rust nnoremap <buffer> <leader>a :<C-u>CocAction<CR>
-autocmd FileType rust nnoremap <buffer> <leader>t :<C-u>call CocAction('doHover')<CR>
-autocmd FileType rust nnoremap <buffer> <leader>gd *``:<C-u>call CocAction('jumpDefinition')<CR>
-autocmd FileType rust nnoremap <buffer> <leader>cr *``:<C-u>call CocAction('rename')<CR>
-
 " Typescript
 function! ShowTypescriptTypeHint()
   let l:ts_hint = tsuquyomi#hint()
@@ -308,60 +306,12 @@ function! ShowTypescriptTypeHint()
   echo l:ts_hint
 endfunction
 
-function! ConfigureJSALE()
-  let l:tslint = trim(tolower(system('which_js_formatter tslint')))
-  let l:eslint = trim(tolower(system('which_js_formatter eslint')))
-  let g:ale_fixers.typescript = [l:tslint]
-  let g:ale_fixers.javascript = [l:eslint]
-endfunction
-
-" autocmd FileType typescript,javascript,typescriptreact,javascript.jsx,json,jsonc call ConfigureJSALE()
-call ConfigureJSALE()
 autocmd BufNewFile,BufRead .eslintrc set syntax=json
-
 autocmd BufNewFile,BufRead *.tsx set filetype=typescriptreact
-" autocmd FileType typescript,javascript,typescriptreact,javascript.jsx nmap <buffer> <leader>t :<C-u>call ShowTypescriptTypeHint()<CR>
-" autocmd FileType typescript,javascript,typescriptreact,javascript.jsx nmap <buffer> <leader>gd *``:<C-u>call tsuquyomi#definition()<CR>
-autocmd FileType typescript,javascript,typescriptreact,javascript.jsx nnoremap <buffer> <leader>t :call CocAction("doHover")<CR>
-autocmd FileType typescript,javascript,typescriptreact,javascript.jsx nnoremap <buffer> <leader>a :<C-u>CocAction<CR>
-autocmd FileType typescript,javascript,typescriptreact,javascript.jsx nnoremap <buffer> <leader>gd *``:<C-u>call CocAction('jumpDefinition')<CR>
-autocmd FileType typescript,javascript,typescriptreact,javascript.jsx nnoremap <buffer> <leader>gr *``:<C-u>call CocAction('jumpReferences')<CR>
-autocmd FileType typescript,javascript,typescriptreact,javascript.jsx nnoremap <buffer> <leader>cr *``:<C-u>call CocAction('rename')<CR>
-" autocmd FileType typescript,javascript,typescriptreact,javascript.jsx set omnifunc=tsuquyomi#complete
 let g:tsuquyomi_javascript_support = 0 "1
 
 " Ruby
-autocmd FileType ruby nnoremap <buffer> <leader>gd <Plug>(coc-definition)
-autocmd FileType ruby nnoremap <buffer> <leader>t :call CocAction("doHover")<CR>
-
 autocmd FileType ruby nnoremap <buffer> <leader>A :execute "e " . rails#buffer().alternate()<CR>
-
-" Elixir
-
-autocmd FileType elixir nnoremap <buffer> <leader>gd <Plug>(coc-definition)
-autocmd FileType elixir nnoremap <buffer> <leader>t :call CocAction("doHover")<CR>
-
-" Reason
-
-" autocmd FileType reason nnoremap <buffer> <leader>t :call CocAction("doHover")<CR>
-" autocmd FileType reason nnoremap <buffer> <leader>gd *``:<C-u>call CocAction('jumpDefinition')<CR>
-" autocmd FileType reason nnoremap <buffer> <leader>gr *``:<C-u>call CocAction('jumpReferences')<CR>
-" autocmd FileType reason nnoremap <buffer> <leader>cr *``:<C-u>call CocAction('rename')<CR>
-
-" autocmd FileType reason nnoremap <buffer> <leader>t :<C-u>call LanguageClient#textDocument_hover()<CR>
-" autocmd FileType reason nnoremap <buffer> <leader>gd *``:<C-u>call LanguageClient#textDocument_definition()<CR>
-" autocmd FileType reason nnoremap <buffer> <leader>gd *``:<C-u>call CocAction('jumpDefinition')<CR>
-
-" " Esy
-autocmd FileType reason nnoremap <buffer> <leader>t :<C-u>MerlinTypeOf<CR>
-autocmd FileType reason nnoremap <buffer> <leader>gd *``:<C-u>MerlinLocate<CR>
-
-" Crystal
-autocmd FileType crystal nnoremap <buffer> <leader>oa :<C-u>CrystalSpecSwitch<CR>
-autocmd FileType crystal nnoremap <buffer> <leader>T :<C-u>CrystalFormat<CR>
-
-" JSON
-autocmd FileType json,jsonc nnoremap <buffer> <leader>t :call CocAction("doHover")<CR>
 
 " Javascript config
 let javascript_enable_domhtmlcss = 1
@@ -457,6 +407,8 @@ parser_configs.http = {
     branch = "main",
   },
 }
+
+require'colorizer'.setup()
 EOF
 
 vnoremap <leader>j :move '>+1<CR>gv
