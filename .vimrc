@@ -77,6 +77,7 @@ Plug 'norcalli/nvim-colorizer.lua'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
 Plug 'nvim-treesitter/playground'
 
+Plug 'JoosepAlviste/nvim-ts-context-commentstring' " manipulate commentstring with tree-sitter context
 Plug 'tpope/vim-projectionist'
 Plug 'tpope/vim-commentary'   " Comment/uncomment
 Plug 'tpope/vim-surround'     " Add surroundings
@@ -91,9 +92,10 @@ Plug 'junegunn/fzf.vim'    " Fuzzy file finder with fzf
 Plug 'airblade/vim-rooter' " Find the project root
 Plug 'neoclide/coc.nvim', {'branch': 'release'}   " Language Server Client
 Plug 'SirVer/ultisnips'    " Snippets for LSP
+Plug 'github/copilot.vim'
 
 " Database
-Plug 'tpope/vim-dadbod'   " Comment/uncomment
+" Plug 'tpope/vim-dadbod'   " Comment/uncomment
 Plug 'pantharshit00/vim-prisma' " Prisma 2
 
 " Nginx
@@ -127,6 +129,7 @@ Plug 'jxnblk/vim-mdx-js'
 Plug 'tpope/vim-rails'
 Plug 'slim-template/vim-slim'
 Plug 'vim-test/vim-test'
+Plug 'jebaum/vim-tmuxify'
 
 " " Golang
 " Plug 'fatih/vim-go'
@@ -159,8 +162,6 @@ Plug 'nvim-lua/plenary.nvim'
 Plug 'NTBBloodbath/rest.nvim'
 
 call plug#end()
-
-let g:polyglot_disabled = ['javascript', 'typescript']
 
 " vim-airline
 let g:airline_powerline_fonts = 1
@@ -220,11 +221,22 @@ noremap <leader>l :CocDiagnostics<CR>
 noremap <leader>gr *``:<C-u>call CocAction('jumpReferences')<CR>
 noremap <leader>T :call CocAction('format')<CR>
 
+" Ctrl-Space for autocomplete
+if has('nvim')
+  inoremap <silent><expr> <c-space> coc#refresh()
+else
+  inoremap <silent><expr> <c-@> coc#refresh()
+endif
+
 " Keymaps: windows
 noremap <silent> <C-h> <C-w>h
 noremap <silent> <C-j> <C-w>j
 noremap <silent> <C-k> <C-w>k
 noremap <silent> <C-l> <C-w>l
+tnoremap <silent> <C-h> <C-\><C-n><C-w>h
+tnoremap <silent> <C-j> <C-\><C-n><C-w>j
+tnoremap <silent> <C-k> <C-\><C-n><C-w>k
+tnoremap <silent> <C-l> <C-\><C-n><C-w>l
 
 " Keymaps: buffers
 nnoremap <silent> <leader>e :bn<CR>
@@ -277,7 +289,7 @@ let g:user_emmet_mode='a'    "enable all function in all mode.
 let g:user_emmet_expandabbr_key='<C-e>'   "This maps the expansion to Ctrl-space
 
 " Markdown
-let g:markdown_fenced_languages = ['html', 'css', 'erb=eruby', 'javascript.jsx', 'json', 'javascript', 'js=javascript.jsx', 'json=javascript', 'ruby', 'xml', 'ts=typescript', 'typescript', 'rust', 'tsx=typescriptreact', 'yaml']
+let g:markdown_fenced_languages = ['html', 'css', 'erb=eruby', 'javascript.jsx', 'json=jsonc', 'javascript', 'js=javascript.jsx', 'json=javascript', 'ruby', 'xml', 'ts=typescript', 'typescript', 'rust', 'tsx=typescriptreact', 'yaml']
 
 " Return to the last position on editor
 if has("autocmd")
@@ -340,6 +352,9 @@ require'nvim-treesitter.configs'.setup {
     -- Instead of true it can also be a list of languages
     additional_vim_regex_highlighting = false,
   },
+  context_commentstring = {
+    enable = true
+  }
 }
 
 local parser_configs = require("nvim-treesitter.parsers").get_parser_configs()
@@ -378,3 +393,14 @@ lua <<EOF
       }
   })
 EOF
+
+" Skip the annoying SQL C-c binding
+let g:omni_sql_no_default_maps = 1
+
+" copilot
+let g:copilot_filetypes = {
+      \ 'markdown': v:true,
+      \ }
+
+" open fzf with directory of current file
+noremap <leader>of :Files %:h<CR>
