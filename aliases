@@ -1,7 +1,12 @@
 #!/bin/bash
 
 alias f=fg
+alias k=kubectl
 alias vcat=vimcat
 function vim() {
   nvim $*
+}
+
+function kubecomplete() {
+  source <(kubectl completion zsh)
 }
