@@ -98,8 +98,9 @@ Plug 'github/copilot.vim'
 " Plug 'tpope/vim-dadbod'   " Comment/uncomment
 Plug 'pantharshit00/vim-prisma' " Prisma 2
 
-" Nginx
+" web servers
 Plug 'chr4/nginx.vim'
+Plug 'isobit/vim-caddyfile'
 
 " Svelte
 Plug 'leafOfTree/vim-svelte-plugin'

@@ -122,7 +122,7 @@ export PATH="$PATH:$HOME/bin:$HOME/Library/Haskell/bin/:$GOPATH:$HOME/.rvm/bin:$
 export PATH="$HOME/Code/fnm/target/debug:$HOME/Code/gpkg/target/debug:$PATH"
 
 # fnm
-eval "$(fnm env --use-on-cd)"
+eval "$(fnm env --use-on-cd --version-file-strategy=recursive)"
 
 # if [ "$NVM_DIR" = "" ]; then
 #   export NVM_DIR=~/.nvm
