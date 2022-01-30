@@ -1,7 +1,9 @@
 #!/bin/sh
 
-if [ -f "$(git rev-parse --show-toplevel)/.git/refs/heads/master" ]; then
-  echo master
-else
+if [ -f "$(git rev-parse --show-toplevel)/.git/refs/heads/canary" ]; then
+  echo canary
+elif [ -f "$(git rev-parse --show-toplevel)/.git/refs/heads/main" ]; then
   echo main
+else
+  echo master
 fi

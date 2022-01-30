@@ -1,0 +1,4 @@
+#!/bin/bash
+
+REF=${REF-origin/$(get_main_branch)}
+echo $@ | xargs git diff $REF --color
