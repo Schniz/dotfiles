@@ -9,6 +9,7 @@
   name = Gal Schlezinger
   email = gal@spitfire.co.il
 [alias]
+  m = !git co $(get_main_branch)
   ac = add . && commit
   co = checkout
   ffm = merge --ff-only
@@ -42,11 +43,11 @@
   required = true
 [push]
   default = current
-[commit]
-  gpgsign = true
+; [commit]
+;   gpgsign = true
 [protocol]
 	version = 2
 [init]
 	defaultBranch = main
-[include]
-  path = ~/.gitconfig.local
+; [include]
+;   path = ~/.gitconfig.local
