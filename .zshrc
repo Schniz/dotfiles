@@ -118,7 +118,7 @@ if command -v rbenv &> /dev/null; then
 fi
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/bin:$HOME/Library/Haskell/bin/:$GOPATH:$HOME/.rvm/bin:$HOME/Code/go/bin:$HOME/.gpkg/bin:node_modules/.bin:../node_modules/.bin:../../node_modules/.bin:../../../node_modules/.bin:/usr/local/opt/llvm/bin"
+export PATH="$PATH:$HOME/bin:$HOME/Library/Haskell/bin/:$GOPATH:$HOME/.rvm/bin:$HOME/Code/go/bin:$HOME/.gpkg/bin:node_modules/.bin:../node_modules/.bin:../../node_modules/.bin:../../../node_modules/.bin:/usr/local/opt/llvm/bin:/Users/schniz/.luarocks/bin"
 export PATH="$HOME/Code/fnm/target/debug:$HOME/Code/gpkg/target/debug:$PATH"
 
 # fnm
