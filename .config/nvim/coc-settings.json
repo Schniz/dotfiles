@@ -1,6 +1,5 @@
 {
   "codeLens.enable": true,
-  "prettier.eslintIntegration": true,
   "coc.preferences.formatOnSaveFiletypes": [
     "elixir",
     "prisma",
@@ -36,5 +35,6 @@
     "typescript.jsx",
     "javascript.jsx"
   ],
-  "rust-analyzer.procMacro.enable": true
+  "rust-analyzer.procMacro.enable": true,
+  "json.format.enable": false
 }
