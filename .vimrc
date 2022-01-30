@@ -57,13 +57,6 @@ set t_ti= t_te=
 
 """ Plugins
 
-" Load vim-plug
-if empty(glob("~/.vim/autoload/plug.vim"))
-    execute '!curl -fLo ~/.vim/autoload/plug.vim https://raw.github.com/junegunn/vim-plug/master/plug.vim'
-endif
-
-set rtp+=/usr/local/opt/fzf
-
 call plug#begin('~/.vim/plugged')
 
 " Looks
@@ -88,6 +81,7 @@ Plug 'sgur/vim-editorconfig'  " .editorconfig file
 Plug 'pbrisbin/vim-mkdir'     " Create new directories if needed
 Plug 'aserowy/tmux.nvim' " Move around with tmux
 
+Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'    " Fuzzy file finder with fzf
 Plug 'airblade/vim-rooter' " Find the project root
 Plug 'neoclide/coc.nvim', {'branch': 'release'}   " Language Server Client
@@ -253,7 +247,7 @@ noremap <localleader>P :GFiles<CR>
 noremap <leader>ss :Rg <C-r>\\b<C-r><C-w>\b<CR>
 
 " FZF configuration
-let $FZF_DEFAULT_COMMAND = 'rg --files'
+let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --glob "!.git/"'
 
 " Vim-Rooter
 let g:rooter_patterns = ['package.json', 'Rakefile', 'Makefile', 'shard.yml', 'requirements.txt', 'Gemfile', 'mix.exs', 'Cargo.toml', '.git/']
@@ -405,3 +399,4 @@ let g:copilot_filetypes = {
 
 " open fzf with directory of current file
 noremap <leader>of :Files %:h<CR>
+noremap <silent> <leader>od :call fzf#run(fzf#wrap({'source': 'dfile-list', 'options': '-m --preview "diff-for-file {}"'}))<CR>
