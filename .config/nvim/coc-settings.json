@@ -36,5 +36,15 @@
     "javascript.jsx"
   ],
   "rust-analyzer.procMacro.enable": true,
-  "json.format.enable": false
+  "json.format.enable": false,
+  "languageserver": {
+    "terraform": {
+      "command": "terraform-ls",
+      "args": ["serve"],
+      "filetypes": ["terraform", "tf"],
+      "initializationOptions": {},
+      "settings": {}
+    }
+  },
+  "deno.enable": false
 }
