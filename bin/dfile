@@ -1,4 +1,4 @@
 #!/bin/bash
 
 REF=${1-origin/$(get_main_branch)}
-dfile-list | fzf -m --preview "REF=$REF diff-for-file {}"
+dfile-list $REF | fzf -m --preview "REF=$REF diff-for-file {}"

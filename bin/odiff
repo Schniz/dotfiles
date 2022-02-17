@@ -1,6 +1,6 @@
 #!/bin/bash
 
-FILE=$(dfile)
+FILE=$(dfile $1)
 if [ "$FILE" != "" ]; then
   nvim $(echo $FILE)
 fi

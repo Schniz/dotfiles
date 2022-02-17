@@ -1,7 +1,39 @@
-#!/bin/bash
+#!/usr/bin/env node
 
-REF=${1-origin/$(get_main_branch)}
-TOPLEVEL=$(git rev-parse --show-toplevel)
-for file in $(git diff --name-only $REF | sed "s@^@$TOPLEVEL/@"); do
-  realpath --relative-to=$(pwd) $file
-done
+const cp = require("child_process");
+const path = require("path");
+
+main();
+
+function getRef() {
+  if (!process.argv[2]) {
+    const mainBranch = cp
+      .execSync("get_main_branch", { encoding: "utf8" })
+      .trim();
+    return `origin/${mainBranch}`;
+  }
+
+  return process.argv[2];
+}
+
+function getTopLevel() {
+  return cp
+    .execSync(`git rev-parse --show-toplevel`, { encoding: "utf8" })
+    .trim();
+}
+
+function main() {
+  const ref = getRef();
+  const topLevel = getTopLevel();
+  const cwd = process.cwd();
+  const lines = cp
+    .execSync(`git diff --name-only ${ref}`, { encoding: "utf8" })
+    .split("\n")
+    .filter(Boolean);
+  for (let line of lines) {
+    line = `${topLevel}/${line}`;
+    line = path.relative(cwd, line);
+
+    console.log(line);
+  }
+}
