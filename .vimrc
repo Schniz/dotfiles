@@ -401,3 +401,7 @@ let g:copilot_filetypes = {
 " open fzf with directory of current file
 noremap <leader>of :Files %:h<CR>
 noremap <silent> <leader>od :call fzf#run(fzf#wrap({'source': 'dfile-list', 'options': '-m --preview "diff-for-file {}"'}))<CR>
+
+" Command-line mapping for text movement
+cnoremap <C-A> <Home>
+cnoremap <C-E> <End>
