@@ -1,0 +1,93 @@
+#!/usr/bin/env node
+
+// @ts-check
+
+const cp = require("child_process");
+
+function main() {
+  const output = cp.execSync(
+    "tmux list-windows -F '#{window_index};;#{window_flags};;#{pane_current_path};;#{pane_current_command}'",
+    { encoding: "utf8" }
+  );
+
+  const windows = output
+    .split("\n")
+    .filter(Boolean)
+    .map((windowLine) => {
+      const [id, rawFlags, path, cmd] = windowLine.split(";;");
+      return { id, flags: parseTmuxWindowFlags(rawFlags), path, cmd };
+    })
+    .map(windowToLine);
+
+  let result;
+  try {
+    result = cp.execSync("fzf-tmux --ansi --header='select a tmux window'", {
+      input: windows.join("\n"),
+      encoding: "utf8",
+    });
+  } catch (e) {
+    return;
+  }
+
+  const windowId = lineToWindowId(result);
+  cp.execSync(`tmux select-window -t ${windowId}`);
+}
+
+/** @typedef {{ current: boolean, last: boolean }} Flags */
+/** @typedef {{ id: string, flags: Flags, path: string, cmd: string }} TmuxWindow */
+
+/**
+ * @param {TmuxWindow} window
+ * @returns string
+ */
+function windowToLine(window) {
+  let { id, flags, path, cmd } = window;
+  const { current, last } = flags;
+  path = path.replace(process.env.HOME, "~");
+  path = colorize.bold(path);
+  cmd = colorize.yellow(colorize.bold(cmd));
+  let str = `${colorize.green(id)} ${path}:${cmd}`;
+
+  if (current) {
+    str += colorize.dim(colorize.cyan(" [current]"));
+  } else if (last) {
+    str += colorize.dim(colorize.cyan(" [prev]"));
+  }
+
+  return str;
+}
+
+/**
+ * @param {string} line
+ * @returns number
+ */
+function lineToWindowId(line) {
+  const output = line.split(" ")[0];
+  const value = Number(output);
+  if (Number.isNaN(value)) {
+    throw new Error(`Invalid window id: ${output}`);
+  }
+  return value;
+}
+
+const colorize = {
+  green: (text) => `\x1b[32m${text}\x1b[0m`,
+  red: (text) => `\x1b[31m${text}\x1b[0m`,
+  yellow: (text) => `\x1b[33m${text}\x1b[0m`,
+  cyan: (text) => `\x1b[36m${text}\x1b[0m`,
+  dim: (text) => `\x1b[2m${text}\x1b[0m`,
+  bold: (text) => `\x1b[1m${text}\x1b[0m`,
+};
+
+/**
+ * @param {string} flags
+ * @returns {Flags}
+ */
+function parseTmuxWindowFlags(flags) {
+  return {
+    current: flags.includes("*"),
+    last: flags.includes("-"),
+  };
+}
+
+main();
