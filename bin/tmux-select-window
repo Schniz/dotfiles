@@ -16,13 +16,19 @@ function main() {
     .map((windowLine) => {
       const [id, rawFlags, path, cmd] = windowLine.split(";;");
       return { id, flags: parseTmuxWindowFlags(rawFlags), path, cmd };
-    })
-    .map(windowToLine);
+    });
+
+  const lastIndex = windows.findIndex((x) => x.flags.last);
+  if (lastIndex > -1) {
+    const last = windows[lastIndex];
+    windows.splice(lastIndex, 1);
+    windows.unshift(last);
+  }
 
   let result;
   try {
     result = cp.execSync("fzf-tmux --ansi --header='select a tmux window'", {
-      input: windows.join("\n"),
+      input: windows.map(windowToLine).join("\n"),
       encoding: "utf8",
     });
   } catch (e) {
