@@ -1,0 +1,74 @@
+#!/usr/bin/env node
+
+const cp = require("child_process");
+
+// helpers for ANSI colorign
+const chalk = {
+  white: (x) => `\x1b[37m${x}\x1b[0m`,
+  red: (text) => `\x1b[31m${text}\x1b[0m`,
+  magenta: (text) => `\x1b[35m${text}\x1b[0m`,
+  green: (text) => `\x1b[32m${text}\x1b[0m`,
+  yellow: (text) => `\x1b[33m${text}\x1b[0m`,
+  cyan: (text) => `\x1b[36m${text}\x1b[0m`,
+  dim: (text) => `\x1b[2m${text}\x1b[0m`,
+};
+
+let args = process.argv.slice(2);
+let fzfArgs = [];
+const fzfArgsIndex = args.indexOf("--fzf");
+const isFzf = fzfArgsIndex !== -1;
+
+if (fzfArgsIndex > 0) {
+  fzfArgs = args.slice(fzfArgsIndex + 1);
+  args = args.slice(0, fzfArgsIndex);
+}
+
+// get all running containers as json
+const getContainers = () => {
+  const ps = cp.spawnSync("docker", ["ps", "--format={{json .}}", ...args], {
+    encoding: "utf8",
+  });
+  const containers = ps.stdout
+    .split("\n")
+    .filter(Boolean)
+    .map((x) => JSON.parse(x));
+  return containers;
+};
+
+const containerToLineParts = (container) => {
+  return [
+    container.ID.substr(0, 12),
+    container.Names,
+    container.Image,
+    container.Status,
+  ];
+};
+
+let lineParts = getContainers().map(containerToLineParts);
+
+/** @type {number[]} */
+const maxLengthOnEveryPart = lineParts.reduce((acc, lineParts) => {
+  return lineParts.map((part, i) => {
+    return Math.max(acc[i] ?? 0, part.length);
+  });
+}, []);
+
+lineParts = lineParts.map((line) => {
+  return line.map((part, i) => {
+    const maxLength = maxLengthOnEveryPart[i];
+    const padding = " ".repeat(maxLength - part.length);
+    return part + padding;
+  });
+});
+
+function formatLineParts([id, names, image, status]) {
+  return [
+    chalk.white(chalk.dim(id)),
+    chalk.yellow(names),
+    chalk.cyan(image),
+    chalk.green(status),
+  ].join("\t");
+}
+
+const prettyOutput = lineParts.map(formatLineParts).join("\n");
+console.log(prettyOutput);
