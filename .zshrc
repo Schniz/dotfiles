@@ -153,10 +153,6 @@ codi() {
     Codi $syntax" "$@"
 }
 
-gitroot() {
-  git rev-parse --show-toplevel
-}
-
 configkube() {
   source <(kubectl completion zsh)
 }
