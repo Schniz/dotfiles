@@ -172,3 +172,9 @@ fpath+=~/.zfunc
 compinit
 
 if [ ! "$TMUX" = "" ]; then export TERM=xterm-256color; fi
+
+function cdgr() {
+  cd $(gitroot)
+}
+
+source <(starship init zsh)

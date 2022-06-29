@@ -1,0 +1,34 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+add_newline = false
+format = "$character$directory$git_branch$cmd_duration${custom.git_dirt}${custom.git_clean}"
+
+[directory]
+style = "bold white"
+
+[character] # The name of the module we are configuring is "character"
+success_symbol = "[✡](bold blue)"
+error_symbol = "[✡](bold red)"
+
+[git_branch]
+format = "[$symbol$branch(:$remote_branch)]($style) "
+truncation_length = 15
+style = "bold cyan"
+
+[git_status]
+style = "bold purple"
+format = "$ahead_behind "
+# an arrow up character
+ahead = "[↑](red)"
+behind = "[↓](red)"
+# a two sided arrow
+diverged = "[⇔](purple)"
+up_to_date = "[◦](green)"
+
+[custom.git_dirt]
+when = "git_dirt expect-dirty"
+format = "[⨯](bold yellow) "
+
+[custom.git_clean]
+when = "git_dirt expect-clean"
+format = "[◦](green) "
