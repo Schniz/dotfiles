@@ -1,1 +1,11 @@
-/Users/galsc/Code/gal-reason-clis/_build/default/show_branches/ShowBranches.exe
+#!/bin/bash
+
+LONGEST_BRANCH_LENGTH="$(for x in $(git branch --list --format="%(refname:short)"); do echo $x | wc -c; done | sort -n | tail -n1 | xargs)"
+
+# git branch --sort=-committerdate --format="%();;%(refname:short);;%(committerdate:short);;"
+git --no-pager \
+  branch \
+  --color=always \
+  --list \
+  --sort=-committerdate \
+  --format "%(align:width=$LONGEST_BRANCH_LENGTH)%(if)%(HEAD)%(then)%(color:green)%(else)%(color:white)%(end)%(refname:short)%(end)%(objectname:short) %(color:dim)%(committerdate:relative): %(subject)"
