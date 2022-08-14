@@ -1,0 +1,10 @@
+#!/bin/bash
+
+OUTPUTS="$(git remote)"
+
+# check if "upstream" is in "$OUTPUTS"
+if [[ "$OUTPUTS" == *"upstream"* ]]; then
+  echo "upstream"
+else
+  echo "origin"
+fi

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-dls \
+dls "$@" \
   | fzf --multi --ansi --header="pick a container" \
     --preview-window="follow" \
     --preview='echo {} | awk '"'"'{print $1}'"'"' | xargs docker logs -f' \
