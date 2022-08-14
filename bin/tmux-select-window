@@ -3,28 +3,28 @@
 // @ts-check
 
 const cp = require("child_process");
+const { promisify } = require("util");
 
-function main() {
-  const output = cp.execSync(
+const exec = promisify(cp.exec);
+
+async function main() {
+  const output = await exec(
     "tmux list-windows -F '#{window_index};;#{window_flags};;#{pane_current_path};;#{pane_current_command}'",
     { encoding: "utf8" }
   );
-
-  const windows = output
+  const windows = output.stdout
     .split("\n")
     .filter(Boolean)
     .map((windowLine) => {
       const [id, rawFlags, path, cmd] = windowLine.split(";;");
       return { id, flags: parseTmuxWindowFlags(rawFlags), path, cmd };
     });
-
   const lastIndex = windows.findIndex((x) => x.flags.last);
   if (lastIndex > -1) {
     const last = windows[lastIndex];
     windows.splice(lastIndex, 1);
     windows.unshift(last);
   }
-
   let result;
   try {
     result = cp.execSync("fzf-tmux --ansi --header='select a tmux window'", {
@@ -34,7 +34,6 @@ function main() {
   } catch (e) {
     return;
   }
-
   const windowId = lineToWindowId(result);
   cp.execSync(`tmux select-window -t ${windowId}`);
 }
