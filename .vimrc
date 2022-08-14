@@ -54,6 +54,9 @@ set foldmethod=syntax foldlevel=99999
 " http://www.shallowsky.com/linux/noaltscreen.html
 set t_ti= t_te=
 
+if exists("g:neovide")
+  set guifont=FiraCode\ Nerd\ Font:h16
+endif
 
 """ Plugins
 
@@ -200,18 +203,18 @@ nnoremap <silent> k gk
 nnoremap <silent> <leader>q :noh<CR>:call ResetVimState()<CR>
 nnoremap <silent> <CR> :call ResetVimState()<CR><CR>
 nnoremap <silent> <C-c> :call ResetVimState()<CR><Esc>
-inoremap <silent> <C-c> <Esc>
+inoremap <C-c> <ESC>
 nnoremap <leader>= gg=G``zz
 noremap Y y$
 noremap <leader>or :e <C-R>=expand('%:p:h') . '/'<CR>
 noremap <leader>f za
 
 " CoC
-noremap <leader>a :<C-u>CocAction<CR>
+noremap <leader>a <plug>(coc-codeaction-cursor)
 noremap <leader>t :<C-u>call CocAction('doHover')<CR>
 noremap <leader>gd *``:<C-u>call CocAction('jumpDefinition')<CR>
 " noremap <leader>gd <Plug>(coc-definition)
-noremap <leader>cr *``:<C-u>call CocAction('rename')<CR>
+noremap <leader>cr <Plug>(coc-rename)
 noremap <leader>l :CocDiagnostics<CR>
 noremap <leader>gr *``:<C-u>call CocAction('jumpReferences')<CR>
 noremap <leader>T :call CocAction('format')<CR>
@@ -284,7 +287,7 @@ let g:user_emmet_mode='a'    "enable all function in all mode.
 let g:user_emmet_expandabbr_key='<C-e>'   "This maps the expansion to Ctrl-space
 
 " Markdown
-let g:markdown_fenced_languages = ['html', 'css', 'erb=eruby', 'javascript.jsx', 'json=jsonc', 'javascript', 'js=javascript.jsx', 'json=javascript', 'ruby', 'xml', 'ts=typescript', 'typescript', 'rust', 'tsx=typescriptreact', 'yaml']
+let g:markdown_fenced_languages = ['html', 'css', 'erb=eruby', 'javascript.jsx', 'json=jsonc', 'javascript', 'js=javascript.jsx', 'json=javascript', 'ruby', 'xml', 'ts=typescript', 'typescript', 'rust', 'tsx=typescriptreact', 'yaml', 'sh-session=bash']
 
 " Return to the last position on editor
 if has("autocmd")
@@ -336,8 +339,8 @@ let g:projectionist_heuristics = {
 
 lua <<EOF
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
-  ignore_install = { "javascript" }, -- List of parsers to ignore installing
+  ensure_installed = "all",
+  ignore_install = { "phpdoc" }, -- List of parsers to ignore installing
   highlight = {
     enable = true,              -- false will disable the whole extension
     disable = { "c", "rust" },  -- list of language that will be disabled
