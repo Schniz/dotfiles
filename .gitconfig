@@ -5,9 +5,12 @@
   email = galstar@spitfire.co.il
   editor = nvim
   excludesfile = ~/.gitignore
+  pager = delta --side-by-side
+
 [user]
   name = Gal Schlezinger
   email = gal@spitfire.co.il
+
 [alias]
   m = !git co $(get_main_branch)
   ac = add . && commit
@@ -32,22 +35,30 @@
   pr-bug = !hub pull-request -a Schniz -l bug
   issue = !hub issue create
   mr = !lab merge-request
+
 [help]
   autocorrect = 10
+
 [gpg]
   program = /usr/local/bin/gpg
+
 [filter "lfs"]
   clean = git-lfs clean -- %f
   smudge = git-lfs smudge -- %f
   process = git-lfs filter-process
   required = true
+
 [push]
   default = current
+
 ; [commit]
 ;   gpgsign = true
+
 [protocol]
 	version = 2
+
 [init]
 	defaultBranch = main
+
 ; [include]
 ;   path = ~/.gitconfig.local
