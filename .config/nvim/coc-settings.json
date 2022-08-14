@@ -4,6 +4,7 @@
     "elixir",
     "eruby",
     "go",
+    "html",
     "javascript",
     "javascript.jsx",
     "javascriptreact",
@@ -37,7 +38,10 @@
     "javascript.jsx"
   ],
   "rust-analyzer.procMacro.enable": true,
+  "rust-analyzer.cargo.runBuildScripts": true,
   "json.format.enable": false,
+  "diagnostic.virtualText": true,
+  "diagnostic.virtualTextCurrentLineOnly": false,
   "languageserver": {
     "terraform": {
       "command": "terraform-ls",
@@ -47,5 +51,11 @@
       "settings": {}
     }
   },
-  "deno.enable": false
+  "deno.enable": false,
+
+  // Inlay Hints for JS/TS
+  "typescript.inlayHints.variableTypes.enabled": true,
+  "javascript.inlayHints.variableTypes.enabled": true,
+  "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
+  "javascript.inlayHints.functionLikeReturnTypes.enabled": true
 }
