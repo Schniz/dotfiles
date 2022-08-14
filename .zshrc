@@ -178,3 +178,10 @@ function cdgr() {
 }
 
 source <(starship init zsh)
+
+# bun completions
+[ -s "/Users/schniz/.bun/_bun" ] && source "/Users/schniz/.bun/_bun"
+
+# Bun
+export BUN_INSTALL="/Users/schniz/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
