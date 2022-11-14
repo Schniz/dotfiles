@@ -1,0 +1,3 @@
+#!/bin/sh
+
+gh pr edit --add-label "$(cat $(gitroot)/.git/.automerge-label 2>/dev/null || echo 'automerge')"

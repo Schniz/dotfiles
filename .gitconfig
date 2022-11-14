@@ -12,6 +12,7 @@
   email = gal@spitfire.co.il
 
 [alias]
+  automerge = !enable-automerge
   m = !git co $(get_main_branch)
   ac = add . && commit
   co = checkout
