@@ -12,9 +12,9 @@
     "jsonc",
     "markdown",
     "prisma",
-    "prisma",
     "ruby",
     "rust",
+    "terraform",
     "typescript",
     "typescriptreact"
   ],
@@ -29,14 +29,7 @@
   "javascript.suggestionActions.enabled": false,
   "tailwindCSS.emmetCompletions": true,
   "tailwindCSS.trace.server": "verbose",
-  "tailwindCSS.jsLanguages": [
-    "javascript",
-    "javascriptreact",
-    "reason",
-    "typescriptreact",
-    "typescript.jsx",
-    "javascript.jsx"
-  ],
+  "tailwindCSS.headwind.runOnSave": false,
   "rust-analyzer.procMacro.enable": true,
   "rust-analyzer.cargo.runBuildScripts": true,
   "json.format.enable": false,
@@ -57,5 +50,14 @@
   "typescript.inlayHints.variableTypes.enabled": true,
   "javascript.inlayHints.variableTypes.enabled": true,
   "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
-  "javascript.inlayHints.functionLikeReturnTypes.enabled": true
+  "javascript.inlayHints.functionLikeReturnTypes.enabled": true,
+  "json.schemas": [
+    {
+      "fileMatch": ["tsconfig.json"],
+      "url": "https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/tsconfig.json"
+    }
+  ],
+  "go.goplsOptions": {
+    "staticcheck": true
+  }
 }
