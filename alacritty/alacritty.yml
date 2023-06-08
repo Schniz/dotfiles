@@ -545,22 +545,24 @@ hints:
 # be mapped to the `ReceiveChar` action. Alternatively, you can use `None` for
 # a no-op if you do not wish to receive input characters for that binding.
 key_bindings:
-  - { key: J,        mods: Alt,           chars: "\x1bj" }
-  - { key: K,        mods: Alt,           chars: "\x1bk" }
-  - { key: H,        mods: Alt,           chars: "\x1bh" }
-  - { key: L,        mods: Alt,           chars: "\x1bl" }
+  - { key: J,        mods: Alt,           chars: "\x13j" }
+  - { key: K,        mods: Alt,           chars: "\x13k" }
+  - { key: H,        mods: Alt,           chars: "\x13h" }
+  - { key: L,        mods: Alt,           chars: "\x13l" }
 
-  - { key: LBracket, mods: Command|Shift, chars: "\x1bb" }
-  - { key: RBracket, mods: Command|Shift, chars: "\x1bn" }
+  - { key: LBracket, mods: Command|Shift, chars: "\x13p" }
+  - { key: RBracket, mods: Command|Shift, chars: "\x13n" }
   - { key: RBracket, mods: Command, chars: "\x1bt" }
   - { key: LBracket, mods: Command, chars: "\x1bT" }
+  - { key: Comma, mods: Command, chars: "\x13>" }
+  - { key: Comma, mods: Command|Shift, chars: "\x13<" }
 
-  - { key: D, mods: Command,       chars: "\x1bd" }
-  - { key: D, mods: Command|Shift, chars: "\x1bD" }
-  - { key: T, mods: Command, chars: "\x1bc" }
+  - { key: D, mods: Command,       chars: "\x13%" }
+  - { key: D, mods: Command|Shift, chars: "\x13\"" }
+  - { key: T, mods: Command, chars: "\x13c" }
 
-  - { key: W, mods: Command, chars: "\x1bw" }
-  - { key: Return, mods: Command|Shift, chars: "\x1b;" }
+  - { key: W, mods: Command, chars: "\x13x" }
+  - { key: Return, mods: Command|Shift, chars: "\x13z" }
 
   - { key: Left, mods: Alt, chars: "\x1bB" }
   - { key: Right, mods: Alt, chars: "\x1bF" }
