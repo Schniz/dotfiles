@@ -1,24 +1,9 @@
 {
   "codeLens.enable": true,
-  "coc.preferences.formatOnSaveFiletypes": [
-    "elixir",
-    "eruby",
-    "go",
-    "html",
-    "javascript",
-    "javascript.jsx",
-    "javascriptreact",
-    "json",
-    "jsonc",
-    "markdown",
-    "prisma",
-    "ruby",
-    "rust",
-    "terraform",
-    "typescript",
-    "typescriptreact"
-  ],
+  "coc.preferences.formatOnSave": true,
+  "Lua.format.enable": false,
   "solargraph.bundlerPath": "~/.rbenv/shims/bundle",
+  "tsserver.useLocalTsdk": true,
   "solargraph.useBundler": true,
   "coc.source.emoji.filetypes": [
     "markdown",
@@ -26,6 +11,7 @@
     "markdown.ghpull",
     "eruby"
   ],
+  "rust-analyzer.lens.enable": false,
   "javascript.suggestionActions.enabled": false,
   "tailwindCSS.emmetCompletions": true,
   "tailwindCSS.trace.server": "verbose",
@@ -42,6 +28,10 @@
       "filetypes": ["terraform", "tf"],
       "initializationOptions": {},
       "settings": {}
+    },
+    "reason": {
+      "command": "ocamllsp",
+      "filetypes": ["reason", "ocaml"]
     }
   },
   "deno.enable": false,
@@ -51,6 +41,9 @@
   "javascript.inlayHints.variableTypes.enabled": true,
   "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
   "javascript.inlayHints.functionLikeReturnTypes.enabled": true,
+
+  "workspace.openResourceCommand": "badd",
+
   "json.schemas": [
     {
       "fileMatch": ["tsconfig.json"],
