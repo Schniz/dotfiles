@@ -117,6 +117,17 @@ if command -v rbenv &> /dev/null; then
   eval "$(rbenv init -)"
 fi
 
+# use sparse cargo index
+export CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse
+
+# # sccache
+# if command -v sccache &> /dev/null; then
+#   export RUSTC_WRAPPER=sccache
+#   export SCCACHE_CACHE_SIZE=10G
+#   export SCCACHE_DIR=$HOME/.cache/sccache
+#   SCCACHE_IDLE_TIMEOUT=0 sccache --start-server &> /dev/null
+# fi
+
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/bin:$HOME/Library/Haskell/bin/:$GOPATH:$HOME/.rvm/bin:$HOME/Code/go/bin:$HOME/.gpkg/bin:node_modules/.bin:../node_modules/.bin:../../node_modules/.bin:../../../node_modules/.bin:/usr/local/opt/llvm/bin:/Users/schniz/.luarocks/bin"
 export PATH="$HOME/Code/fnm/target/debug:$HOME/Code/gpkg/target/debug:$PATH"
@@ -185,3 +196,18 @@ source <(starship init zsh)
 # Bun
 export BUN_INSTALL="/Users/schniz/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+
+function screenshell() {
+  if [ "$STARSHIP_CONFIG" = "" ]; then
+    export STARSHIP_CONFIG=~/.config/starship-screenshot.toml
+  else
+    unset STARSHIP_CONFIG
+  fi
+}
+
+# pnpm
+export PNPM_HOME="/Users/schniz/Library/pnpm"
+export PATH="$PNPM_HOME:$PATH"
+# pnpm end
+
+export BAT_THEME='Dracula'
