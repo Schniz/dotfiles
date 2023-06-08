@@ -1,0 +1,2 @@
+#!/bin/sh
+fnm exec --using=default node "$@"

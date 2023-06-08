@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+CMD="${1:-build}"
+
+pnpm run -w "$CMD" --filter "$(jq -r .name package.json)"...
