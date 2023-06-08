@@ -58,6 +58,23 @@ if exists("g:neovide")
   set guifont=FiraCode\ Nerd\ Font:h16
 endif
 
+" Set Coc.nvim global extensions
+let g:coc_global_extensions = [
+  \ '@yaegassy/coc-tailwindcss3',
+  \ 'coc-deno',
+  \ 'coc-emoji',
+  \ 'coc-eslint',
+  \ 'coc-go',
+  \ 'coc-json',
+  \ 'coc-lua',
+  \ 'coc-prettier',
+  \ 'coc-prisma',
+  \ 'coc-rust-analyzer',
+  \ 'coc-toml',
+  \ 'coc-tsserver',
+  \ 'coc-yaml',
+  \ ]
+
 """ Plugins
 
 call plug#begin('~/.vim/plugged')
@@ -72,6 +89,7 @@ Plug 'norcalli/nvim-colorizer.lua'
 " Tree sitter!
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
 Plug 'nvim-treesitter/playground'
+Plug 'nvim-treesitter/nvim-treesitter-context'
 
 Plug 'JoosepAlviste/nvim-ts-context-commentstring' " manipulate commentstring with tree-sitter context
 Plug 'tpope/vim-projectionist'
@@ -88,6 +106,7 @@ Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'    " Fuzzy file finder with fzf
 Plug 'airblade/vim-rooter' " Find the project root
 Plug 'neoclide/coc.nvim', {'branch': 'release'}   " Language Server Client
+" Plug 'neovim/nvim-lspconfig'
 Plug 'SirVer/ultisnips'    " Snippets for LSP
 Plug 'github/copilot.vim'
 
@@ -141,7 +160,8 @@ Plug 'neoclide/jsonc.vim'
 
 " " Reason
 " Plug 'jordwalke/vim-reasonml'
-" Plug 'figitaki/vim-dune'
+Plug 'figitaki/vim-dune'
+Plug 'reasonml-editor/vim-reason-plus'
 
 " " Elixir
 " Plugin 'elixir-editors/vim-elixir'
@@ -207,9 +227,11 @@ inoremap <C-c> <ESC>
 nnoremap <leader>= gg=G``zz
 noremap Y y$
 noremap <leader>or :e <C-R>=expand('%:p:h') . '/'<CR>
+noremap <leader>o<C-r> :call fzf#vim#files(getcwd(), { 'options': ['--query', expand('%:h'), '--preview', 'bat {} --color always'] })<CR>
 noremap <leader>f za
 
 " CoC
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
 noremap <leader>a <plug>(coc-codeaction-cursor)
 noremap <leader>t :<C-u>call CocAction('doHover')<CR>
 noremap <leader>gd *``:<C-u>call CocAction('jumpDefinition')<CR>
@@ -218,6 +240,10 @@ noremap <leader>cr <Plug>(coc-rename)
 noremap <leader>l :CocDiagnostics<CR>
 noremap <leader>gr *``:<C-u>call CocAction('jumpReferences')<CR>
 noremap <leader>T :call CocAction('format')<CR>
+
+" rest.nvim
+autocmd FileType http nnoremap <buffer> <leader><cr> <Plug>RestNvim
+autocmd FileType http nnoremap <buffer> <leader><s-cr> <Plug>RestNvimPreview
 
 " Ctrl-Space for autocomplete
 if has('nvim')
@@ -253,7 +279,7 @@ noremap <leader>ss :Rg <C-r>\\b<C-r><C-w>\b<CR>
 let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --glob "!.git/"'
 
 " Vim-Rooter
-let g:rooter_patterns = ['package.json', 'Rakefile', 'Makefile', 'shard.yml', 'requirements.txt', 'Gemfile', 'mix.exs', 'Cargo.toml', '.git/']
+let g:rooter_patterns = ['package.json', 'Rakefile', 'Makefile', 'shard.yml', 'requirements.txt', 'Gemfile', 'mix.exs', 'Cargo.toml', 'go.mod', '.git/']
 
 " Typescript
 function! ShowTypescriptTypeHint()
@@ -337,6 +363,17 @@ let g:projectionist_heuristics = {
       \   "*.tsx": {"alternate": "{}.spec.tsx"},
       \ }}
 
+" lua <<EOF
+" local lspconfig = require('lspconfig')
+" lspconfig.tsserver.setup {}
+" lspconfig.rust_analyzer.setup {
+"   -- Server-specific settings. See `:help lspconfig-setup`
+"   settings = {
+"     ['rust-analyzer'] = {},
+"   },
+" }
+" EOF
+
 lua <<EOF
 require'nvim-treesitter.configs'.setup {
   ensure_installed = "all",
@@ -408,3 +445,7 @@ noremap <silent> <leader>od :call fzf#run(fzf#wrap({'source': 'dfile-list', 'opt
 " Command-line mapping for text movement
 cnoremap <C-A> <Home>
 cnoremap <C-E> <End>
+
+" coc.nvim colors
+highlight CocMenuSel ctermfg=18 ctermbg=16 guifg=#393939 guibg=#f99157
+
