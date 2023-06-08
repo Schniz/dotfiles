@@ -3,8 +3,11 @@ alfred
 .DS_Store
 _esy
 *.dontcommit.*
+*.dontcommit
 .netrwhist
 .config/nvim/plugged
 .config/karabiner/automatic_backups
 coc-settings.json
 yarn-error.log
+
+.projections.json
