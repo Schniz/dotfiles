@@ -1,9 +1,9 @@
 #!/bin/sh
 
-if [ -f "$(git rev-parse --show-toplevel)/.git/refs/heads/canary" ]; then
-  echo canary
-elif [ -f "$(git rev-parse --show-toplevel)/.git/refs/heads/main" ]; then
-  echo main
+HEAD_FILE="$(git rev-parse --show-toplevel)/.git/refs/remotes/origin/HEAD | rev | cut -d/ -f1 | rev)"
+
+if [ -f "$HEAD_FILE" ]; then
+  cat "$HEAD_FILE"
 else
-  echo master
+  echo 'main'
 fi
