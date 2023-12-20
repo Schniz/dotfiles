@@ -11,9 +11,15 @@ local function with_looks(config)
     bottom = 8,
   }
 
+  config.bidi_enabled = true
+
+  config.line_height = 1.2
+
   config.font = wezterm.font {
     family = "FiraCode Nerd Font Mono",
   }
+
+  config.native_macos_fullscreen_mode = true
 
   config.font_size = 16.0
 end
