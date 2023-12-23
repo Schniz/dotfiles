@@ -22,3 +22,7 @@ vim.keymap.set("n", "<leader>w", ":bp<CR>", { silent = true })
 vim.keymap.set("n", "<leader>dd", ":bd<CR>", { silent = true })
 vim.keymap.set("n", "<leader>DD", ":bd!<CR>", { silent = true })
 vim.keymap.set("n", "<leader>bo", ":BufOnly<CR>", { silent = true })
+
+vim.keymap.set("n", "<leader>di", function()
+  vim.diagnostic.open_float(nil)
+end, { silent = true })

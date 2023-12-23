@@ -36,3 +36,7 @@ vim.opt.undofile = true
 -- set t_ti= t_te=
 -- vim.o.t_ti = nil
 -- vim.o.t_te = nil
+
+-- Set filetype SQL to stop forcing me to press Ctrl-C twice
+-- see https://unix.stackexchange.com/questions/150093/vim-delay-when-using-ctrlc-but-only-in-sql-files
+vim.g.ftplugin_sql_omni_key = '<C-j>'

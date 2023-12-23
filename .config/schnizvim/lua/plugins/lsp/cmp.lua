@@ -1,6 +1,6 @@
 return {
   "hrsh7th/nvim-cmp",
-  dependencies = { "onsails/lspkind.nvim", "hrsh7th/cmp-path" },
+  dependencies = { "onsails/lspkind.nvim", "hrsh7th/cmp-path", "hrsh7th/cmp-nvim-lsp" },
   init = function()
     -- Taken from @javivelasco
     local lspkind = require "lspkind"

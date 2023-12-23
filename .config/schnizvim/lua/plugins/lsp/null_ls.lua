@@ -13,8 +13,9 @@ return {
       debug = true,
       sources = {
         formatting.prettier,
-        diagnostics.eslint,
-        code_actions.eslint,
+        -- formatting.eslint_d,
+        diagnostics.eslint_d,
+        code_actions.eslint_d,
       },
     })
   end

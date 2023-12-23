@@ -1,10 +1,15 @@
-local function set_lsp_keymaps(client, buffer)
+local function setup_lsp_keymaps(client, bufnr)
+  vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, { buffer = bufnr })
+  vim.keymap.set("n", "<leader>t", vim.lsp.buf.hover, { buffer = bufnr })
+  vim.keymap.set("n", "<leader>h", function()
+    vim.lsp.inlay_hint.enable(0, nil)
+  end, { buffer = bufnr })
+  vim.keymap.set("n", "<leader>a", vim.lsp.buf.code_action, { buffer = bufnr })
 end
 
 return {
   'neovim/nvim-lspconfig',
   dependencies = {
-    -- Automatically install LSPs to stdpath for neovim
     {
       'VonHeikemen/lsp-zero.nvim',
       branch = 'v3.x'
@@ -15,8 +20,7 @@ return {
     },
     { 'williamboman/mason.nvim' },
     { 'williamboman/mason-lspconfig.nvim' },
-    { "hrsh7th/cmp-nvim-lsp" }, -- Required
-    { "L3MON4D3/LuaSnip" },     -- Required
+    { "L3MON4D3/LuaSnip" },
     { "lvimuser/lsp-inlayhints.nvim" },
     { import = "plugins.lsp" },
     {
@@ -29,21 +33,27 @@ return {
       opts = {
         autocmd = { enabled = true }
       }
-    }
+    },
   },
   config = function(_, opts)
     local lsp_zero = require("lsp-zero")
 
-    lsp_zero.on_attach(function(client, bufnr)
-      lsp_zero.default_keymaps({ buffer = bufnr })
-      vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, { buffer = bufnr })
-      vim.keymap.set("n", "<leader>t", vim.lsp.buf.hover, { buffer = bufnr })
+    vim.api.nvim_create_autocmd("LspAttach", {
+      callback = function(ev)
+        local client = vim.lsp.get_client_by_id(ev.data.client_id)
+        local bufnr = ev.buf
 
-      require("lsp-inlayhints").on_attach(client, bufnr)
-    end)
+        lsp_zero.default_keymaps({ buffer = bufnr })
+        setup_lsp_keymaps(client, bufnr)
+
+        if client ~= nil then
+          require("lsp-inlayhints").on_attach(client, bufnr)
+        end
+      end
+    })
 
     vim.api.nvim_create_user_command("LspFormat", function(_)
-      vim.lsp.buf.format()
+      vim.lsp.buf.format({ async = true })
     end, {
       desc = "LSP: Format document"
     })
@@ -51,7 +61,6 @@ return {
     require("mason").setup()
     require("mason-lspconfig").setup({
       ensure_installed = opts.ensure_installed,
-      handlers = { lsp_zero.default_setup },
     })
 
     for server_name, options in pairs(opts.servers) do
