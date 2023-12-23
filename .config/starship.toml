@@ -1,7 +1,7 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 add_newline = false
-format = "$character$directory$git_branch$cmd_duration${custom.git_dirt}${custom.git_clean}"
+format = "$directory$git_branch$cmd_duration$character"
 
 [directory]
 style = "bold white"
@@ -24,11 +24,3 @@ behind = "[↓](red)"
 # a two sided arrow
 diverged = "[⇔](purple)"
 up_to_date = "[◦](green)"
-
-[custom.git_dirt]
-when = "git_dirt expect-dirty"
-format = "[⨯](bold yellow) "
-
-[custom.git_clean]
-when = "git_dirt expect-clean"
-format = "[◦](green) "
