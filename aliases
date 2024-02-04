@@ -3,10 +3,34 @@
 alias f=fg
 alias k=kubectl
 alias vcat=vimcat
+
+# git
+alias g='git'
+alias gst='git status'
+alias gco='git checkout'
+alias gcm='git commit -m'
+
+if command -v exa > /dev/null; then
+  alias ls='exa'
+fi
+
+if command -v bat > /dev/null; then
+  alias cat='bat'
+fi
+
 function vim() {
   nvim $*
 }
 
 function kubecomplete() {
   source <(kubectl completion zsh)
+}
+
+function mkcd() {
+  mkdir $1
+  cd $1
+}
+
+function start_colima() {
+  colima start --arch aarch64 --vm-type=vz --vz-rosetta --cpu 4 --memory 8 --mount-inotify
 }
