@@ -1,15 +1,25 @@
 return {
   'nvim-lualine/lualine.nvim',
-  dependencies = { 'nvim-tree/nvim-web-devicons', 'arkav/lualine-lsp-progress' },
+  dependencies = { 'nvim-tree/nvim-web-devicons', 'linrongbin16/lsp-progress.nvim' },
   opts = {
+    theme = "base16",
     tabline = {
       lualine_a = {
-        { 'buffers' }
+        {
+          'buffers',
+          show_filename_only = false,
+        }
       }
     },
     sections = {
-      lualine_c = {
-        'lsp_progress'
+      lualine_c = {},
+      lualine_x = {
+        'searchcount',
+        {
+          require("statusline.lsp_status"),
+          icon = { "", align = "left" },
+        },
+        "diagnostics",
       }
     }
   },

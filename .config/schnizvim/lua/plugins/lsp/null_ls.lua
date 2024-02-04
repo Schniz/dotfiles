@@ -13,9 +13,19 @@ return {
       debug = true,
       sources = {
         formatting.prettier,
-        -- formatting.eslint_d,
-        diagnostics.eslint_d,
+        formatting.sqlfmt,
+        formatting.eslint_d,
         code_actions.eslint_d,
+        diagnostics.eslint_d.with({
+          filter = function(diagnostic)
+            -- If ESLint is not configured, don't show the error
+            if string.match(diagnostic.message, "Error: No ESLint configuration found in") then
+              return false
+            end
+
+            return true
+          end
+        }),
       },
     })
   end

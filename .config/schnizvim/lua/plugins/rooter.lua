@@ -1,22 +1,20 @@
 -- This ensures we automatically `cd` to the nearest project
 
 return {
-  'ahmedkhalf/project.nvim',
-  opts = {},
-  config = function()
-    require("project_nvim").setup {
-      patterns = {
-        'package.json',
-        'Rakefile',
-        'Makefile',
-        'shard.yml',
-        'requirements.txt',
-        'Gemfile',
-        'mix.exs',
-        'Cargo.toml',
-        'go.mod',
-        '.git/'
-      }
+  'airblade/vim-rooter',
+  init = function()
+    vim.g.rooter_patterns = {
+      'package.json',
+      'Rakefile',
+      'Makefile',
+      'shard.yml',
+      'requirements.txt',
+      'Gemfile',
+      'mix.exs',
+      'Cargo.toml',
+      'go.mod',
+      '.git/',
+      'lazy-lock.json',
     }
   end
 }

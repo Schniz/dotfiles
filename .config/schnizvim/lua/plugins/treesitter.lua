@@ -1,14 +1,16 @@
 return {
   "nvim-treesitter/nvim-treesitter",
   dependencies = {
-    "JoosepAlviste/nvim-ts-context-commentstring"
+    { "JoosepAlviste/nvim-ts-context-commentstring", opts = {} },
+    { "nvim-treesitter/nvim-treesitter-context",     opts = {} },
   },
   build = function()
     vim.cmd(":TSUpdate")
   end,
   config = function()
+    ---@diagnostic disable-next-line: missing-fields
     require('nvim-treesitter.configs').setup {
-      ensure_installed = "all",
+      ensure_installed = { "typescript", "vimdoc", "javascript", "rust", "lua", "go", "tsx", "vim", "python", "toml", "prisma" },
       ignore_install = { "phpdoc" },      -- List of parsers to ignore installing
       highlight = {
         enable = true,                    -- false will disable the whole extension

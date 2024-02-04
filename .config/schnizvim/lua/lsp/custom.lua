@@ -1,0 +1,6 @@
+return {
+  vercel_lsp = {
+    filetypes = { "json", "jsonc" },
+    command = { "/Users/schniz/Code/vercel/vercel_lsp/target/debug/vercel_lsp" }
+  }
+}

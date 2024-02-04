@@ -1,8 +1,27 @@
+--- @param client lsp.Client
 local function setup_lsp_keymaps(client, bufnr)
-  vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, { buffer = bufnr })
+  local telescope = require("telescope.builtin")
+
+  if client.supports_method("textDocument/signatureHelp") then
+    vim.api.nvim_create_autocmd("CursorHoldI", {
+      buffer = bufnr,
+      callback = function()
+        vim.lsp.buf.signature_help()
+      end
+    })
+  end
+
+  vim.keymap.set("i", "<c-;>", vim.lsp.buf.signature_help, { buffer = bufnr, silent = true })
+  vim.keymap.set("n", "<leader>gd", telescope.lsp_definitions, { buffer = bufnr })
+  vim.keymap.set("n", "<leader>gr", telescope.lsp_references, { buffer = bufnr })
   vim.keymap.set("n", "<leader>t", vim.lsp.buf.hover, { buffer = bufnr })
+  vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, { buffer = bufnr })
   vim.keymap.set("n", "<leader>h", function()
-    vim.lsp.inlay_hint.enable(0, nil)
+    if vim.lsp.inlay_hint.is_enabled(bufnr) then
+      vim.lsp.inlay_hint.enable(bufnr, false)
+    else
+      vim.lsp.inlay_hint.enable(bufnr, true)
+    end
   end, { buffer = bufnr })
   vim.keymap.set("n", "<leader>a", vim.lsp.buf.code_action, { buffer = bufnr })
 end
@@ -21,36 +40,43 @@ return {
     { 'williamboman/mason.nvim' },
     { 'williamboman/mason-lspconfig.nvim' },
     { "L3MON4D3/LuaSnip" },
-    { "lvimuser/lsp-inlayhints.nvim" },
     { import = "plugins.lsp" },
-    {
-      "ray-x/lsp_signature.nvim",
-      event = "VeryLazy",
-      opts = {},
-    },
+    -- {
+    --   "ray-x/lsp_signature.nvim",
+    --   event = "VeryLazy",
+    --   opts = {},
+    -- },
     {
       "kosayoda/nvim-lightbulb",
       opts = {
         autocmd = { enabled = true }
       }
     },
+    {
+      "j-hui/fidget.nvim",
+      opts = {
+        progress = {
+          ignore = { "null-ls" }
+        }
+      }
+    },
+    {
+      -- For autocompleting JSON files
+      'b0o/schemastore.nvim'
+    }
   },
   config = function(_, opts)
+    vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
+      vim.lsp.handlers.signature_help,
+      { focus = false, anchor_bias = "above" }
+    )
+
     local lsp_zero = require("lsp-zero")
 
-    vim.api.nvim_create_autocmd("LspAttach", {
-      callback = function(ev)
-        local client = vim.lsp.get_client_by_id(ev.data.client_id)
-        local bufnr = ev.buf
-
-        lsp_zero.default_keymaps({ buffer = bufnr })
-        setup_lsp_keymaps(client, bufnr)
-
-        if client ~= nil then
-          require("lsp-inlayhints").on_attach(client, bufnr)
-        end
-      end
-    })
+    lsp_zero.on_attach(function(client, bufnr)
+      lsp_zero.default_keymaps({ buffer = bufnr })
+      setup_lsp_keymaps(client, bufnr)
+    end)
 
     vim.api.nvim_create_user_command("LspFormat", function(_)
       vim.lsp.buf.format({ async = true })
@@ -63,7 +89,21 @@ return {
       ensure_installed = opts.ensure_installed,
     })
 
+    for server_name, options in pairs(opts.custom_servers) do
+      local configs = require("lspconfig.configs")
+      configs[server_name] = {
+        default_config = {
+          cmd = options.command,
+          filetypes = options.filetypes,
+          root_dir = require('lspconfig').util.root_pattern('.git'),
+        }
+      }
+    end
+
     for server_name, options in pairs(opts.servers) do
+      if type(options) == "function" then
+        options = options(server_name)
+      end
       require("lspconfig")[server_name].setup(options)
     end
 
@@ -76,12 +116,14 @@ return {
     })
   end,
   opts = {
-    ensure_installed = { "lua_ls", "rust_analyzer", "tsserver", "prismals" },
+    ensure_installed = { "lua_ls", "rust_analyzer", "tsserver", "prismals", "tailwindcss", "jsonls" },
     autoformat = {
-      ['null-ls'] = { 'javascript', 'typescript', 'typescriptreact', 'javascriptreact' },
+      ['null-ls'] = { 'javascript', 'typescript', 'typescriptreact', 'javascriptreact', 'json', 'jsonc', 'yaml', 'markdown', 'sql' },
       ['lua_ls'] = { 'lua' },
       ['rust_analyzer'] = { 'rust' },
       ['prismals'] = { 'prisma' },
+      ['jsonls'] = { 'json', 'jsonc' },
+      ['taplo'] = { 'toml' },
     },
     diagnostics = {
       underline = true,
@@ -97,39 +139,7 @@ return {
       severity_sort = true,
     },
     inlay_hints = true,
-    servers = {
-      tsserver = {
-        -- taken from https://github.com/typescript-language-server/typescript-language-server#workspacedidchangeconfiguration
-        javascript = {
-          inlayHints = {
-            includeInlayEnumMemberValueHints = true,
-            includeInlayFunctionLikeReturnTypeHints = true,
-            includeInlayFunctionParameterTypeHints = true,
-            includeInlayParameterNameHints = 'all',
-            includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-            includeInlayPropertyDeclarationTypeHints = true,
-            includeInlayVariableTypeHints = true,
-          },
-        },
-        typescript = {
-          inlayHints = {
-            includeInlayEnumMemberValueHints = true,
-            includeInlayFunctionLikeReturnTypeHints = true,
-            includeInlayFunctionParameterTypeHints = true,
-            includeInlayParameterNameHints = 'all',
-            includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-            includeInlayPropertyDeclarationTypeHints = true,
-            includeInlayVariableTypeHints = true,
-          },
-        },
-      },
-      lua_ls = {
-        Lua = {
-          workspace = { checkThirdParty = false },
-          telemetry = { enable = false },
-          hint = { enable = true },
-        },
-      }
-    }
+    servers = require("lsp.servers"),
+    custom_servers = require('lsp.custom'),
   }
 }
