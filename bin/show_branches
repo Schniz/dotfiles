@@ -1,13 +1,9 @@
 #!/bin/bash
 
-LONGEST_BRANCH_LENGTH="$(for x in $(git branch --list --format="%(refname:short)"); do echo $x | wc -c; done | sort -n | tail -n1 | xargs)"
-
-BRANCH_WIDTH=$(($LONGEST_BRANCH_LENGTH + 2))
-
 # git branch --sort=-committerdate --format="%();;%(refname:short);;%(committerdate:short);;"
 git --no-pager \
   branch \
   --color=always \
   --list \
   --sort=-committerdate \
-  --format "%(align:width=$BRANCH_WIDTH)%(if)%(HEAD)%(then)%(color:green)%(else)%(color:yellow)%(end)%(refname:short)%(end) %(color:magenta)%(align:width=12)%(committerdate:relative)%(end) %(color:cyan)%(objectname:short) %(color:white)%(subject)"
+  --format "%(align:width=1)%(if)%(HEAD)%(then)%(color:green)%(else)%(color:yellow)%(end)%(refname:short)%(end) %(color:magenta)%(align:width=12)%(committerdate:relative)%(end) %(color:cyan)%(objectname:short) %(color:white)%(subject)"
