@@ -15,7 +15,9 @@ return {
         formatting.prettier,
         formatting.sqlfmt,
         formatting.eslint_d,
+        formatting.swiftlint,
         code_actions.eslint_d,
+        diagnostics.swiftlint,
         diagnostics.eslint_d.with({
           filter = function(diagnostic)
             -- If ESLint is not configured, don't show the error

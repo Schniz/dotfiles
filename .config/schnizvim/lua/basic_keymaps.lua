@@ -26,3 +26,7 @@ vim.keymap.set({ "n", "v" }, "<leader>bo", ":%bd|e#", { silent = true })
 vim.keymap.set("n", "<leader>di", function()
   vim.diagnostic.open_float(nil)
 end, { silent = true })
+
+-- evil mode muahahaha
+vim.keymap.set("c", "<C-a>", "<Home>")
+vim.keymap.set("c", "<C-e>", "<End>")

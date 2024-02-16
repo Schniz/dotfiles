@@ -10,6 +10,13 @@ return {
       defaults = {
         mappings = {
           i = {
+            -- emacs style: go to the beginning of the line
+            ["<c-a>"] = function()
+              vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<home>", true, false, true), "n", true)
+            end,
+            ["<c-e>"] = function()
+              vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<end>", true, false, true), "n", true)
+            end,
             ["<esc>"] = actions.close
           },
         },

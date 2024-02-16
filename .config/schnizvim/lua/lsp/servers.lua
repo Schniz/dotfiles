@@ -58,4 +58,8 @@ return {
   taplo = {},
 
   sqlls = {},
+
+  sourcekit_lsp = {},
+
+  gopls = {},
 }

@@ -63,6 +63,10 @@ return {
     {
       -- For autocompleting JSON files
       'b0o/schemastore.nvim'
+    },
+    {
+      -- using twoslash queries in typescript
+      'marilari88/twoslash-queries.nvim'
     }
   },
   config = function(_, opts)
@@ -76,6 +80,8 @@ return {
     lsp_zero.on_attach(function(client, bufnr)
       lsp_zero.default_keymaps({ buffer = bufnr })
       setup_lsp_keymaps(client, bufnr)
+
+      require("twoslash-queries").attach(client, bufnr)
     end)
 
     vim.api.nvim_create_user_command("LspFormat", function(_)
@@ -118,12 +124,13 @@ return {
   opts = {
     ensure_installed = { "lua_ls", "rust_analyzer", "tsserver", "prismals", "tailwindcss", "jsonls" },
     autoformat = {
-      ['null-ls'] = { 'javascript', 'typescript', 'typescriptreact', 'javascriptreact', 'json', 'jsonc', 'yaml', 'markdown', 'sql' },
+      ['null-ls'] = { 'javascript', 'typescript', 'typescriptreact', 'javascriptreact', 'json', 'jsonc', 'yaml', 'markdown', 'sql', 'swift' },
       ['lua_ls'] = { 'lua' },
       ['rust_analyzer'] = { 'rust' },
       ['prismals'] = { 'prisma' },
       ['jsonls'] = { 'json', 'jsonc' },
       ['taplo'] = { 'toml' },
+      ['gopls'] = { 'go' },
     },
     diagnostics = {
       underline = true,

@@ -7,6 +7,7 @@ return {
       'package.json',
       'Rakefile',
       'Makefile',
+      'Podfile',
       'shard.yml',
       'requirements.txt',
       'Gemfile',
