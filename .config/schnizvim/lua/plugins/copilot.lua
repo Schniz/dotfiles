@@ -17,7 +17,11 @@ return {
   build = function()
     vim.cmd("Copilot auth")
   end,
-  opts = {},
+  opts = {
+    filetypes = {
+      ["*"] = true
+    }
+  },
   config = function(_, opts)
     require("copilot").setup(opts)
     require("copilot_cmp").setup()

@@ -14,7 +14,7 @@ return {
       sources = {
         formatting.prettier,
         formatting.sqlfmt,
-        formatting.eslint_d,
+        -- formatting.eslint_d,
         formatting.swiftlint,
         code_actions.eslint_d,
         diagnostics.swiftlint,

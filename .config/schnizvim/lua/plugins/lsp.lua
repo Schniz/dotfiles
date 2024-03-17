@@ -115,7 +115,7 @@ return {
 
     lsp_zero.format_on_save({
       format_opts = {
-        async = false,
+        async = true,
         timeout_ms = 10000,
       },
       servers = opts.autoformat,
@@ -128,8 +128,8 @@ return {
       ['lua_ls'] = { 'lua' },
       ['rust_analyzer'] = { 'rust' },
       ['prismals'] = { 'prisma' },
-      ['jsonls'] = { 'json', 'jsonc' },
-      ['taplo'] = { 'toml' },
+      -- ['jsonls'] = { 'json', 'jsonc' },
+      -- ['taplo'] = { 'toml' },
       ['gopls'] = { 'go' },
     },
     diagnostics = {
