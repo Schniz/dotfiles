@@ -7,8 +7,8 @@ format = "$directory$git_branch$cmd_duration$character"
 style = "bold white"
 
 [character] # The name of the module we are configuring is "character"
-success_symbol = "[⛧](bold blue)"
-error_symbol = "[⛧](bold red)"
+success_symbol = "[✡](bold blue)"
+error_symbol = "[✡](bold red)"
 
 [git_branch]
 format = "[$symbol$branch(:$remote_branch)]($style) "
