@@ -49,7 +49,7 @@ set fileencoding=utf-8
 set fileencodings=ucs-bom,utf8,prc
 set undofile
 set undodir=~/.vim/undodir
-set foldmethod=syntax foldlevel=99999
+set foldmethod=expr foldexpr=nvim_treesitter#foldexpr() foldlevel=9999
 " Prevent Vim from clobbering the scrollback buffer. See
 " http://www.shallowsky.com/linux/noaltscreen.html
 set t_ti= t_te=
@@ -141,6 +141,7 @@ Plug 'jtratner/vim-flavored-markdown'
 Plug 'tpope/vim-markdown'
 Plug 'jez/vim-github-hub'
 Plug 'jxnblk/vim-mdx-js'
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install' }
 
 " " Ruby
 Plug 'tpope/vim-rails'
@@ -290,6 +291,10 @@ endfunction
 
 autocmd BufNewFile,BufRead .eslintrc set syntax=json
 autocmd BufNewFile,BufRead *.tsx set filetype=typescriptreact
+" apply autofix to javascript files on save
+autocmd BufWritePre *.js call CocAction('runCommand', 'eslint.executeAutofix')
+autocmd BufWritePre *.ts call CocAction('runCommand', 'eslint.executeAutofix')
+autocmd BufWritePre *.tsx call CocAction('runCommand', 'eslint.executeAutofix')
 let g:tsuquyomi_javascript_support = 0 "1
 
 " Ruby
