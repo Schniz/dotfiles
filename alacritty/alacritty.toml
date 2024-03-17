@@ -1,0 +1,161 @@
+[colors]
+draw_bold_text_with_bright_colors = false
+
+[colors.bright]
+black = "#636363"
+blue = "#7eaac7"
+cyan = "#86d3ce"
+green = "#909d63"
+magenta = "#aa6292"
+red = "#bc5653"
+white = "#f7f7f7"
+yellow = "#ebc17a"
+
+[colors.cursor]
+cursor = "#d9d9d9"
+text = "#2c2c2c"
+
+[colors.dim]
+black = "#232323"
+blue = "#556b79"
+cyan = "#5c8482"
+green = "#5e6547"
+magenta = "#6e4962"
+red = "#74423f"
+white = "#828282"
+yellow = "#8b7653"
+
+[colors.normal]
+black = "#1c1c1c"
+blue = "#7eaac7"
+cyan = "#86d3ce"
+green = "#909d63"
+magenta = "#aa6292"
+red = "#bc5653"
+white = "#cacaca"
+yellow = "#ebc17a"
+
+[colors.primary]
+background = "#2c2c2c"
+bright_foreground = "#d9d9d9"
+dim_foreground = "#dbdbdb"
+foreground = "#d6d6d6"
+
+[font]
+size = 17.5
+
+[font.normal]
+family = "FiraCode Nerd Font"
+# style = "Regular"
+
+[[hints.enabled]]
+command = "open"
+post_processing = true
+regex = "(ipfs:|ipns:|magnet:|mailto:|gemini:|gopher:|https:|http:|news:|file:|git:|ssh:|ftp:)[^\u0000-\u001F\u007F-<>\"\\s{-}\\^⟨⟩`]+"
+
+[hints.enabled.mouse]
+enabled = true
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u0013j"
+key = "J"
+mods = "Alt"
+
+[[keyboard.bindings]]
+chars = "\u0013k"
+key = "K"
+mods = "Alt"
+
+[[keyboard.bindings]]
+chars = "\u0013h"
+key = "H"
+mods = "Alt"
+
+[[keyboard.bindings]]
+chars = "\u0013l"
+key = "L"
+mods = "Alt"
+
+[[keyboard.bindings]]
+chars = "\u0013p"
+key = "{"
+mods = "Command|Shift"
+
+[[keyboard.bindings]]
+chars = "\u0013p"
+key = "LBracket"
+mods = "Alt"
+
+[[keyboard.bindings]]
+chars = "\u001Bn"
+key = "}"
+mods = "Command|Shift"
+
+[[keyboard.bindings]]
+chars = "\u001Bn"
+key = "RBracket"
+mods = "Alt"
+
+[[keyboard.bindings]]
+chars = "\u001Bt"
+key = "RBracket"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u001BT"
+key = "LBracket"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u0013>"
+key = "Comma"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u0013<"
+key = "Comma"
+mods = "Command|Shift"
+
+[[keyboard.bindings]]
+chars = "\u0013%"
+key = "D"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u0013\""
+key = "D"
+mods = "Command|Shift"
+
+[[keyboard.bindings]]
+chars = "\u0013c"
+key = "T"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u0013x"
+key = "W"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u0013z"
+key = "Return"
+mods = "Command|Shift"
+
+[[keyboard.bindings]]
+chars = "\u001BB"
+key = "Left"
+mods = "Alt"
+
+[[keyboard.bindings]]
+chars = "\u001BF"
+key = "Right"
+mods = "Alt"
+
+[window]
+decorations = "Buttonless"
+blur = true
+padding.x = 6
+padding.y = 6
+opacity = 0.95
+option_as_alt = "OnlyLeft"
