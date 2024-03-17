@@ -94,6 +94,3 @@ export PATH="$PNPM_HOME:$PATH"
 
 export BAT_THEME='Dracula'
 export NVIM_APPNAME='schnizvim'
-
-# bun completions
-[ -s "/Users/schniz/.bun/_bun" ] && source "/Users/schniz/.bun/_bun"
