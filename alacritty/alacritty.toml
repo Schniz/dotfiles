@@ -16,7 +16,7 @@ cursor = "#d9d9d9"
 text = "#2c2c2c"
 
 [colors.dim]
-black = "#232323"
+black = "#444444"
 blue = "#556b79"
 cyan = "#5c8482"
 green = "#5e6547"
@@ -26,7 +26,7 @@ white = "#828282"
 yellow = "#8b7653"
 
 [colors.normal]
-black = "#1c1c1c"
+black = "#6C6C6C"
 blue = "#7eaac7"
 cyan = "#86d3ce"
 green = "#909d63"
@@ -36,7 +36,7 @@ white = "#cacaca"
 yellow = "#ebc17a"
 
 [colors.primary]
-background = "#2c2c2c"
+background = "#303030"
 bright_foreground = "#d9d9d9"
 dim_foreground = "#dbdbdb"
 foreground = "#d6d6d6"
