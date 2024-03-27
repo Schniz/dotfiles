@@ -8,6 +8,7 @@ return {
 
     telescope.setup {
       defaults = {
+        path_display = { "smart" },
         mappings = {
           i = {
             -- emacs style: go to the beginning of the line

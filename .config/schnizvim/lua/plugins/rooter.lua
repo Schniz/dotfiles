@@ -14,6 +14,7 @@ return {
       'mix.exs',
       'Cargo.toml',
       'go.mod',
+      '.terraform/',
       '.git/',
       'lazy-lock.json',
     }

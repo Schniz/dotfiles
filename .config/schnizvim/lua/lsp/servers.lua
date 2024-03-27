@@ -62,4 +62,8 @@ return {
   sourcekit_lsp = {},
 
   gopls = {},
+
+  nil_ls = {},
+
+  terraformls = {},
 }
