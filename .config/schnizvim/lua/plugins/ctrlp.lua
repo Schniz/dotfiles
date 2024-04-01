@@ -8,6 +8,10 @@ return {
 
     telescope.setup {
       defaults = {
+        set_env = {
+          LESS = '',
+          DELTA_PAGER = 'bat',
+        },
         path_display = { "smart" },
         mappings = {
           i = {
@@ -52,24 +56,26 @@ return {
 
     vim.keymap.set("n", "<C-p>", ":Files<CR>")
     vim.keymap.set("n", "<leader><tab>", ":Buffers<CR>")
+    vim.keymap.set("n", "<tab>", ":Buffers<CR>", { silent = true })
     vim.keymap.set("n", "<localleader>P", ":GFiles<CR>")
     vim.keymap.set("n", "<leader>ss", function()
       local current_word = ""
-
       current_word = vim.treesitter.get_node_text(vim.treesitter.get_node(), vim.api.nvim_get_current_buf(), nil)
-
-      -- if current_word == "" then
-      --   current_word = vim.api.nvim_eval("expand(\"<cword>\")")
-      -- end
-
       telescope.grep_string({ search = current_word, word_match = "-w" })
     end)
 
-    -- noremap <leader>of :Files %:h<CR>
-    -- noremap <silent> <leader>od :call fzf#run(fzf#wrap({'source': 'dfile-list', 'options': '-m --preview "diff-for-file {}"'}))<CR>
-
     vim.keymap.set("n", "<leader>od", function()
-      telescope.find_files({ find_command = { "dfile-list" } })
+      local previewers = require('telescope.previewers')
+      local themes = require('telescope.themes')
+
+      local delta = previewers.new_termopen_previewer({
+        get_command = function(entry)
+          return { 'diff-for-file', entry.value }
+        end
+      })
+
+
+      telescope.find_files({ find_command = { "dfile-list" }, previewer = delta })
     end)
   end
 }

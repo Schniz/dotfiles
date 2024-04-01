@@ -24,15 +24,34 @@ local function setup_lsp_keymaps(client, bufnr)
     end
   end, { buffer = bufnr })
   vim.keymap.set("n", "<leader>a", vim.lsp.buf.code_action, { buffer = bufnr })
+
+  vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, {
+    desc = "Go to previous diagnostic message",
+    remap = false,
+  })
+  vim.keymap.set("n", "]d", vim.diagnostic.goto_next, {
+    desc = "Go to next diagnostic message",
+    remap = false,
+  })
+  vim.keymap.set("n", "<leader>l", vim.diagnostic.open_float, {
+    desc = "Open floating diagnostic message",
+    remap = false,
+  })
+  vim.keymap.set("n", "<leader>L", vim.diagnostic.setloclist, {
+    desc = "Open diagnostics list",
+    remap = false,
+  })
+end
+
+--- @param client lsp.Client
+--- @param bufnr number
+local function on_attach(client, bufnr)
+  setup_lsp_keymaps(client, bufnr)
 end
 
 return {
   'neovim/nvim-lspconfig',
   dependencies = {
-    {
-      'VonHeikemen/lsp-zero.nvim',
-      branch = 'v3.x'
-    },
     {
       'folke/neodev.nvim',
       opts = {}
@@ -41,11 +60,6 @@ return {
     { 'williamboman/mason-lspconfig.nvim' },
     { "L3MON4D3/LuaSnip" },
     { import = "plugins.lsp" },
-    -- {
-    --   "ray-x/lsp_signature.nvim",
-    --   event = "VeryLazy",
-    --   opts = {},
-    -- },
     {
       "kosayoda/nvim-lightbulb",
       opts = {
@@ -75,14 +89,6 @@ return {
       { focus = false, anchor_bias = "above" }
     )
 
-    local lsp_zero = require("lsp-zero")
-
-    lsp_zero.on_attach(function(client, bufnr)
-      lsp_zero.default_keymaps({ buffer = bufnr })
-      setup_lsp_keymaps(client, bufnr)
-
-      require("twoslash-queries").attach(client, bufnr)
-    end)
 
     vim.api.nvim_create_user_command("LspFormat", function(_)
       vim.lsp.buf.format({ async = true })
@@ -110,16 +116,11 @@ return {
       if type(options) == "function" then
         options = options(server_name)
       end
+      options = vim.tbl_deep_extend("keep", {
+        on_attach = on_attach,
+      }, options)
       require("lspconfig")[server_name].setup(options)
     end
-
-    lsp_zero.format_on_save({
-      format_opts = {
-        async = true,
-        timeout_ms = 10000,
-      },
-      servers = opts.autoformat,
-    })
   end,
   opts = {
     ensure_installed = { "lua_ls", "rust_analyzer", "tsserver", "prismals", "tailwindcss", "jsonls" },
@@ -131,6 +132,7 @@ return {
       -- ['jsonls'] = { 'json', 'jsonc' },
       -- ['taplo'] = { 'toml' },
       ['gopls'] = { 'go' },
+      ['terraformls'] = { 'terraform', 'terraformvars' }
     },
     diagnostics = {
       underline = true,
