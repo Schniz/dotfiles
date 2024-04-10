@@ -5,7 +5,7 @@
   email = galstar@spitfire.co.il
   editor = nvim
   excludesfile = ~/.gitignore
-  pager = delta --side-by-side
+  pager = delta # --side-by-side
 
 [user]
   name = Gal Schlezinger
@@ -36,6 +36,7 @@
   pr-bug = !hub pull-request -a Schniz -l bug
   issue = !hub issue create
   mr = !lab merge-request
+  dno = diff --name-only
 
 [help]
   autocorrect = 10
@@ -69,3 +70,5 @@
 [credential "https://gist.github.com"]
 	helper = 
 	helper = !/opt/homebrew/bin/gh auth git-credential
+[rerere]
+	enabled = true
