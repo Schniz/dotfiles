@@ -22,7 +22,7 @@ COLOR_RESET="\033[0m"
 
 echo -n 'jq ' > /dev/stderr
 PREVIEW_JQ_COMMAND="jq {q} --arg file $FILE $FILE"
-JQ_COMMAND="$(echo '' | fzf --print-query --header="create jq" --preview "$PREVIEW_JQ_COMMAND > $TEMPOUTPUT; $PREVIEW_JQ_COMMAND -C" --preview-window=up,99%,border-none --query . --border none)"
+JQ_COMMAND="$(echo '' | fzf --print-query --header="filtering $FILE" --preview "$PREVIEW_JQ_COMMAND > $TEMPOUTPUT; $PREVIEW_JQ_COMMAND -C" --preview-window=up,99%,border-none --query . --border none)"
 cat $TEMPOUTPUT
 echo "${COLOR_WHITE_DIMMED}> output stored in $TEMPOUTPUT${COLOR_RESET}" > /dev/stderr
 echo "${COLOR_WHITE_DIMMED}> \$ jq $JQ_COMMAND${COLOR_RESET}" > /dev/stderr
