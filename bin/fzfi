@@ -1,0 +1,28 @@
+#!/usr/bin/env zsh
+# > fzfi: fzf wrapper for jq to have an interactive jq query
+#
+# USAGE:
+#   fzfi [FILE]
+
+FILE=$1
+
+if [ -z "$FILE" ]; then
+  FILE=$(fzf --header="choose file")
+fi
+
+if [ -z "$FILE" ]; then
+  echo "no file selected" > /dev/stderr
+  exit 1
+fi
+
+TEMPOUTPUT=$(mktemp).json
+
+COLOR_WHITE_DIMMED="\033[37;2m"
+COLOR_RESET="\033[0m"
+
+echo -n 'jq ' > /dev/stderr
+PREVIEW_JQ_COMMAND="jq {q} --arg file $FILE $FILE"
+JQ_COMMAND="$(echo '' | fzf --print-query --header="create jq" --preview "$PREVIEW_JQ_COMMAND > $TEMPOUTPUT; $PREVIEW_JQ_COMMAND -C" --preview-window=up,99%,border-none --query . --border none)"
+cat $TEMPOUTPUT
+echo "${COLOR_WHITE_DIMMED}> output stored in $TEMPOUTPUT${COLOR_RESET}" > /dev/stderr
+echo "${COLOR_WHITE_DIMMED}> \$ jq $JQ_COMMAND${COLOR_RESET}" > /dev/stderr
