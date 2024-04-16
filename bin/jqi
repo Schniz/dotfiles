@@ -1,8 +1,8 @@
 #!/usr/bin/env zsh
-# > fzfi: fzf wrapper for jq to have an interactive jq query
+# > jqi: fzf wrapper for jq to have an interactive jq query
 #
 # USAGE:
-#   fzfi [FILE]
+#   jqi [FILE]
 
 FILE=$1
 
