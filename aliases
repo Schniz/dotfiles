@@ -34,3 +34,16 @@ function mkcd() {
 function start_colima() {
   colima start --arch aarch64 --vm-type=vz --vz-rosetta --cpu 4 --memory 8 --mount-inotify
 }
+
+function awsso() {
+  export AWS_PROFILE="$(cat ~/.aws/credentials | rg '^\[(.+)\] # sso$' -r '$1' | fzf --header "choose aws profile" --height 20)"
+
+  if [ -z "$AWS_PROFILE" ]; then
+      echo "noop: no profile selected" > /dev/stderr
+      exit 1
+  fi
+
+  echo "logging in to $AWS_PROFILE"
+
+  aws sso login --profile "$AWS_PROFILE"
+}
