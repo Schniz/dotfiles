@@ -36,7 +36,7 @@
   pr-bug = !hub pull-request -a Schniz -l bug
   issue = !hub issue create
   mr = !lab merge-request
-  dno = diff --name-only
+  dno = !git diff $(get_main_branch) --name-only
 
 [help]
   autocorrect = 10
