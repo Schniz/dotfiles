@@ -12,7 +12,11 @@ return {
           LESS = '',
           DELTA_PAGER = 'bat',
         },
-        path_display = { "smart" },
+        path_display = {
+          filename_first = {
+            reverse_directories = false
+          }
+        },
         mappings = {
           i = {
             -- emacs style: go to the beginning of the line
@@ -22,7 +26,21 @@ return {
             ["<c-e>"] = function()
               vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<end>", true, false, true), "n", true)
             end,
-            ["<esc>"] = actions.close
+            ["<esc>"] = actions.close,
+            ["<cr>"] = function(prompt_bufnr)
+              local picker = require('telescope.actions.state').get_current_picker(prompt_bufnr)
+              local multi = picker:get_multi_selection()
+              if not vim.tbl_isempty(multi) then
+                require('telescope.actions').close(prompt_bufnr)
+                for _, j in pairs(multi) do
+                  if j.path ~= nil then
+                    vim.cmd(string.format('%s %s', 'edit', j.path))
+                  end
+                end
+              else
+                require('telescope.actions').select_default(prompt_bufnr)
+              end
+            end
           },
         },
       },

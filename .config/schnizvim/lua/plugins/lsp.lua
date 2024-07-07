@@ -17,11 +17,7 @@ local function setup_lsp_keymaps(client, bufnr)
   vim.keymap.set("n", "<leader>t", vim.lsp.buf.hover, { buffer = bufnr })
   vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, { buffer = bufnr })
   vim.keymap.set("n", "<leader>h", function()
-    if vim.lsp.inlay_hint.is_enabled(bufnr) then
-      vim.lsp.inlay_hint.enable(bufnr, false)
-    else
-      vim.lsp.inlay_hint.enable(bufnr, true)
-    end
+    vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
   end, { buffer = bufnr })
   vim.keymap.set("n", "<leader>a", vim.lsp.buf.code_action, { buffer = bufnr })
 
@@ -123,7 +119,7 @@ return {
     end
   end,
   opts = {
-    ensure_installed = { "lua_ls", "rust_analyzer", "tsserver", "prismals", "tailwindcss", "jsonls" },
+    -- ensure_installed = { "lua_ls", "rust_analyzer", "tsserver", "prismals", "tailwindcss", "jsonls" },
     autoformat = {
       ['null-ls'] = { 'javascript', 'typescript', 'typescriptreact', 'javascriptreact', 'json', 'jsonc', 'yaml', 'markdown', 'sql', 'swift' },
       ['lua_ls'] = { 'lua' },

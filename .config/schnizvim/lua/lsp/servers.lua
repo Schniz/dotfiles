@@ -33,6 +33,9 @@ return {
       ["rust-analyzer"] = {
         lens = { enable = true },
         procMacro = { enable = true },
+        checkOnSave = {
+          command = "clippy",
+        },
       }
     }
   },
@@ -66,4 +69,6 @@ return {
   nil_ls = {},
 
   terraformls = {},
+
+  -- git_lsp = {},
 }
