@@ -1,2 +1,2 @@
 #!/bin/bash
-jq -R '. as $line | try (fromjson) catch $line'
+jq -R '. as $line | try (fromjson) catch $line' "$@"
