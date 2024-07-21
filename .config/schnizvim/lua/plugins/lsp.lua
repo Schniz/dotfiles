@@ -11,6 +11,14 @@ local function setup_lsp_keymaps(client, bufnr)
     })
   end
 
+  vim.api.nvim_create_autocmd("CursorHold", {
+    buffer = bufnr,
+    callback = vim.lsp.buf.document_highlight
+  })
+  vim.api.nvim_create_autocmd("CursorMoved", {
+    buffer = bufnr,
+    callback = vim.lsp.buf.clear_references
+  })
   vim.keymap.set("i", "<c-;>", vim.lsp.buf.signature_help, { buffer = bufnr, silent = true })
   vim.keymap.set("n", "<leader>gd", telescope.lsp_definitions, { buffer = bufnr })
   vim.keymap.set("n", "<leader>gr", telescope.lsp_references, { buffer = bufnr })
