@@ -60,6 +60,7 @@ return {
     vim.api.nvim_create_user_command("Files", function()
       telescope.find_files({ find_command = { "rg", "--files", "--hidden", "--glob=!.git/" } })
     end, opts)
+    vim.api.nvim_create_user_command("History", telescope.oldfiles, opts)
     vim.api.nvim_create_user_command("GFiles", telescope.git_files, opts)
     vim.api.nvim_create_user_command("Buffers", telescope.buffers, opts)
     vim.api.nvim_create_user_command("Rg", function(args)
