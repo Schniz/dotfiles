@@ -15,10 +15,23 @@ local formatters = {
 
 return {
   'stevearc/conform.nvim',
+  ---@type conform.setupOpts
   opts = {
     lsp_fallback = true,
     formatters_by_ft = formatters,
-    format_on_save = function(bufnr)
+    formatters = {
+      [formatters.lua[1]] = {
+        ---@diagnostic disable-next-line: unused-local
+        condition = function(self, ctx)
+          if string.match(ctx.dirname, "/vercel/proxy/") then
+            return false
+          end
+
+          return true
+        end
+      }
+    },
+    format_after_save = function(bufnr)
       -- Disable with a global or buffer-local variable
       if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
         return
