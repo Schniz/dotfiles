@@ -79,8 +79,15 @@ return {
     vim.keymap.set("n", "<localleader>P", ":GFiles<CR>")
     vim.keymap.set("n", "<leader>ss", function()
       local current_word = ""
-      current_word = vim.treesitter.get_node_text(vim.treesitter.get_node(), vim.api.nvim_get_current_buf(), nil)
-      telescope.grep_string({ search = current_word, word_match = "-w" })
+      local node = vim.treesitter.get_node()
+      if node then
+        current_word = vim.treesitter.get_node_text(node, vim.api.nvim_get_current_buf(), nil)
+        telescope.grep_string({ search = current_word, word_match = "-w" })
+      end
+    end)
+
+    vim.keymap.set("n", "<leader>L", function()
+      telescope.diagnostics({ layout_strategy = "vertical" })
     end)
 
     vim.keymap.set("n", "<leader>od", function()
