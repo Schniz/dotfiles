@@ -17,8 +17,9 @@ brew outdated --json | \
      "reset": "\u001b[0m",
     };
 
-    .formulae | map("\(colors.reset)\(.name)\t\t\(colors.yellow)\(.installed_versions[0])\(colors.reset) -> \(colors.green)\(.current_version)") | .[]
+    .formulae | map("\(colors.reset)\(.name)\t\(colors.yellow)\(.installed_versions[0])\(colors.reset) -> \(colors.green)\(.current_version)") | .[]
   ' | \
+  column -ts $'\t' | \
   fzf -m --ansi "$@" | \
   awk '{print $1}' | \
   xargs brew upgrade
