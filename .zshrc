@@ -1,6 +1,7 @@
 set -kJ
 
 autoload -Uz compinit
+setopt INC_APPEND_HISTORY
 zstyle ':completion:*' menu select
 zmodload zsh/complist
 
@@ -55,7 +56,15 @@ export PATH="$HOME/bin:$HOME/Code/fnm/target/debug:$HOME/Code/gpkg/target/debug:
 eval "$(fnm env --use-on-cd --version-file-strategy=recursive --corepack-enabled --resolve-engines)"
 
 source ~/.dotfiles/aliases
-source ~/.secrets
+
+# Load all custom zsh functions
+for file in ~/.dotfiles/zsh-functions/*; do
+  source $file
+done
+
+if [ -f ~/.secrets ]; then
+  source ~/.secrets
+fi
 
 configkube() {
   source <(kubectl completion zsh)
