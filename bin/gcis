@@ -28,7 +28,7 @@ EOF
         pending: c::yellow("pending"),
         neutral: c::lightgray("neutral"),
       } as $colors |
-        map("\(.context)\t\($colors[.state]//.state)\t\(c::yellow(c::dim(.target_url)))") | .[]
+        map("\(.context | sub(" "; " "; "g"))\t\($colors[.state]//.state)\t\(c::yellow(c::dim(.target_url)))") | .[]
     ' -r
 ) \
   | column -ts $'\t'
