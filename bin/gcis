@@ -15,8 +15,8 @@ fi
 SCRIPT_NAME=$(basename "$0")
 
 otel-cli exec -s "bin/$SCRIPT_NAME" --name "root" -- bash -c "$(cat <<EOF
-  otel-cli exec -s gh --name statuses -- gh api -H "Accept: application/vnd.github+json" '/repos/{owner}/{repo}/commits/'"$(git rev-parse HEAD)"'/status' | jq '.statuses' &
-  otel-cli exec -s gh --name checks -- gh api -H "Accept: application/vnd.github+json" '/repos/{owner}/{repo}/commits/'"$(git rev-parse HEAD)"'/check-runs' | jq '.check_runs | map({state:.conclusion,target_url:.details_url,context:.name})' &
+  otel-cli exec -s gh --name statuses -- gh api -H "Accept: application/vnd.github+json" '/repos/{owner}/{repo}/commits/'"$(git rev-parse HEAD)"'/status' --paginate --jq '.statuses' &
+  otel-cli exec -s gh --name checks -- gh api -H "Accept: application/vnd.github+json" '/repos/{owner}/{repo}/commits/'"$(git rev-parse HEAD)"'/check-runs' --paginate --jq '.check_runs | map({state:.conclusion,target_url:.details_url,context:.name})' &
 EOF
 )" \
   | jq '
@@ -28,8 +28,7 @@ EOF
         pending: c::yellow("pending"),
         neutral: c::lightgray("neutral"),
       } as $colors |
-         [.] | add |
-         map("\(.context)\t\($colors[.state]//.state)\t\(c::yellow(c::dim(.target_url)))") | .[]
+        map("\(.context)\t\($colors[.state]//.state)\t\(c::yellow(c::dim(.target_url)))") | .[]
     ' -r
 ) \
   | column -ts $'\t'
