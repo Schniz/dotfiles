@@ -13,7 +13,7 @@
 
 [alias]
   automerge = !enable-automerge
-  m = !git co $(get_main_branch)
+  m = co main
   ac = add . && commit
   co = checkout
   ffm = merge --ff-only
@@ -37,6 +37,8 @@
   issue = !hub issue create
   mr = !lab merge-request
   dno = !git diff $(get_main_branch) --name-only
+  # set a symbolic link to the main branch
+  symbolic-main = symbolic-ref refs/heads/main
 
 [help]
   autocorrect = 10
