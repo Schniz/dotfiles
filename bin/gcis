@@ -1,0 +1,35 @@
+#!/bin/bash
+
+set -o pipefail
+set -e
+
+function bold() {
+  printf "\e[1m%s\e[0m" "$1"
+}
+
+(
+if [ "$SKIP_HEADER" != "1" ]; then
+  printf "%s\t%s\t%s\n" "$(bold NAME)" "$(bold STATUS)" "$(bold URL)"
+fi
+
+SCRIPT_NAME=$(basename "$0")
+
+otel-cli exec -s "bin/$SCRIPT_NAME" --name "root" -- bash -c "$(cat <<EOF
+  otel-cli exec -s gh --name statuses -- gh api -H "Accept: application/vnd.github+json" '/repos/{owner}/{repo}/commits/'"$(git rev-parse HEAD)"'/status' | jq '.statuses' &
+  otel-cli exec -s gh --name checks -- gh api -H "Accept: application/vnd.github+json" '/repos/{owner}/{repo}/commits/'"$(git rev-parse HEAD)"'/check-runs' | jq '.check_runs | map({state:.conclusion,target_url:.details_url,context:.name})' &
+EOF
+)" \
+  | jq '
+      import "colors" as c;
+      {
+        error:   c::red(   "error  "),
+        failure: c::red(   "failure"),
+        success: c::green( "ok     "),
+        pending: c::yellow("pending"),
+        neutral: c::lightgray("neutral"),
+      } as $colors |
+         [.] | add |
+         map("\(.context)\t\($colors[.state]//.state)\t\(c::yellow(c::dim(.target_url)))") | .[]
+    ' -r
+) \
+  | column -ts $'\t'
