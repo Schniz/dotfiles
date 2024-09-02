@@ -1,74 +1,76 @@
-return {
-  tsserver = {
-    init_options = {
-      preferences = {
-        includeInlayEnumMemberValueHints = true,
-        includeInlayFunctionLikeReturnTypeHints = true,
-        includeInlayFunctionParameterTypeHints = true,
-        -- includeInlayParameterNameHints = 'all',
-        -- includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-        includeInlayPropertyDeclarationTypeHints = true,
-        includeInlayVariableTypeHints = true,
-      },
-    },
-  },
+local servers = {
+	tsserver = {
+		init_options = {
+			preferences = {
+				includeInlayEnumMemberValueHints = true,
+				includeInlayFunctionLikeReturnTypeHints = true,
+				includeInlayFunctionParameterTypeHints = true,
+				-- includeInlayParameterNameHints = 'all',
+				-- includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+				includeInlayPropertyDeclarationTypeHints = true,
+				includeInlayVariableTypeHints = true,
+			},
+		},
+	},
 
-  jsonls = function()
-    local capabilities = vim.lsp.protocol.make_client_capabilities()
-    capabilities.textDocument.completion.completionItem.snippetSupport = true
+	jsonls = function()
+		local capabilities = vim.lsp.protocol.make_client_capabilities()
+		capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-    return {
-      capabilities = capabilities,
-      settings = {
-        json = {
-          schemas = require('schemastore').json.schemas(),
-          validate = { enable = true },
-        },
-      },
-    }
-  end,
+		return {
+			capabilities = capabilities,
+			settings = {
+				json = {
+					schemas = require("schemastore").json.schemas(),
+					validate = { enable = true },
+				},
+			},
+		}
+	end,
 
-  rust_analyzer = {
-    settings = {
-      ["rust-analyzer"] = {
-        lens = { enable = true },
-        procMacro = { enable = true },
-        checkOnSave = {
-          command = "clippy",
-        },
-      }
-    }
-  },
+	rust_analyzer = {
+		settings = {
+			["rust-analyzer"] = {
+				lens = { enable = true },
+				procMacro = { enable = true },
+				checkOnSave = {
+					command = "clippy",
+				},
+			},
+		},
+	},
 
-  lua_ls = {
-    Lua = {
-      workspace = { checkThirdParty = false },
-      telemetry = { enable = false },
-      hint = { enable = true },
-    },
-  },
+	lua_ls = {
+		Lua = {
+			workspace = { checkThirdParty = false },
+			telemetry = { enable = false },
+			hint = { enable = true },
+		},
+	},
 
-  vercel_lsp = {},
+	vercel_lsp = {},
 
-  prismals = {},
+	prismals = {},
 
-  tailwindcss = {},
+	tailwindcss = {},
 
-  yamlls = {
-    ["yaml.schemaStore.enable"] = true,
-  },
+	yamlls = {
+		["yaml.schemaStore.enable"] = true,
+	},
 
-  taplo = {},
+	taplo = {},
 
-  sqlls = {},
+	sqlls = {},
 
-  sourcekit_lsp = {},
+	sourcekit_lsp = {},
 
-  gopls = {},
+	gopls = {},
 
-  nil_ls = {},
+	nil_ls = {},
 
-  terraformls = {},
+	terraformls = {},
 
-  -- git_lsp = {},
+	gleam = {},
 }
+
+return servers
