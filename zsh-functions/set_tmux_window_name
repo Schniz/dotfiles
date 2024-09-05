@@ -1,5 +1,7 @@
 #!/bin/bash
 
+local winidx=$(tmux display-message -p '#I')
+
 function set_tmux_window_name() {
   if [[ ! -n "$TMUX" ]]; then
     return
@@ -21,12 +23,21 @@ function set_tmux_window_name() {
 
   # Check if we're in ~/Code/vercel/[dirname]
   if [[ "$PWD" == "$HOME/Code/vercel/"* ]]; then
-    tmux rename-window "▲/$dir"
-  else
-    tmux rename-window "$dir"
+    dir="▲/$dir"
   fi
+
+  tmux rename-window -t "$winidx" "$dir"
 }
 
 if [[ -n "$TMUX" ]]; then
   precmd_functions+=(set_tmux_window_name)
+fi
+
+  # If we're running this script directly, set the window name to the current directory
+if [[ "$0" == *"/set_tmux_window_name" ]]; then
+  if [[ -n "$TMUX" ]]; then
+    cd $(tmux display -p "#{pane_current_path}")
+  fi
+
+  set_tmux_window_name
 fi
