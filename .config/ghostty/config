@@ -1,0 +1,48 @@
+theme = Tomorrow Night Eighties
+
+background-opacity = 0.98
+background-blur-radius = 10
+
+# Fira Code with ligatures |> === !== {}
+font-family = Fira Code Medium
+font-size = 17.5
+# Font rendering is a bit spacey for me
+adjust-cell-width = -5%
+
+keybind = super+w=text:\x13x
+keybind = super+d=text:\x13%
+keybind = super+shift+d=text:\x13"
+keybind = super+t=text:\x13c
+keybind = super+shift+left_bracket=text:\x13p
+keybind = super+shift+right_bracket=text:\x13n
+keybind = super+right_bracket=text:\x1Bt
+keybind = super+left_bracket=text:\x1BT
+keybind = super+shift+enter=text:\x13z
+
+window-padding-balance = true
+
+# set bold text as bright colors
+bold-is-bright = true
+
+# base16-eighties
+palette=0=#2d2d2d
+palette=1=#f2777a
+palette=10=#99cc99
+palette=11=#ffcc66
+palette=12=#6699cc
+palette=13=#cc99cc
+palette=14=#66cccc
+palette=15=#f2f0ec
+palette=2=#99cc99
+palette=3=#ffcc66
+palette=4=#6699cc
+palette=5=#cc99cc
+palette=6=#66cccc
+palette=7=#d3d0c8
+palette=8=#747369
+palette=9=#f2777a
+background=#2d2d2d
+cursor-color=#d3d0c8
+foreground=#d9d9d9
+selection-foreground=#d3d0c8
+selection-background=#515151
