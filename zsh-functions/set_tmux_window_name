@@ -1,6 +1,6 @@
 #!/bin/bash
 
-local winidx=$(tmux display-message -p '#I')
+local winidx
 
 function set_tmux_window_name() {
   if [[ ! -n "$TMUX" ]]; then
@@ -30,6 +30,7 @@ function set_tmux_window_name() {
 }
 
 if [[ -n "$TMUX" ]]; then
+  winidx=$(tmux display-message -p '#I')
   precmd_functions+=(set_tmux_window_name)
 fi
 
