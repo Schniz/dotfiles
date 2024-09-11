@@ -4,7 +4,7 @@ return {
   "jose-elias-alvarez/null-ls.nvim",
   dependencies = { "nvim-lua/plenary.nvim" },
   init = function()
-    local null_ls = require('null-ls')
+    local null_ls = require("null-ls")
     local formatting = null_ls.builtins.formatting
     local diagnostics = null_ls.builtins.diagnostics
     local code_actions = null_ls.builtins.code_actions
@@ -16,6 +16,7 @@ return {
         formatting.sqlfmt,
         -- formatting.eslint_d,
         formatting.swiftlint,
+        -- code_actions.eslint_d,
         code_actions.eslint_d,
         diagnostics.swiftlint,
         diagnostics.eslint_d.with({
@@ -26,9 +27,9 @@ return {
             end
 
             return true
-          end
+          end,
         }),
       },
     })
-  end
+  end,
 }
