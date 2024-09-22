@@ -12,7 +12,6 @@ return {
     null_ls.setup({
       debug = true,
       sources = {
-        formatting.prettier,
         formatting.sqlfmt,
         -- formatting.eslint_d,
         formatting.swiftlint,

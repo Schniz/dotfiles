@@ -1,10 +1,28 @@
+local function biome_or_prettier(bufnr)
+  local biome_json = vim.fs.find({ "biome.json", "biome.jsonc" }, {
+    upward = true,
+    stop = vim.loop.os_homedir(),
+    path = vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr)),
+  })[1]
+
+  if biome_json then
+    return { "biome" }
+  else
+    return { "prettier" }
+  end
+end
+
 local formatters = {
   lua = { "stylua" },
   python = { "isort", "black" },
-  javascript = { "prettier" },
-  typescript = { "prettier" },
-  css = { "prettier" },
-  html = { "prettier" },
+  javascript = biome_or_prettier,
+  javascriptreact = biome_or_prettier,
+  typescript = biome_or_prettier,
+  typescriptreact = biome_or_prettier,
+  css = biome_or_prettier,
+  html = biome_or_prettier,
+  json = biome_or_prettier,
+  jsonc = biome_or_prettier,
   sh = { "shfmt" },
   toml = { "taplo" },
   rust = { "rustfmt" },
