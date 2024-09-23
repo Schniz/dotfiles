@@ -1,27 +1,37 @@
--- taken from https://github.com/javivelasco/dotfiles/blob/main/nvim/.config/nvim/after/plugin/null-ls.lua
+-- based on https://github.com/javivelasco/dotfiles/blob/main/nvim/.config/nvim/after/plugin/null-ls.lua
+
+local biomejs = require("schniz.biomejs")
 
 return {
-  "jose-elias-alvarez/null-ls.nvim",
-  dependencies = { "nvim-lua/plenary.nvim" },
+  "nvimtools/none-ls.nvim",
+  dependencies = { "nvim-lua/plenary.nvim", "nvimtools/none-ls-extras.nvim" },
   init = function()
     local null_ls = require("null-ls")
     local formatting = null_ls.builtins.formatting
-    local diagnostics = null_ls.builtins.diagnostics
-    local code_actions = null_ls.builtins.code_actions
+    local helpers = require("null-ls.helpers")
+
+    local is_eslint_enabled = helpers.cache.by_bufnr(function(params)
+      return not biomejs.is_biome_project(params.bufnr)
+    end)
 
     null_ls.setup({
       debug = true,
       sources = {
         formatting.sqlfmt,
-        -- formatting.eslint_d,
         formatting.swiftlint,
-        -- code_actions.eslint_d,
-        code_actions.eslint_d,
-        diagnostics.swiftlint,
-        diagnostics.eslint_d.with({
+        require("none-ls.code_actions.eslint").with({
+          runtime_condition = is_eslint_enabled,
+        }),
+        require("none-ls.diagnostics.eslint").with({
+          runtime_condition = is_eslint_enabled,
           filter = function(diagnostic)
-            -- If ESLint is not configured, don't show the error
+            -- ignore eslint 8.x not configured
             if string.match(diagnostic.message, "Error: No ESLint configuration found in") then
+              return false
+            end
+
+            -- ignore eslint 9.x not configured
+            if string.match(diagnostic.message, "ESLint couldn't find a configuration file") then
               return false
             end
 

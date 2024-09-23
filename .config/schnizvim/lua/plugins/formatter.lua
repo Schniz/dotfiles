@@ -1,11 +1,7 @@
-local function biome_or_prettier(bufnr)
-  local biome_json = vim.fs.find({ "biome.json", "biome.jsonc" }, {
-    upward = true,
-    stop = vim.loop.os_homedir(),
-    path = vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr)),
-  })[1]
+local biomejs = require("schniz.biomejs")
 
-  if biome_json then
+local function biome_or_prettier(bufnr)
+  if biomejs.is_biome_project(bufnr) then
     return { "biome" }
   else
     return { "prettier" }
