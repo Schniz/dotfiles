@@ -30,7 +30,7 @@ function set_tmux_window_name() {
 }
 
 if [[ -n "$TMUX" ]]; then
-  winidx=$(tmux display-message -p '#I')
+  winidx=$(tmux display-message -t "$TMUX_PANE" -p '#I')
   precmd_functions+=(set_tmux_window_name)
 fi
 
