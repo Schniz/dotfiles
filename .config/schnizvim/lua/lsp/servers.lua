@@ -73,6 +73,8 @@ local servers = {
   gleam = {},
 
   biome = {},
+
+  bashls = {},
 }
 
 return servers

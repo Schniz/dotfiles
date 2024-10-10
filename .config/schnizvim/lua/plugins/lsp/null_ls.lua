@@ -4,7 +4,10 @@ local biomejs = require("schniz.biomejs")
 
 return {
   "nvimtools/none-ls.nvim",
-  dependencies = { "nvim-lua/plenary.nvim", "nvimtools/none-ls-extras.nvim" },
+  dependencies = {
+    "nvim-lua/plenary.nvim",
+    "nvimtools/none-ls-extras.nvim",
+  },
   init = function()
     local null_ls = require("null-ls")
     local formatting = null_ls.builtins.formatting
