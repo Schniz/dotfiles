@@ -1,0 +1,3 @@
+#!/bin/bash
+
+GROQ_API_KEY='op://Projects/groq.com/credential' op run -- bun run ~/Code/explain-diff/src/index.ts
