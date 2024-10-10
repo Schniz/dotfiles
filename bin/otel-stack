@@ -1,0 +1,40 @@
+#!/bin/bash
+
+set -e
+
+CONTAINER_NAME="$USER-otel-stack"
+
+function start_otel() {
+  SHOULD_CREATE="$(docker inspect schniz-otel-stack >/dev/null 2>/dev/null && echo no || echo yes)"
+
+  if [ "$SHOULD_CREATE" == "yes" ]; then
+    # start container in the background
+    docker run -d --name "$CONTAINER_NAME" -p 3333:3000 -p 4317:4317 -p 4318:4318 grafana/otel-lgtm >/dev/null
+
+    # tail logs in nonblocking way
+    { docker logs -f "$CONTAINER_NAME" & } 2>/dev/null
+
+    if ! command -v wait-for-them &>/dev/null; then
+      cargo binstall wait-for-them
+    fi
+
+    wait-for-them localhost:3333
+
+    { kill %% && wait; } 2>/dev/null
+
+    echo "opening http://localhost:3333"
+  fi
+
+  open http://localhost:3333
+}
+
+stop_otel() {
+  docker rm -f $CONTAINER_NAME >/dev/null
+  echo "stopped otel-stack."
+}
+
+if [ "$1" == "stop" ]; then
+  stop_otel
+else
+  start_otel
+fi
