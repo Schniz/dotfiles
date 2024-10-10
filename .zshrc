@@ -58,7 +58,7 @@ bindkey "^X^E" edit-command-line
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 # export PATH="$PATH:$HOME/bin:$HOME/Library/Haskell/bin/:$GOPATH:$HOME/.rvm/bin:$HOME/Code/go/bin:$HOME/.gpkg/bin:node_modules/.bin:../node_modules/.bin:../../node_modules/.bin:../../../node_modules/.bin:/usr/local/opt/llvm/bin:/Users/schniz/.luarocks/bin"
-export PATH="$HOME/Code/dotfiles/bin:$HOME/Code/fnm/target/debug:$HOME/Code/gpkg/target/debug:$HOME/.gpkg/bin:$HOME/.cargo/bin:/opt/homebrew/opt/util-linux/bin:$PATH:$GOPATH/bin"
+export PATH="$HOME/Code/dotfiles/bin:$HOME/Code/fnm/target/debug:$HOME/Code/gpkg/target/debug:$HOME/.gpkg/bin:$HOME/.cargo/bin:/opt/homebrew/opt/util-linux/bin:$PATH:$GOPATH/bin:./node_modules/.bin:../node_modules/.bin:../../node_modules/.bin"
 
 # fnm
 eval "$(fnm env --use-on-cd --version-file-strategy=recursive --corepack-enabled --resolve-engines)"
