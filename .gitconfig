@@ -5,7 +5,7 @@
   email = galstar@spitfire.co.il
   editor = nvim
   excludesfile = ~/.gitignore
-  pager = delta # --side-by-side
+  pager = delta --tabs=4 # --side-by-side
 
 [user]
   name = Gal Schlezinger
