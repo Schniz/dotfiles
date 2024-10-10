@@ -33,6 +33,16 @@ local function is_ignored_from_autosave(bufnr)
   local basename = vim.fs.basename(filename)
   local dirname = vim.fs.dirname(filename)
 
+  local disable_formatter_file = vim.fs.find({ "schniz.dontcommit.disable-formatter" }, {
+    upward = true,
+    stop = vim.loop.os_homedir(),
+    path = vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr)),
+  })[1]
+
+  if disable_formatter_file then
+    return true
+  end
+
   if string.match(basename, "%.lua$") and string.match(dirname, "/vercel/proxy/") then
     return true
   end
@@ -44,7 +54,7 @@ return {
   "stevearc/conform.nvim",
   ---@type conform.setupOpts
   opts = {
-    lsp_fallback = true,
+    -- lsp_fallback = true,
     formatters_by_ft = formatters,
     format_after_save = function(bufnr)
       -- Disable with a global or buffer-local variable
@@ -77,6 +87,8 @@ return {
     })
 
     local conform = require("conform")
-    vim.keymap.set({ "n", "v" }, "<leader>T", conform.format)
+    vim.keymap.set({ "n", "v" }, "<leader>T", function()
+      conform.format()
+    end)
   end,
 }

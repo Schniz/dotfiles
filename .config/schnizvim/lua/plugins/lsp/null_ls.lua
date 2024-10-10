@@ -11,7 +11,13 @@ return {
     local helpers = require("null-ls.helpers")
 
     local is_eslint_enabled = helpers.cache.by_bufnr(function(params)
-      return not biomejs.is_biome_project(params.bufnr)
+      if biomejs.is_biome_project(params.bufnr) then
+        return false
+      end
+
+      local executable_exists = vim.fn.executable("eslint") == 1
+
+      return executable_exists
     end)
 
     null_ls.setup({
@@ -20,6 +26,9 @@ return {
         formatting.sqlfmt,
         formatting.swiftlint,
         require("none-ls.code_actions.eslint").with({
+          runtime_condition = is_eslint_enabled,
+        }),
+        require("none-ls.formatting.eslint").with({
           runtime_condition = is_eslint_enabled,
         }),
         require("none-ls.diagnostics.eslint").with({
