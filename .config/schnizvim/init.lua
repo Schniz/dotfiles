@@ -2,8 +2,15 @@
 vim.g.mapleader = ","
 vim.g.maplocalleader = "\\"
 
-require 'basic_keymaps'
-require 'global_settings'
+local previous_print = print
+PRINT_TRACE = function(v)
+  -- get traceback
+  local traceback = debug.traceback()
+  previous_print(vim.inspect(v) .. "\n" .. traceback)
+end
+
+require("basic_keymaps")
+require("global_settings")
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -18,4 +25,4 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require("lazy").setup('plugins')
+require("lazy").setup("plugins")
