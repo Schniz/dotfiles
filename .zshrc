@@ -38,6 +38,12 @@ zinit light htlsne/zinit-rbenv
 
 zinit wait lucid for OMZL::history.zsh
 
+# install completions
+zi ice as"completion"
+zi snippet OMZP::docker/completions/_docker
+zi ice as"completion"
+zi snippet OMZP::docker-compose/_docker-compose
+
 export EDITOR=nvim
 export GOPATH=$HOME/Code/go
 
