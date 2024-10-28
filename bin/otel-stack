@@ -5,7 +5,7 @@ set -e
 CONTAINER_NAME="$USER-otel-stack"
 
 function start_otel() {
-  SHOULD_CREATE="$(docker inspect schniz-otel-stack >/dev/null 2>/dev/null && echo no || echo yes)"
+  SHOULD_CREATE="$(docker inspect "$CONTAINER_NAME" >/dev/null 2>/dev/null && echo no || echo yes)"
 
   if [ "$SHOULD_CREATE" == "yes" ]; then
     # start container in the background
@@ -29,7 +29,7 @@ function start_otel() {
 }
 
 stop_otel() {
-  docker rm -f $CONTAINER_NAME >/dev/null
+  docker rm -f "$CONTAINER_NAME" >/dev/null
   echo "stopped otel-stack."
 }
 
