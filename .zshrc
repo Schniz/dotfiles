@@ -98,13 +98,13 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 # bun completions
 # [ -s "/Users/schniz/.bun/_bun" ] && source "/Users/schniz/.bun/_bun"
 
-# function screenshell() {
-#   if [ "$STARSHIP_CONFIG" = "" ]; then
-#     export STARSHIP_CONFIG=~/.config/starship-screenshot.toml
-#   else
-#     unset STARSHIP_CONFIG
-#   fi
-# }
+function screenshell() {
+  if [ "$STARSHIP_CONFIG" = "" ]; then
+    export STARSHIP_CONFIG=~/.config/starship-screenshot.toml
+  else
+    unset STARSHIP_CONFIG
+  fi
+}
 
 # pnpm
 export PNPM_HOME="/Users/schniz/Library/pnpm"
