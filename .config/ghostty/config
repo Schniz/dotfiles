@@ -20,6 +20,7 @@ keybind = super+left_bracket=text:\x1BT
 keybind = super+shift+enter=text:\x13z
 
 window-padding-balance = true
+# window-decoration = false
 
 # set bold text as bright colors
 bold-is-bright = true
