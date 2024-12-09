@@ -7,18 +7,18 @@ local function setup_lsp_keymaps(client, bufnr)
       buffer = bufnr,
       callback = function()
         vim.lsp.buf.signature_help()
-      end
+      end,
     })
   end
 
   if client.supports_method("textDocument/documentHighlight") then
     vim.api.nvim_create_autocmd("CursorHold", {
       buffer = bufnr,
-      callback = vim.lsp.buf.document_highlight
+      callback = vim.lsp.buf.document_highlight,
     })
     vim.api.nvim_create_autocmd("CursorMoved", {
       buffer = bufnr,
-      callback = vim.lsp.buf.clear_references
+      callback = vim.lsp.buf.clear_references,
     })
   end
 
@@ -53,50 +53,47 @@ local function on_attach(client, bufnr)
 end
 
 return {
-  'neovim/nvim-lspconfig',
+  "neovim/nvim-lspconfig",
   dependencies = {
     {
-      'folke/neodev.nvim',
-      opts = {}
+      "folke/neodev.nvim",
+      opts = {},
     },
-    { 'williamboman/mason.nvim' },
-    { 'williamboman/mason-lspconfig.nvim' },
+    { "williamboman/mason.nvim" },
+    { "williamboman/mason-lspconfig.nvim" },
     { "L3MON4D3/LuaSnip" },
     { import = "plugins.lsp" },
     {
       "kosayoda/nvim-lightbulb",
       opts = {
-        autocmd = { enabled = true }
-      }
+        autocmd = { enabled = true },
+      },
     },
     {
       "j-hui/fidget.nvim",
       opts = {
         progress = {
-          ignore = { "null-ls" }
-        }
-      }
+          ignore = { "null-ls" },
+        },
+      },
     },
     {
       -- For autocompleting JSON files
-      'b0o/schemastore.nvim'
+      "b0o/schemastore.nvim",
     },
     {
       -- using twoslash queries in typescript
-      'marilari88/twoslash-queries.nvim'
-    }
+      "marilari88/twoslash-queries.nvim",
+    },
   },
   config = function(_, opts)
-    vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
-      vim.lsp.handlers.signature_help,
-      { focus = false, anchor_bias = "above" }
-    )
-
+    vim.lsp.handlers["textDocument/signatureHelp"] =
+      vim.lsp.with(vim.lsp.handlers.signature_help, { focus = false, anchor_bias = "above" })
 
     vim.api.nvim_create_user_command("LspFormat", function(_)
       vim.lsp.buf.format({ async = true })
     end, {
-      desc = "LSP: Format document"
+      desc = "LSP: Format document",
     })
 
     require("mason").setup()
@@ -110,8 +107,8 @@ return {
         default_config = {
           cmd = options.command,
           filetypes = options.filetypes,
-          root_dir = require('lspconfig').util.root_pattern('.git'),
-        }
+          root_dir = require("lspconfig").util.root_pattern(".git"),
+        },
       }
     end
 
@@ -119,8 +116,16 @@ return {
       if type(options) == "function" then
         options = options(server_name)
       end
+      local previous_on_attach = options.on_attach
+      local new_on_attach = on_attach
+      if previous_on_attach then
+        new_on_attach = function(client, bufnr)
+          on_attach(client, bufnr)
+          previous_on_attach(client, bufnr)
+        end
+      end
       options = vim.tbl_deep_extend("keep", {
-        on_attach = on_attach,
+        on_attach = new_on_attach,
       }, options)
       require("lspconfig")[server_name].setup(options)
     end
@@ -128,14 +133,25 @@ return {
   opts = {
     -- ensure_installed = { "lua_ls", "rust_analyzer", "tsserver", "prismals", "tailwindcss", "jsonls" },
     autoformat = {
-      ['null-ls'] = { 'javascript', 'typescript', 'typescriptreact', 'javascriptreact', 'json', 'jsonc', 'yaml', 'markdown', 'sql', 'swift' },
-      ['lua_ls'] = { 'lua' },
-      ['rust_analyzer'] = { 'rust' },
-      ['prismals'] = { 'prisma' },
+      ["null-ls"] = {
+        "javascript",
+        "typescript",
+        "typescriptreact",
+        "javascriptreact",
+        "json",
+        "jsonc",
+        "yaml",
+        "markdown",
+        "sql",
+        "swift",
+      },
+      ["lua_ls"] = { "lua" },
+      ["rust_analyzer"] = { "rust" },
+      ["prismals"] = { "prisma" },
       -- ['jsonls'] = { 'json', 'jsonc' },
       -- ['taplo'] = { 'toml' },
-      ['gopls'] = { 'go' },
-      ['terraformls'] = { 'terraform', 'terraformvars' }
+      ["gopls"] = { "go" },
+      ["terraformls"] = { "terraform", "terraformvars" },
     },
     diagnostics = {
       underline = true,
@@ -152,6 +168,6 @@ return {
     },
     inlay_hints = true,
     servers = require("lsp.servers"),
-    custom_servers = require('lsp.custom'),
-  }
+    custom_servers = require("lsp.custom"),
+  },
 }

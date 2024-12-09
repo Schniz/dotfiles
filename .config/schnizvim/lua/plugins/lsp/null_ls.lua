@@ -18,6 +18,16 @@ return {
         return false
       end
 
+      local disable_eslint = vim.fs.find({ "schniz.dontcommit.disable-eslint" }, {
+        upward = true,
+        stop = vim.loop.os_homedir(),
+        path = vim.fs.dirname(vim.api.nvim_buf_get_name(params.bufnr)),
+      })[1]
+
+      if disable_eslint then
+        return false
+      end
+
       local executable_exists = vim.fn.executable("eslint") == 1
 
       return executable_exists

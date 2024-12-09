@@ -11,6 +11,9 @@ local servers = {
         includeInlayVariableTypeHints = true,
       },
     },
+    on_attach = function(client, bufnr)
+      require("twoslash-queries").attach(client, bufnr)
+    end,
   },
 
   jsonls = function()
