@@ -10,11 +10,14 @@ alias gst='git status'
 alias gco='git checkout'
 alias gcm='git commit -m'
 
-if command -v exa > /dev/null; then
-  alias ls='exa'
+alias p=pnpm
+alias t=turbo
+
+if command -v eza >/dev/null; then
+  alias ls='eza'
 fi
 
-if command -v bat > /dev/null; then
+if command -v bat >/dev/null; then
   alias cat='bat'
 fi
 
@@ -39,8 +42,8 @@ function awsso() {
   export AWS_PROFILE="$(cat ~/.aws/credentials | rg '^\[(.+)\] # sso$' -r '$1' | fzf --header "choose aws profile" --height 20)"
 
   if [ -z "$AWS_PROFILE" ]; then
-      echo "noop: no profile selected" > /dev/stderr
-      exit 1
+    echo "noop: no profile selected" >/dev/stderr
+    exit 1
   fi
 
   echo "logging in to $AWS_PROFILE"
