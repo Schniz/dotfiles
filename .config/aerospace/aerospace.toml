@@ -1,0 +1,83 @@
+after-startup-command = [
+  'exec-and-forget borders active_color=0xff90ff90 inactive_color=0x00494d64 width=7.0',
+]
+
+[gaps]
+inner.horizontal = 4
+inner.vertical = 4
+outer.left = 4
+outer.bottom = 4
+outer.top = 4
+outer.right = 4
+
+[mode.main.binding]
+cmd-h = []     # Disable "hide application"
+cmd-alt-h = [] # Disable "hide others"
+
+ctrl-cmd-alt-left = 'focus left'
+ctrl-cmd-alt-down = 'focus down'
+ctrl-cmd-alt-up = 'focus up'
+ctrl-cmd-alt-right = 'focus right'
+ctrl-cmd-alt-h = 'focus left'
+ctrl-cmd-alt-j = 'focus down'
+ctrl-cmd-alt-k = 'focus up'
+ctrl-cmd-alt-l = 'focus right'
+
+ctrl-cmd-alt-shift-left = 'move left'
+ctrl-cmd-alt-shift-down = 'move down'
+ctrl-cmd-alt-shift-up = 'move up'
+ctrl-cmd-alt-shift-right = 'move right'
+ctrl-cmd-alt-shift-h = 'move left'
+ctrl-cmd-alt-shift-j = 'move down'
+ctrl-cmd-alt-shift-k = 'move up'
+ctrl-cmd-alt-shift-l = 'move right'
+
+ctrl-cmd-alt-1 = 'workspace 1'
+ctrl-cmd-alt-2 = 'workspace 2'
+ctrl-cmd-alt-3 = 'workspace 3'
+ctrl-cmd-alt-4 = 'workspace 4'
+ctrl-cmd-alt-5 = 'workspace 5'
+ctrl-cmd-alt-6 = 'workspace 6'
+ctrl-cmd-alt-7 = 'workspace 7'
+ctrl-cmd-alt-8 = 'workspace 8'
+ctrl-cmd-alt-9 = 'workspace 9'
+ctrl-cmd-alt-0 = 'workspace 10'
+ctrl-cmd-alt-w = 'workspace W'
+ctrl-cmd-alt-p = 'workspace P'
+
+ctrl-cmd-alt-shift-1 = 'move-node-to-workspace 1'
+ctrl-cmd-alt-shift-2 = 'move-node-to-workspace 2'
+ctrl-cmd-alt-shift-3 = 'move-node-to-workspace 3'
+ctrl-cmd-alt-shift-4 = 'move-node-to-workspace 4'
+ctrl-cmd-alt-shift-5 = 'move-node-to-workspace 5'
+ctrl-cmd-alt-shift-6 = 'move-node-to-workspace 6'
+ctrl-cmd-alt-shift-7 = 'move-node-to-workspace 7'
+ctrl-cmd-alt-shift-8 = 'move-node-to-workspace 8'
+ctrl-cmd-alt-shift-9 = 'move-node-to-workspace 9'
+ctrl-cmd-alt-shift-0 = 'move-node-to-workspace 10'
+ctrl-cmd-alt-shift-w = 'move-node-to-workspace W'
+ctrl-cmd-alt-shift-p = 'move-node-to-workspace P'
+
+ctrl-cmd-alt-backslash = 'fullscreen'
+
+ctrl-cmd-alt-semicolon = 'mode service'
+
+ctrl-cmd-alt-slash = 'layout tiles horizontal vertical'
+ctrl-cmd-alt-comma = 'layout accordion horizontal vertical'
+
+ctrl-cmd-alt-minus = 'resize smart -50'
+ctrl-cmd-alt-equal = 'resize smart +50'
+
+[mode.service.binding]
+esc = ['reload-config', 'mode main']
+# Toggle between floating and tiling layout
+f = ['layout floating tiling', 'mode main']
+
+ctrl-cmd-alt-h = ['join-with left', 'mode main']
+ctrl-cmd-alt-j = ['join-with down', 'mode main']
+ctrl-cmd-alt-k = ['join-with up', 'mode main']
+ctrl-cmd-alt-l = ['join-with right', 'mode main']
+ctrl-cmd-alt-left = ['join-with left', 'mode main']
+ctrl-cmd-alt-down = ['join-with down', 'mode main']
+ctrl-cmd-alt-up = ['join-with up', 'mode main']
+ctrl-cmd-alt-right = ['join-with right', 'mode main']
