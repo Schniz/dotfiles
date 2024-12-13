@@ -80,7 +80,9 @@ configkube() {
   source <(kubectl completion zsh)
 }
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+if command -v fzf &> /dev/null; then
+  source <(fzf --zsh)
+fi
 
 if command -v zoxide &> /dev/null; then
   eval "$(zoxide init zsh)"
