@@ -23,7 +23,9 @@ brew install \
   caddy \
   pgcli \
   ripgrep \
-  FelixKratz/formulae/borders
+  FelixKratz/formulae/borders \
+  delta \
+  lazygit
 
 brew install --cask \
   raycast \
@@ -38,7 +40,8 @@ brew install --cask \
 mas install \
   747648890 `# Telegram` \
   803453959 `# Slack` \
-  1569813296 `# 1Password for Safari`
+  1569813296 `# 1Password for Safari` \
+  310633997 `# WhatsApp`
 
 if [ ! -d ~/.tmux/plugins/tpm ]; then
   git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
