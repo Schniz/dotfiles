@@ -6,6 +6,7 @@ set -e
 ./bootstrap/installations
 
 macos-defaults apply ./macos-defaults
+/System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
 
 # ./bootstrap/homebrew
 
