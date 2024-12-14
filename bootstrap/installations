@@ -36,7 +36,8 @@ brew install --cask \
   vivaldi \
   nikitabobko/tap/aerospace \
   orbstack \
-  istat-menus
+  istat-menus \
+  notion-calendar
 
 mas install \
   747648890 `# Telegram` \
