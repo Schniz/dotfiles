@@ -1,0 +1,10 @@
+---
+description: com.apple.Safari
+kill: ["Safari"]
+sudo: false
+current_host: false
+data:
+  com.apple.Safari:
+    ExtensionsEnabled: true
+    ShowFullURLInSmartSearchField: true
+    ShowStandaloneTabBar: false # compact tab bar
