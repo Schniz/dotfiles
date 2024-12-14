@@ -4,16 +4,12 @@ set -e
 
 ROOT_DIRECTORY="$HOME/Code/dotfiles"
 
+mkdir -p "$HOME/.config"
+(cd $ROOT_DIRECTORY/.config && stow .)
+
 echo " --> Setup links from $ROOT_DIRECTORY"
 
 ln -vnfs "$ROOT_DIRECTORY" "$HOME/.dotfiles"
-mkdir -p "$HOME/.config"
-ln -vnfs "$ROOT_DIRECTORY/.config/karabiner" "$HOME/.config/karabiner"
-ln -vnfs "$ROOT_DIRECTORY/.config/nvim" "$HOME/.config/nvim"
-ln -vnfs "$ROOT_DIRECTORY/.config/starship.toml" "$HOME/.config/starship.toml"
-ln -vnfs "$ROOT_DIRECTORY/.config/starship-screenshot.toml" "$HOME/.config/starship-screenshot.toml"
-ln -vnfs "$ROOT_DIRECTORY/.gitconfig" "$HOME/.gitconfig"
-ln -vnfs "$ROOT_DIRECTORY/.gitignore" "$HOME/.gitignore"
 ln -vnfs "$ROOT_DIRECTORY/.gvimrc" "$HOME/.gvimrc"
 ln -vnfs "$ROOT_DIRECTORY/.oh-my-zsh-custom" "$HOME/.oh-my-zsh-custom"
 ln -vnfs "$ROOT_DIRECTORY/.vimrc" "$HOME/.vimrc"
@@ -22,9 +18,4 @@ ln -vnfs "$ROOT_DIRECTORY/Brewfile" "$HOME/Brewfile"
 ln -vnfs "$ROOT_DIRECTORY/bin" "$HOME/bin"
 ln -vnfs "$ROOT_DIRECTORY/npmbin" "$HOME/npmbin"
 ln -vnfs "$ROOT_DIRECTORY/.tmux.conf" "$HOME/.tmux.conf"
-ln -vnfs "$ROOT_DIRECTORY/alacritty" "$HOME/.config/alacritty"
-ln -vnfs "$ROOT_DIRECTORY/.config/schnizvim" "$HOME/.config/schnizvim"
-ln -vnfs "$ROOT_DIRECTORY/.config/stylua.toml" "$HOME/.config/stylua.toml"
 ln -vnfs "$ROOT_DIRECTORY/.jq" "$HOME/.jq"
-ln -vnfs "$ROOT_DIRECTORY/.config/ghostty" "$HOME/.config/ghostty"
-ln -vnfs "$ROOT_DIRECTORY/.config/aerospace" "$HOME/.config/aerospace"
