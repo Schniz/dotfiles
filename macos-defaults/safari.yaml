@@ -7,4 +7,5 @@ data:
   com.apple.Safari:
     ExtensionsEnabled: true
     ShowFullURLInSmartSearchField: true
-    ShowStandaloneTabBar: false # compact tab bar
+    ShowStandaloneTabBar: true # !compact tab bar
+    AutoFillPasswords: false # i use 1password
