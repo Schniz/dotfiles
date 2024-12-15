@@ -37,7 +37,8 @@ brew install --cask \
   nikitabobko/tap/aerospace \
   orbstack \
   istat-menus \
-  notion-calendar
+  notion-calendar \
+  mimestream
 
 mas install \
   747648890 `# Telegram` \
