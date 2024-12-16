@@ -42,14 +42,14 @@ brew install --cask \
   karabiner-elements \
   1password 1password-cli \
   font-fira-code-nerd-font \
-  vivaldi \
   nikitabobko/tap/aerospace \
   $(print_unless_disabled orbstack) \
   istat-menus \
   notion-calendar \
   mimestream \
   linear-linear \
-  spotify
+  spotify \
+  google-chrome
 
 mas install \
   747648890 `# Telegram` \
