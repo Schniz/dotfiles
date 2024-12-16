@@ -10,7 +10,7 @@ brew install \
   dsully/tap/macos-defaults \
   fd \
   zsh \
-  awscli \
+  awscli aws-iam-authenticator \
   go \
   graphviz \
   lua \
@@ -26,7 +26,8 @@ brew install \
   FelixKratz/formulae/borders \
   delta \
   lazygit \
-  stow
+  stow \
+  git-lfs
 
 brew install --cask \
   raycast \
@@ -38,7 +39,8 @@ brew install --cask \
   orbstack \
   istat-menus \
   notion-calendar \
-  mimestream
+  mimestream \
+  linear-linear
 
 mas install \
   747648890 `# Telegram` \
