@@ -2,6 +2,7 @@
 
 set -e
 
+./bootstrap/homebrew
 ./bootstrap/installations
 (cd .config && stow .)
 
