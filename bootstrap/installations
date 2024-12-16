@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# prints the value of $1 if the variable skip_$1 is not set
+function print_unless_disabled() {
+  local varname="skip_$1"
+  if [ -z "${!varname}" ]; then
+    echo "$1"
+  fi
+}
+
 brew install \
   neovim \
   mas \
@@ -36,7 +44,7 @@ brew install --cask \
   font-fira-code-nerd-font \
   vivaldi \
   nikitabobko/tap/aerospace \
-  orbstack \
+  $(print_unless_disabled orbstack) \
   istat-menus \
   notion-calendar \
   mimestream \
