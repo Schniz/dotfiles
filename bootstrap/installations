@@ -40,7 +40,8 @@ brew install --cask \
   istat-menus \
   notion-calendar \
   mimestream \
-  linear-linear
+  linear-linear \
+  spotify
 
 mas install \
   747648890 `# Telegram` \
