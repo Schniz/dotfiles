@@ -82,3 +82,30 @@ ctrl-cmd-alt-left = ['join-with left', 'mode main']
 ctrl-cmd-alt-down = ['join-with down', 'mode main']
 ctrl-cmd-alt-up = ['join-with up', 'mode main']
 ctrl-cmd-alt-right = ['join-with right', 'mode main']
+
+[[on-window-detected]]
+if.app-id = 'com.tinyspeck.slackmacgap'
+if.app-name-regex-substring = 'slack'
+run = ['move-node-to-workspace W']
+
+[[on-window-detected]]
+if.app-id = 'com.linear'
+run = ['move-node-to-workspace W']
+
+[[on-window-detected]]
+if.app-id = 'com.apple.Safari'
+if.window-title-regex-substring = '^Vercel — '
+run = ['move-node-to-workspace W']
+
+[[on-window-detected]]
+if.app-id = 'com.apple.Safari'
+if.window-title-regex-substring = '^Personal — '
+run = ['move-node-to-workspace P']
+
+[[on-window-detected]]
+if.app-id = 'ru.keepcoder.Telegram'
+run = ['move-node-to-workspace P']
+
+[[on-window-detected]]
+if.app-id = 'net.whatsapp.WhatsApp'
+run = ['move-node-to-workspace P']
