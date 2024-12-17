@@ -1,22 +1,35 @@
 -- This ensures we automatically `cd` to the nearest project
 
 return {
-  'airblade/vim-rooter',
-  init = function()
-    vim.g.rooter_patterns = {
-      'package.json',
-      'Rakefile',
-      'Makefile',
-      'Podfile',
-      'shard.yml',
-      'requirements.txt',
-      'Gemfile',
-      'mix.exs',
-      'Cargo.toml',
-      'go.mod',
-      '.terraform/',
-      '.git/',
-      'lazy-lock.json',
-    }
-  end
+	'airblade/vim-rooter',
+	dependencies = { "folke/snacks.nvim" },
+	init = function()
+		vim.g.rooter_silent_chdir = 1
+		vim.g.rooter_patterns = {
+			'package.json',
+			'Rakefile',
+			'Makefile',
+			'Podfile',
+			'shard.yml',
+			'requirements.txt',
+			'Gemfile',
+			'mix.exs',
+			'Cargo.toml',
+			'go.mod',
+			'.terraform/',
+			'.git/',
+			'lazy-lock.json',
+		}
+
+		vim.api.nvim_create_autocmd("DirChanged", {
+			callback = function()
+				local git = require('snacks.git')
+				local root_dir = git.get_root():gsub("@--", "@--")
+				local Notifier = require('snacks.notifier')
+				local dirname = vim.fn.getcwd()
+				local new_dirname = dirname:gsub(root_dir, "")
+				Notifier.notify(new_dirname, "info", { title = "Directory changed" })
+			end
+		})
+	end
 }
