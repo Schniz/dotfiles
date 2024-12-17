@@ -1,6 +1,7 @@
 after-startup-command = [
   'exec-and-forget borders active_color=0xff90ff90 inactive_color=0x00494d64 width=7.0',
 ]
+start-at-login = false
 
 [gaps]
 inner.horizontal = 4
@@ -68,6 +69,17 @@ ctrl-cmd-alt-comma = 'layout accordion horizontal vertical'
 ctrl-cmd-alt-minus = 'resize smart -50'
 ctrl-cmd-alt-equal = 'resize smart +50'
 
+ctrl-cmd-alt-r = 'mode resize'
+ctrl-cmd-alt-z = 'layout floating tiling'
+
+[mode.resize.binding]
+left = 'resize width -50'
+down = 'resize height +50'
+up = 'resize height -50'
+right = 'resize width +50'
+enter = 'mode main'
+esc = 'mode main'
+
 [mode.service.binding]
 esc = ['reload-config', 'mode main']
 # Toggle between floating and tiling layout
@@ -81,3 +93,40 @@ ctrl-cmd-alt-left = ['join-with left', 'mode main']
 ctrl-cmd-alt-down = ['join-with down', 'mode main']
 ctrl-cmd-alt-up = ['join-with up', 'mode main']
 ctrl-cmd-alt-right = ['join-with right', 'mode main']
+
+[[on-window-detected]]
+if.app-id = 'com.tinyspeck.slackmacgap'
+if.app-name-regex-substring = 'slack'
+run = ['move-node-to-workspace W']
+
+[[on-window-detected]]
+if.app-id = 'com.linear'
+run = ['move-node-to-workspace W']
+
+[[on-window-detected]]
+if.app-id = 'com.apple.Safari'
+if.window-title-regex-substring = '^Vercel — '
+run = ['move-node-to-workspace W']
+
+[[on-window-detected]]
+if.app-id = 'com.google.Chrome'
+if.window-title-regex-substring = ' - Gal \(Vercel\)$'
+run = ['move-node-to-workspace W']
+
+[[on-window-detected]]
+if.app-id = 'com.apple.Safari'
+if.window-title-regex-substring = '^Personal — '
+run = ['move-node-to-workspace P']
+
+[[on-window-detected]]
+if.app-id = 'com.google.Chrome'
+if.window-title-regex-substring = ' - Gal$'
+run = ['move-node-to-workspace P']
+
+[[on-window-detected]]
+if.app-id = 'ru.keepcoder.Telegram'
+run = ['move-node-to-workspace P']
+
+[[on-window-detected]]
+if.app-id = 'net.whatsapp.WhatsApp'
+run = ['move-node-to-workspace P']

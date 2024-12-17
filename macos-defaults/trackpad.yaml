@@ -1,0 +1,7 @@
+---
+description: "Trackpad config"
+sudo: false
+current_host: false
+data:
+  com.apple.AppleMultitouchTrackpad:
+    Clicking: 1

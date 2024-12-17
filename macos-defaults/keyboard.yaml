@@ -1,0 +1,10 @@
+---
+description: Keyboard settings
+sudo: false
+current_host: false
+kill: ["Dock"]
+data:
+  NSGlobalDomain:
+    KeyRepeat: 2
+    InitialKeyRepeat: 30
+    com.apple.keyboard.fnState: true
