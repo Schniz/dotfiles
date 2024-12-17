@@ -70,6 +70,7 @@ ctrl-cmd-alt-minus = 'resize smart -50'
 ctrl-cmd-alt-equal = 'resize smart +50'
 
 ctrl-cmd-alt-r = 'mode resize'
+ctrl-cmd-alt-z = 'layout floating tiling'
 
 [mode.resize.binding]
 left = 'resize width -50'
