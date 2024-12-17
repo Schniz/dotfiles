@@ -35,7 +35,8 @@ brew install \
   delta \
   lazygit \
   stow \
-  git-lfs
+  git-lfs \
+  python-setuptools
 
 brew install --cask \
   raycast \
