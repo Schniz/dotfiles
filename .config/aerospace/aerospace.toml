@@ -69,6 +69,16 @@ ctrl-cmd-alt-comma = 'layout accordion horizontal vertical'
 ctrl-cmd-alt-minus = 'resize smart -50'
 ctrl-cmd-alt-equal = 'resize smart +50'
 
+ctrl-cmd-alt-r = 'mode resize'
+
+[mode.resize.binding]
+left = 'resize width -50'
+down = 'resize height +50'
+up = 'resize height -50'
+right = 'resize width +50'
+enter = 'mode main'
+esc = 'mode main'
+
 [mode.service.binding]
 esc = ['reload-config', 'mode main']
 # Toggle between floating and tiling layout
