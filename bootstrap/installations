@@ -50,7 +50,8 @@ brew install --cask \
   mimestream \
   linear-linear \
   spotify \
-  google-chrome
+  google-chrome \
+  ngrok
 
 mas install \
   747648890 `# Telegram` \
