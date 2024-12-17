@@ -24,11 +24,12 @@ return {
 		vim.api.nvim_create_autocmd("DirChanged", {
 			callback = function()
 				local git = require('snacks.git')
+
 				local root_dir = git.get_root():gsub("@--", "@--")
-				local Notifier = require('snacks.notifier')
 				local dirname = vim.fn.getcwd()
 				local new_dirname = dirname:gsub(root_dir, "")
-				Notifier.notify(new_dirname, "info", { title = "Directory changed" })
+
+				vim.notify(new_dirname, "info", { title = "Directory changed" })
 			end
 		})
 	end
