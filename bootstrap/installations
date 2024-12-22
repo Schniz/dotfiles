@@ -36,7 +36,10 @@ brew install \
   lazygit \
   stow \
   git-lfs \
-  python-setuptools
+  python-setuptools \
+  presenterm \
+  fswatch \
+  plantuml
 
 brew install --cask \
   raycast \
@@ -51,7 +54,10 @@ brew install --cask \
   linear-linear \
   spotify \
   google-chrome \
-  ngrok
+  ngrok \
+  sony-ps-remote-play \
+  tailscale \
+  obsidian
 
 mas install \
   747648890 `# Telegram` \
