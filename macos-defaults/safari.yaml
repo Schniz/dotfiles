@@ -1,0 +1,12 @@
+---
+description: com.apple.Safari
+kill: ["Safari"]
+sudo: false
+current_host: false
+data:
+  com.apple.Safari:
+    ExtensionsEnabled: true
+    ShowFullURLInSmartSearchField: true
+    ShowStandaloneTabBar: true # !compact tab bar
+    AutoFillPasswords: false # i use 1password
+    IncludeDevelopMenu: true

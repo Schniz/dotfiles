@@ -2,7 +2,13 @@
 
 set -e
 
-./bootstrap/links
+./bootstrap/homebrew
+./bootstrap/installations
+(cd .config && stow .)
+
+macos-defaults apply ./macos-defaults
+/System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
+
 # ./bootstrap/homebrew
 
 # brew install homebrew/cask-fonts/font-fira-code-nerd-font

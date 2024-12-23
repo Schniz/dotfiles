@@ -1,0 +1,8 @@
+---
+description: com.apple.Dock
+sudo: false
+current_host: false
+kill: ["Dock"]
+data:
+  com.apple.Dock:
+    autohide: true
