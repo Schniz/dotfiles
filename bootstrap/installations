@@ -39,7 +39,8 @@ brew install \
   python-setuptools \
   presenterm \
   fswatch \
-  plantuml
+  plantuml \
+  cmake
 
 brew install --cask \
   raycast \
