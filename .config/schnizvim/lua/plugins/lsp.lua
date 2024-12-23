@@ -130,6 +130,8 @@ return {
 			}, options)
 			require("lspconfig")[server_name].setup(options)
 		end
+
+		vim.lsp.set_log_level("off")
 	end,
 	opts = {
 		ensure_installed = {
