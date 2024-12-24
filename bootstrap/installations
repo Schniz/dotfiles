@@ -40,7 +40,8 @@ brew install \
   presenterm \
   fswatch \
   plantuml \
-  cmake
+  cmake \
+  coreutils
 
 brew install --cask \
   raycast \
@@ -73,3 +74,4 @@ if [ ! -d ~/.tmux/plugins/tpm ]; then
 fi
 
 sudo-touchid
+brew services start borders
