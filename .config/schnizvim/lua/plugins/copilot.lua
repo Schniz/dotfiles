@@ -6,7 +6,11 @@ return {
 	build = function()
 		vim.cmd("Copilot auth")
 	end,
+	---@type copilot_config
 	opts = {
+		-- use fnm to find the node binary (`fnm exec --using=default "$@"`)
+		-- ../../../../bin/default-node
+		copilot_node_command = "default-node",
 		filetypes = {
 			["*"] = true
 		}
