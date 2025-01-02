@@ -47,3 +47,7 @@ cursor-color=#d3d0c8
 foreground=#d9d9d9
 selection-foreground=#d3d0c8
 selection-background=#515151
+
+macos-icon = custom-style
+macos-icon-ghost-color = f2777a
+macos-icon-screen-color = 2d2d2d
