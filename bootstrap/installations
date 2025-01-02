@@ -41,7 +41,9 @@ brew install \
   fswatch \
   plantuml \
   cmake \
-  coreutils
+  coreutils \
+  gpg \
+  git-secret
 
 brew install --cask \
   raycast \
