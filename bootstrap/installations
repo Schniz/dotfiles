@@ -61,7 +61,8 @@ brew install --cask \
   ngrok \
   sony-ps-remote-play \
   tailscale \
-  obsidian
+  obsidian \
+  discord
 
 mas install \
   747648890 `# Telegram` \
