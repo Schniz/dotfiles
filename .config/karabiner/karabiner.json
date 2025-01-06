@@ -182,6 +182,10 @@
                 {
                     "from": { "key_code": "pause" },
                     "to": [{ "key_code": "power" }]
+                },
+                {
+                    "from": { "key_code": "left_control" },
+                    "to": [{ "apple_vendor_top_case_key_code": "keyboard_fn" }]
                 }
             ],
             "virtual_hid_keyboard": {
