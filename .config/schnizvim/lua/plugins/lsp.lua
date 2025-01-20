@@ -46,6 +46,20 @@ local function setup_lsp_keymaps(client, bufnr)
 	})
 end
 
+-- ignore "No information available" in vim.notify
+-- this is because it is wrongly used in some LSPs
+local banned_messages = { "No information available" }
+local notify = vim.notify
+---@diagnostic disable-next-line: duplicate-set-field
+vim.notify = function(msg, ...)
+	for _, banned in ipairs(banned_messages) do
+		if msg == banned then
+			return
+		end
+	end
+	return notify(msg, ...)
+end
+
 --- @param client lsp.Client
 --- @param bufnr number
 local function on_attach(client, bufnr)
