@@ -29,7 +29,11 @@ return {
 				local dirname = vim.fn.getcwd()
 				local new_dirname = dirname:gsub(root_dir, "")
 
-				vim.notify(new_dirname, "info", { title = "Directory changed" })
+				if new_dirname == "" then
+					new_dirname = "/"
+				end
+
+				vim.notify(new_dirname, "info", { title = "Directory changed", id = "rooter.changed" })
 			end
 		})
 	end
