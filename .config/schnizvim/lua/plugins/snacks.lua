@@ -7,7 +7,14 @@ return {
 		bigfile = { enabled = true },
 		dashboard = { enabled = false },
 		indent = { enabled = true },
-		input = { enabled = true },
+		input = {
+			enabled = true,
+			win = {
+				keys = {
+					["<C-c>"] = { "close", mode = "i" }
+				}
+			},
+		},
 		notifier = { enabled = true },
 		quickfile = { enabled = true },
 		scope = { enabled = true },
