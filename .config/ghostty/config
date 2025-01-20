@@ -1,6 +1,6 @@
 # theme = Tomorrow Night Eighties
 
-background-opacity = 0.98
+background-opacity = 0.95
 background-blur-radius = 10
 
 # Fira Code with ligatures |> === !== {}
