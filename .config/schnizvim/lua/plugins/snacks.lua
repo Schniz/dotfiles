@@ -1,7 +1,21 @@
+---@type LazyPluginSpec
 return {
 	"folke/snacks.nvim",
 	priority = 1000,
 	lazy = false,
+	keys = {
+		{
+			"<leader>cd",
+			function()
+				if Snacks.dim.enabled then
+					Snacks.dim.disable()
+				else
+					Snacks.dim.enable()
+				end
+			end,
+			desc = "Toggle Snacks.dim to highlight current scope"
+		}
+	},
 	---@type snacks.Config
 	opts = {
 		bigfile = { enabled = true },
