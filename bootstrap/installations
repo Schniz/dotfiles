@@ -70,7 +70,8 @@ mas install \
   1569813296 `# 1Password for Safari` \
   310633997 `# WhatsApp` \
   1480933944 `# Vimari` \
-  1607635845 `# Velja`
+  1607635845 `# Velja` \
+  1522267256 `# Shareful (share menu extensions)`
 
 if [ ! -d ~/.tmux/plugins/tpm ]; then
   git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
