@@ -1,16 +1,16 @@
 local servers = {
-	ts_ls = {
-		init_options = {
-			preferences = {
-				includeInlayEnumMemberValueHints = true,
-				includeInlayFunctionLikeReturnTypeHints = true,
-				includeInlayFunctionParameterTypeHints = true,
-				-- includeInlayParameterNameHints = 'all',
-				-- includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-				includeInlayPropertyDeclarationTypeHints = true,
-				includeInlayVariableTypeHints = true,
-			},
-		},
+	vtsls = {
+		-- init_options = {
+		-- 	preferences = {
+		-- 		includeInlayEnumMemberValueHints = true,
+		-- 		includeInlayFunctionLikeReturnTypeHints = true,
+		-- 		includeInlayFunctionParameterTypeHints = true,
+		-- 		-- includeInlayParameterNameHints = 'all',
+		-- 		-- includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+		-- 		includeInlayPropertyDeclarationTypeHints = true,
+		-- 		includeInlayVariableTypeHints = true,
+		-- 	},
+		-- },
 		on_attach = function(client, bufnr)
 			require("twoslash-queries").attach(client, bufnr)
 		end,
