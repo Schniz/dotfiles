@@ -43,7 +43,8 @@ brew install \
   cmake \
   coreutils \
   gpg \
-  git-secret
+  git-secret \
+  watchexec
 
 brew install --cask \
   raycast \
