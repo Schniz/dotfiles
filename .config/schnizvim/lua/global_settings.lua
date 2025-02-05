@@ -1,5 +1,5 @@
 vim.o.termguicolors = true -- 24-bit colors in terminal
-vim.o.number = true        -- hybrid
+vim.o.number = true -- hybrid
 vim.o.smartcase = true
 vim.o.ignorecase = true
 vim.o.wildmenu = true
@@ -31,6 +31,9 @@ vim.o.fileencodings = "ucs-bom,utf8,prc"
 vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
 vim.opt.undofile = true
 -- set foldmethod=expr foldexpr=nvim_treesitter#foldexpr() foldlevel=9999
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+vim.opt.foldlevel = 9999
 -- " Prevent Vim from clobbering the scrollback buffer. See
 -- " http://www.shallowsky.com/linux/noaltscreen.html
 -- set t_ti= t_te=
@@ -39,17 +42,13 @@ vim.opt.undofile = true
 
 -- Set filetype SQL to stop forcing me to press Ctrl-C twice
 -- see https://unix.stackexchange.com/questions/150093/vim-delay-when-using-ctrlc-but-only-in-sql-files
-vim.g.ftplugin_sql_omni_key = '<C-j>'
+vim.g.ftplugin_sql_omni_key = "<C-j>"
 
-vim.cmd [[set listchars=tab:∙\ ,eol:↲,nbsp:␣,trail:•,extends:⟩,precedes:⟨]]
+vim.cmd([[set listchars=tab:∙\ ,eol:↲,nbsp:␣,trail:•,extends:⟩,precedes:⟨]])
 vim.o.list = true
 
 -- define Browse command
 -- see https://vi.stackexchange.com/questions/38447/vim-fugitive-netrw-not-found-define-your-own-browse-to-use-gbrowse
-vim.api.nvim_create_user_command(
-  'Browse',
-  function(opts)
-    vim.fn.system { 'open', opts.fargs[1] }
-  end,
-  { nargs = 1 }
-)
+vim.api.nvim_create_user_command("Browse", function(opts)
+  vim.fn.system({ "open", opts.fargs[1] })
+end, { nargs = 1 })
