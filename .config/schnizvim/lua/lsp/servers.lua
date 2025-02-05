@@ -65,7 +65,13 @@ local servers = {
 
   sourcekit_lsp = {},
 
-  gopls = {},
+  gopls = {
+    settings = {
+      gopls = {
+        staticcheck = true,
+      },
+    },
+  },
 
   terraformls = {},
 
