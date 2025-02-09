@@ -1,55 +1,69 @@
 return {
-  'nvim-telescope/telescope.nvim',
-  tag = '0.1.5',
-  dependencies = { 'nvim-lua/plenary.nvim', 'nvim-telescope/telescope-ui-select.nvim' },
+  "nvim-telescope/telescope.nvim",
+  tag = "0.1.5",
+  dependencies = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope-ui-select.nvim" },
   config = function()
-    local telescope = require('telescope')
-    local actions = require('telescope.actions')
+    local telescope = require("telescope")
+    local actions = require("telescope.actions")
 
-    telescope.setup {
+    telescope.setup({
       defaults = {
+        layout_strategy = "flex",
+        layout_config = {
+          flex = {
+            flip_columns = 150,
+          },
+        },
         set_env = {
-          LESS = '',
-          DELTA_PAGER = 'bat',
+          LESS = "",
+          DELTA_PAGER = "bat",
         },
         path_display = {
           filename_first = {
-            reverse_directories = false
-          }
+            reverse_directories = false,
+          },
         },
         mappings = {
           i = {
             -- emacs style: go to the beginning of the line
             ["<c-a>"] = function()
-              vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<home>", true, false, true), "n", true)
+              vim.api.nvim_feedkeys(
+                vim.api.nvim_replace_termcodes("<home>", true, false, true),
+                "n",
+                true
+              )
             end,
             ["<c-e>"] = function()
-              vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<end>", true, false, true), "n", true)
+              vim.api.nvim_feedkeys(
+                vim.api.nvim_replace_termcodes("<end>", true, false, true),
+                "n",
+                true
+              )
             end,
             ["<esc>"] = actions.close,
             ["<cr>"] = function(prompt_bufnr)
-              local picker = require('telescope.actions.state').get_current_picker(prompt_bufnr)
+              local picker = require("telescope.actions.state").get_current_picker(prompt_bufnr)
               local multi = picker:get_multi_selection()
               if not vim.tbl_isempty(multi) then
-                require('telescope.actions').close(prompt_bufnr)
+                require("telescope.actions").close(prompt_bufnr)
                 for _, j in pairs(multi) do
                   if j.path ~= nil then
-                    vim.cmd(string.format('%s %s', 'edit', j.path))
+                    vim.cmd(string.format("%s %s", "edit", j.path))
                   end
                 end
               else
-                require('telescope.actions').select_default(prompt_bufnr)
+                require("telescope.actions").select_default(prompt_bufnr)
               end
-            end
+            end,
           },
         },
       },
       extensions = {
         ["ui-select"] = {
-          require("telescope.themes").get_cursor {}
-        }
-      }
-    }
+          require("telescope.themes").get_cursor({}),
+        },
+      },
+    })
 
     telescope.load_extension("ui-select")
   end,
@@ -70,7 +84,7 @@ return {
         telescope.grep_string({ search = args.args })
       end
     end, {
-      nargs = "?"
+      nargs = "?",
     })
 
     vim.keymap.set("n", "<C-p>", ":Files<CR>")
@@ -91,17 +105,16 @@ return {
     end)
 
     vim.keymap.set("n", "<leader>od", function()
-      local previewers = require('telescope.previewers')
-      local themes = require('telescope.themes')
+      local previewers = require("telescope.previewers")
+      local themes = require("telescope.themes")
 
       local delta = previewers.new_termopen_previewer({
         get_command = function(entry)
-          return { 'diff-for-file', entry.value }
-        end
+          return { "diff-for-file", entry.value }
+        end,
       })
-
 
       telescope.find_files({ find_command = { "dfile-list" }, previewer = delta })
     end)
-  end
+  end,
 }
