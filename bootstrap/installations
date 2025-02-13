@@ -63,7 +63,8 @@ brew install --cask \
   sony-ps-remote-play \
   tailscale \
   obsidian \
-  discord
+  discord \
+  ghostty
 
 mas install \
   747648890 `# Telegram` \
