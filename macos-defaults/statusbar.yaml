@@ -1,0 +1,9 @@
+---
+description: Status bar spacing
+sudo: false
+current_host: false
+data:
+  NSGlobalDomain:
+    NSStatusItemSpacing: 12
+    NSStatusItemSelectionPadding: 6
+
