@@ -44,13 +44,15 @@ brew install \
   coreutils \
   gpg \
   git-secret \
-  watchexec
+  watchexec \
+  cormacrelf/tap/dark-notify
 
 brew install --cask \
   raycast \
   karabiner-elements \
   1password 1password-cli \
   font-fira-code-nerd-font \
+  font-sf-pro \
   nikitabobko/tap/aerospace \
   $(print_unless_disabled orbstack) \
   istat-menus \
