@@ -2,6 +2,9 @@
 vim.g.mapleader = ","
 vim.g.maplocalleader = "\\"
 
+vim.g.lumen_light_colorscheme = "base16-github"
+vim.g.lumen_dark_colorscheme = "base16-eighties"
+
 local previous_print = print
 PRINT_TRACE = function(v)
   -- get traceback
