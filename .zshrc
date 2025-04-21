@@ -110,10 +110,16 @@ function screenshell() {
   fi
 }
 
+# ghostty {
+if [[ -n $GHOSTTY_RESOURCES_DIR ]]; then
+  source "$GHOSTTY_RESOURCES_DIR"/shell-integration/zsh/ghostty-integration
+fi
+# }
+
 # pnpm
 export PNPM_HOME="/Users/schniz/Library/pnpm"
 export PATH="$PNPM_HOME:$PATH"
 # pnpm end
 
-export BAT_THEME='Dracula'
+export BAT_THEME='base16'
 export NVIM_APPNAME='schnizvim'
