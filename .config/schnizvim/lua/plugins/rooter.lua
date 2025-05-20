@@ -15,6 +15,8 @@ return {
       "Gemfile",
       "mix.exs",
       "Cargo.toml",
+      "*.xcworkspace",
+      "*.xcproject",
       "go.mod",
       ".terraform/",
       ".git/",

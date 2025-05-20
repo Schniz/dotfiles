@@ -17,6 +17,7 @@ return {
         { name = "path" },
         { name = "copilot" },
         { name = "crates" },
+        { name = "codecompanion" },
       }),
       formatting = {
         format = lspkind.cmp_format({

@@ -63,7 +63,11 @@ local servers = {
 
   sqlls = {},
 
-  sourcekit_lsp = {},
+  sourcekit = {
+    cmd = {
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/sourcekit-lsp",
+    },
+  },
 
   gopls = {
     settings = {
