@@ -45,7 +45,8 @@ brew install \
   gpg \
   git-secret \
   watchexec \
-  cormacrelf/tap/dark-notify
+  cormacrelf/tap/dark-notify \
+  xcode-build-server
 
 brew install --cask \
   raycast \
