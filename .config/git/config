@@ -12,7 +12,7 @@
 
 [alias]
   automerge = !enable-automerge
-  m = co main
+  m = !git co $(get_main_branch)
   ac = add . && commit
   co = checkout
   ffm = merge --ff-only

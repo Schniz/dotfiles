@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -euo pipefail
+
+remote="$(get_upstream_remote)"
+branch="$(git branch -r | rg "^\s*$remote/HEAD\b.+$remote/([^\s]+)" -r '$1')"
+
+echo "$remote/$branch"

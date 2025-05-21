@@ -1,4 +1,4 @@
 #!/bin/bash
 
-REF=${1-$(get_upstream_remote)/$(get_main_branch)}
+REF=${1-$(get_main_upstream)}
 dfile-list $REF | fzf -m --preview "REF=$REF diff-for-file {}"

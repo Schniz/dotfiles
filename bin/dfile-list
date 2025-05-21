@@ -7,13 +7,9 @@ main();
 
 function getRef() {
   if (!process.argv[2]) {
-    const mainBranch = cp
-      .execSync("get_main_branch", { encoding: "utf8" })
+    return cp
+      .execSync("get_main_upstream", { encoding: "utf8" })
       .trim();
-    const remote = cp
-      .execSync("get_upstream_remote", { encoding: "utf8" })
-      .trim();
-    return `${remote}/${mainBranch}`;
   }
 
   return process.argv[2];

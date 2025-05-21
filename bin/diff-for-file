@@ -1,4 +1,4 @@
 #!/bin/bash
 
-REF=${REF-origin/$(get_main_branch)}
+REF=${REF-$(get_main_upstream)}
 echo $@ | xargs git diff $REF --color
