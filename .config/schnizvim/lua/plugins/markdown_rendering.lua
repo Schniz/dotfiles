@@ -10,6 +10,7 @@ return {
   ---@module 'render-markdown'
   ---@type render.md.UserConfig
   opts = {
+    file_types = { "markdown", "codecompanion" },
     latex = { enabled = false },
     heading = {
       left_margin = 0,

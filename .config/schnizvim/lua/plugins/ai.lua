@@ -24,6 +24,33 @@ return {
     },
   },
   opts = {
+    adapters = {
+      ---@return CodeCompanion.Adapter
+      devstral = function()
+        return require("codecompanion.adapters").extend("ollama", {
+          name = "devstral",
+          schema = {
+            model = {
+              default = "devstral:24b",
+            },
+          },
+        })
+      end,
+      ---@return CodeCompanion.Adapter
+      v0 = function()
+        return require("codecompanion.adapters").extend("openai_compatible", {
+          env = {
+            url = "https://api.v0.dev",
+            api_key = "cmd:op read op://Projects/v0/credential --no-newline",
+          },
+          schema = {
+            model = {
+              default = "v0-1.0-md",
+            },
+          },
+        })
+      end,
+    },
     strategies = {
       chat = {
         keymaps = {
