@@ -1,7 +1,16 @@
 return {
   "nvim-telescope/telescope.nvim",
   tag = "0.1.5",
-  dependencies = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope-ui-select.nvim" },
+  dependencies = {
+    "nvim-lua/plenary.nvim",
+    "nvim-telescope/telescope-ui-select.nvim",
+    {
+      "2kabhishek/nerdy.nvim",
+      dependencies = {
+        "folke/snacks.nvim",
+      },
+    },
+  },
   config = function()
     local telescope = require("telescope")
     local actions = require("telescope.actions")
@@ -66,6 +75,7 @@ return {
     })
 
     telescope.load_extension("ui-select")
+    telescope.load_extension("nerdy")
   end,
   init = function()
     local telescope = require("telescope.builtin")

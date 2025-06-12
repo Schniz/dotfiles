@@ -78,5 +78,15 @@ return {
         branch = "main",
       },
     }
+    ---@type ParserInfo
+    parser_configs.plantuml = {
+      filetype = "plantuml",
+      maintainers = {},
+      install_info = {
+        url = "https://github.com/lyndsysimon/tree-sitter-plantuml",
+        files = { "src/parser.c" },
+        branch = "main",
+      },
+    }
   end,
 }
