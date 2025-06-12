@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Usage:
+# ------
+# Run `stylua` from the Mason installation
+#     mason stylua --help
+# See ../.config/schnizvim/lua/plugins/lsp.lua for the Mason installation
+
+export PATH="$HOME/.local/share/$NVIM_APPNAME/mason/bin":$PATH
+
+"$@"

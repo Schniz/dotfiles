@@ -123,3 +123,6 @@ export PATH="$PNPM_HOME:$PATH"
 
 export BAT_THEME='base16'
 export NVIM_APPNAME='schnizvim'
+
+# ni https://github.com/antfu-collective/ni
+export NI_CONFIG_FILE="$HOME/.config/ni/nirc"
