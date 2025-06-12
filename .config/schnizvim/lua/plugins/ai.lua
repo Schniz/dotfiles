@@ -36,6 +36,15 @@ return {
           },
         })
       end,
+      copilot = function()
+        return require("codecompanion.adapters").extend("copilot", {
+          schema = {
+            model = {
+              default = "claude-sonnet-4",
+            },
+          },
+        })
+      end,
       ---@return CodeCompanion.Adapter
       v0 = function()
         return require("codecompanion.adapters").extend("openai_compatible", {
@@ -52,7 +61,11 @@ return {
       end,
     },
     strategies = {
+      inline = {
+        adapter = "copilot",
+      },
       chat = {
+        adapter = "copilot",
         keymaps = {
           send = {
             modes = { i = "<C-;>" },
