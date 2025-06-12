@@ -1,8 +1,8 @@
---- @param client lsp.Client
+--- @param client vim.lsp.Client
 local function setup_lsp_keymaps(client, bufnr)
   local telescope = require("telescope.builtin")
 
-  if client.supports_method("textDocument/documentHighlight") then
+  if client:supports_method("textDocument/documentHighlight") then
     vim.api.nvim_create_autocmd("CursorHold", {
       buffer = bufnr,
       callback = vim.lsp.buf.document_highlight,
@@ -23,11 +23,27 @@ local function setup_lsp_keymaps(client, bufnr)
   end, { buffer = bufnr })
   vim.keymap.set("n", "<leader>a", vim.lsp.buf.code_action, { buffer = bufnr })
 
-  vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, {
+  vim.keymap.set("n", "]d", function()
+    local position = vim.diagnostic.get_next()
+    -- go to the position
+    if position and position.lnum then
+      vim.api.nvim_win_set_cursor(0, { position.lnum + 1, position.col })
+    else
+      vim.notify("No next diagnostic message", vim.log.levels.WARN, { id = "diagnostic_goto" })
+    end
+  end, {
     desc = "Go to previous diagnostic message",
     remap = false,
   })
-  vim.keymap.set("n", "]d", vim.diagnostic.goto_next, {
+  vim.keymap.set("n", "[d", function()
+    local position = vim.diagnostic.get_prev()
+    -- go to the position
+    if position and position.lnum then
+      vim.api.nvim_win_set_cursor(0, { position.lnum + 1, position.col })
+    else
+      vim.notify("No previous diagnostic message", vim.log.levels.WARN, { id = "diagnostic_goto" })
+    end
+  end, {
     desc = "Go to next diagnostic message",
     remap = false,
   })
@@ -51,7 +67,7 @@ vim.notify = function(msg, ...)
   return notify(msg, ...)
 end
 
---- @param client lsp.Client
+--- @param client vim.lsp.Client
 --- @param bufnr number
 local function on_attach(client, bufnr)
   setup_lsp_keymaps(client, bufnr)
