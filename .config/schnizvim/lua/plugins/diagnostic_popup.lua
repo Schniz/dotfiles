@@ -1,4 +1,4 @@
 return {
-  'Kasama/nvim-custom-diagnostic-highlight',
-  opts = {}
+  "Kasama/nvim-custom-diagnostic-highlight",
+  opts = {},
 }

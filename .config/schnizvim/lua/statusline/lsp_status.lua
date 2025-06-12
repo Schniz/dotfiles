@@ -9,14 +9,10 @@ return function()
       local client_names = {}
       for _, client in ipairs(active_clients) do
         if client and client.name ~= "" then
-          table.insert(
-            client_names,
-            1,
-            client.name
-          )
+          table.insert(client_names, 1, client.name)
         end
       end
       return table.concat(client_names, "")
-    end
+    end,
   })
 end

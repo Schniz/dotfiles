@@ -5,5 +5,5 @@ return {
   init = function()
     local trouble = require("trouble")
     vim.keymap.set("n", "<leader>l", trouble.toggle)
-  end
+  end,
 }

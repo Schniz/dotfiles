@@ -11,8 +11,11 @@ vim.keymap.set("n", "<C-c>", ":noh<CR><Esc>", { silent = true })
 vim.keymap.set("i", "<C-c>", "<ESC>", { silent = true })
 vim.keymap.set("n", "Y", "y$")
 vim.keymap.set("n", "<leader>or", ":e <C-R>=expand('%:p:h') . '/'<CR>")
-vim.keymap.set("n", "<leader>o<C-r>",
-  ":call fzf#vim#files(getcwd(), { 'options': ['--query', expand('%:h'), '--preview', 'bat {} --color always'] })<CR>")
+vim.keymap.set(
+  "n",
+  "<leader>o<C-r>",
+  ":call fzf#vim#files(getcwd(), { 'options': ['--query', expand('%:h'), '--preview', 'bat {} --color always'] })<CR>"
+)
 vim.keymap.set("n", "<leader>f", "za")
 
 -- windows
