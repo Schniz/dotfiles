@@ -37,7 +37,7 @@ fi
   # If we're running this script directly, set the window name to the current directory
 if [[ "$0" == *"/set_tmux_window_name" ]]; then
   if [[ -n "$TMUX" ]]; then
-    cd $(tmux display -p "#{pane_current_path}")
+    cd "$(tmux display -p "#{pane_current_path}")"
   fi
 
   set_tmux_window_name
