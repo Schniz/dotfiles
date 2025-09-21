@@ -7,6 +7,8 @@ return {
       opts = { max_lines = 3, multiline_threshold = 1 },
     },
     "nvim-treesitter/nvim-treesitter-textobjects",
+    -- non-ts syntax highlights
+    { "isobit/vim-caddyfile" },
   },
   build = function()
     vim.cmd(":TSUpdate")

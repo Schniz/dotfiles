@@ -2,7 +2,7 @@ local biomejs = require("schniz.biomejs")
 
 local function biome_or_prettier(bufnr)
   if biomejs.is_biome_project(bufnr) then
-    return { "biome" }
+    return { "biome-check" }
   else
     return { "prettier" }
   end
@@ -11,6 +11,7 @@ end
 local formatters = {
   lua = { "stylua" },
   python = { "isort", "black" },
+  cpp = { "clang-format" },
   javascript = biome_or_prettier,
   javascriptreact = biome_or_prettier,
   typescript = biome_or_prettier,

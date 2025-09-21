@@ -1,6 +1,7 @@
 local servers = {
   ts_ls = {
     init_options = {
+      maxTsServerMemory = 12288,
       preferences = {
         includeInlayEnumMemberValueHints = true,
         includeInlayFunctionLikeReturnTypeHints = true,
@@ -86,6 +87,8 @@ local servers = {
   bashls = {},
 
   buf_ls = {},
+
+  zls = {},
 }
 
 return servers
