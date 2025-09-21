@@ -1,0 +1,22 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "anthropic/claude-sonnet-4-20250514",
+  "theme": "opencode",
+  "keybinds": {
+    "messages_last": "<leader>G",
+    "editor_open": "<leader>ctrl+e"
+  },
+  "permission": {
+    "bash": "allow",
+    "edit": "allow",
+    "webfetch": "allow"
+  },
+  "mcp": {
+    "godoc": {
+      "type": "local",
+      "command": [
+        "godoc-mcp"
+      ]
+    }
+  }
+}

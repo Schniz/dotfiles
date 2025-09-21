@@ -1,0 +1,22 @@
+#!/bin/bash
+
+set -e pipefail
+
+gh api --paginate "/repos/$(gh repo view --json nameWithOwner --jq .nameWithOwner)/pulls/$(gh pr view --json number --jq .number)/comments" | \
+  jq -r '
+  def indent(padding):
+    . | gsub("(?<x>^|\n)"; "\(.x)\(padding)");
+
+  .[] | {
+    id: "\(if .in_reply_to_id then "\(.in_reply_to_id)/" else "" end)\(.id)"
+    , username: .user.login
+    , message: .body | indent("    ")
+    , hunk: .diff_hunk | indent("    ")
+    , repo_path: .path
+  } | "[@\(.id)] @\(.username):\n\(.message)\non repo file \(.repo_path):\n\(.hunk)\n"
+  '
+
+  # }
+  #   "[@\(
+  #     if .in_reply_to_id then "\(.in_reply_to_id)/" else "" end
+  #   )\(.id)] @\(.user.login): \(.body | gsub("\n"; "\n    "))\n\non diff\n\n\(.diff_hunk | gsub("(?<x>^|\n)"; "\(.x)    "))\n"' -r
