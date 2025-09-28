@@ -3,11 +3,17 @@ return {
   dependencies = { "nvim-tree/nvim-web-devicons", "linrongbin16/lsp-progress.nvim" },
   opts = {
     theme = "base16",
+    section_separators = "",
     tabline = {
       lualine_a = {
         {
           "buffers",
           show_filename_only = false,
+          active = { underline = true },
+          buffers_color = {
+            -- active = "lualine_{section}_normal", -- Color for active buffer.
+            inactive = "Conceal", -- Color for inactive buffer.
+          },
         },
       },
     },
@@ -24,6 +30,6 @@ return {
     },
   },
   init = function()
-    vim.o.cmdheight = 0
+    -- vim.o.cmdheight = 0
   end,
 }

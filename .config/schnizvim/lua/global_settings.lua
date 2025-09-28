@@ -46,9 +46,3 @@ vim.g.ftplugin_sql_omni_key = "<C-j>"
 
 vim.cmd([[set listchars=tab:∙\ ,eol:↲,nbsp:␣,trail:•,extends:⟩,precedes:⟨]])
 vim.o.list = true
-
--- define Browse command
--- see https://vi.stackexchange.com/questions/38447/vim-fugitive-netrw-not-found-define-your-own-browse-to-use-gbrowse
-vim.api.nvim_create_user_command("Browse", function(opts)
-  vim.fn.system({ "open", opts.fargs[1] })
-end, { nargs = 1 })
