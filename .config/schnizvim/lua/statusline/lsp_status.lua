@@ -2,7 +2,7 @@ return function()
   return require("lsp-progress").progress({
     max_size = 80,
     format = function(messages)
-      local active_clients = vim.lsp.get_active_clients()
+      local active_clients = vim.lsp.get_clients()
       if #messages > 0 then
         return table.concat(messages, " ")
       end

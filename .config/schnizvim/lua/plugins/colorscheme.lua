@@ -31,7 +31,7 @@ local function set_colorscheme()
   vim.cmd([[highlight Normal guibg=None]])
 end
 
-function force_update_background_value()
+local function force_update_background_value()
   if vim.fn.has("mac") == 1 then
     local is_dark = string.match(
       vim.fn.system("defaults read -g AppleInterfaceStyle 2>/dev/null"):lower(),
@@ -50,11 +50,13 @@ end
 ---@type LazySpec
 return {
   "RRethy/nvim-base16",
+  lazy = false,
+  priority = 1000,
   dependencies = {
     "vinitkumar/monokai-pro-vim",
     "folke/snacks.nvim",
   },
-  init = function()
+  config = function()
     local augroup = vim.api.nvim_create_augroup("ColorschemeAppearance", { clear = true })
 
     vim.api.nvim_create_autocmd("OptionSet", {

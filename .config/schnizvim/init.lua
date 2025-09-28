@@ -2,8 +2,6 @@
 vim.g.mapleader = ","
 vim.g.maplocalleader = "\\"
 
-vim.cmd([[autocmd OptionSet background echomsg "Background changed to: " . &background]])
-
 local previous_print = print
 PRINT_TRACE = function(v)
   -- get traceback
