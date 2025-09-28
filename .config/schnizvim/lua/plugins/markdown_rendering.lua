@@ -37,15 +37,15 @@ return {
     },
   },
   init = function()
-    local colors = require("render-markdown.colors")
     vim.api.nvim_create_autocmd("FileType", {
       pattern = "markdown",
+      group = vim.api.nvim_create_augroup("MarkdownColors", { clear = true }),
       callback = function()
         local colorscheme = require("base16-colorscheme")
         vim.api.nvim_set_hl(
           0,
           "@markup.heading.2.markdown",
-          { fg = colorscheme.colors.base0F, bg = "" }
+          { fg = colorscheme.colorschemes["schemer-dark"].base0F, bg = "" }
         )
       end,
     })
