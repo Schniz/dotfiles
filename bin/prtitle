@@ -1,0 +1,16 @@
+#!/usr/bin/env bun
+// vim: ft=javascript
+
+// prtitle
+// copies the current PR title and URL to the clipboard in rich text format (RTF) and markdown format
+
+import { $ } from "bun";
+
+const { additions, deletions, url, number, title } =
+  await $`gh pr view --json title,number,url,additions,deletions`.json();
+
+const text = `<b>#${number} ${title}</b>`;
+const stats = `+${additions} -${deletions}`;
+const clipboardContent = `:pr: <a href=${JSON.stringify(url)}>${text}</a> ${stats}`;
+
+await $`(~/Code/Schniz/devek/target/debug/devek ${clipboardContent}) || (bunx devek ${clipboardContent})`;
