@@ -1,4 +1,4 @@
-theme = dark:schniz-dark,light:GitHub Light High Contrast
+theme = dark:Monokai Pro,light:GitHub Light High Contrast
 
 background-opacity = 0.95
 background-blur-radius = 10
