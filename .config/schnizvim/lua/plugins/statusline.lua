@@ -1,9 +1,13 @@
 return {
   "nvim-lualine/lualine.nvim",
-  dependencies = { "nvim-tree/nvim-web-devicons", "linrongbin16/lsp-progress.nvim" },
+  dependencies = {
+    "nvim-tree/nvim-web-devicons",
+    "linrongbin16/lsp-progress.nvim",
+  },
   opts = {
-    theme = "base16",
-    section_separators = "",
+    options = {
+      section_separators = "",
+    },
     tabline = {
       lualine_a = {
         {

@@ -29,6 +29,7 @@ return {
         "yaml",
         "toml",
         "prisma",
+        "jsdoc",
       },
       ignore_install = { "phpdoc" }, -- List of parsers to ignore installing
       highlight = {

@@ -1,50 +1,18 @@
-local colorschemes = {
-  dark = "base16-eighties",
-  light = "monokai-pro-light",
-}
+local colors = require("schniz.colors")
 
-local function set_colorscheme()
-  local background = vim.api.nvim_get_option("background") or "unknown"
-
-  vim.notify("using " .. vim.inspect(background) .. " theme", "info", {
-    id = "colorscheme_appearance",
-  })
-
-  if background ~= "dark" and background ~= "light" then
-    vim.notify("unknown background: " .. vim.inspect(background), "warn", {
-      id = "colorscheme_appearance",
-    })
-    background = "dark"
-  end
-
-  if vim.g.colors_name == colorschemes[background] then
+---@param background "light" | "dark" | string
+---@param on_done fun() | nil
+local function set_colorscheme(background, on_done)
+  if vim.opt.background == background then
     return
   end
 
-  vim.cmd.colorscheme(colorschemes[background])
-  if background == "light" then
-    vim.cmd([[highlight LspReferenceText guibg=#ffdddd]])
-    vim.cmd([[highlight RenderMarkdownCode guibg=#ffeeee]])
-  else
-    vim.cmd([[highlight NonText guifg=#444444]])
-  end
-  vim.cmd([[highlight Normal guibg=None]])
-end
-
-local function force_update_background_value()
-  if vim.fn.has("mac") == 1 then
-    local is_dark = string.match(
-      vim.fn.system("defaults read -g AppleInterfaceStyle 2>/dev/null"):lower(),
-      "dark"
-    )
-    if is_dark then
-      vim.o.background = "dark"
-    else
-      vim.o.background = "light"
+  vim.defer_fn(function()
+    colors.set_colorscheme(background)
+    if on_done then
+      on_done()
     end
-
-    set_colorscheme()
-  end
+  end, 1)
 end
 
 ---@type LazySpec
@@ -53,30 +21,37 @@ return {
   lazy = false,
   priority = 1000,
   dependencies = {
-    "vinitkumar/monokai-pro-vim",
+    { "vinitkumar/monokai-pro-vim", lazy = false },
     "folke/snacks.nvim",
+    { "vimpostor/vim-lumen", lazy = true },
   },
   config = function()
-    local augroup = vim.api.nvim_create_augroup("ColorschemeAppearance", { clear = true })
+    local augroup = vim.api.nvim_create_augroup("LumenColorscheme", { clear = true })
 
-    vim.api.nvim_create_autocmd("OptionSet", {
-      pattern = "background",
-      callback = set_colorscheme,
+    if vim.o.background == "dark" then
+      colors.set_colorscheme("dark")
+    else
+      colors.set_colorscheme("light")
+    end
+
+    vim.api.nvim_create_autocmd("User", {
+      pattern = "LumenLight",
+      desc = "Set light colorscheme",
       group = augroup,
+      callback = function()
+        vim.notify("LumenLight")
+        set_colorscheme("light")
+      end,
+    })
+    vim.api.nvim_create_autocmd("User", {
+      pattern = "LumenDark",
+      desc = "Set dark colorscheme",
+      group = augroup,
+      callback = function()
+        set_colorscheme("dark")
+      end,
     })
 
-    -- run set_colorscheme on focus
-    vim.api.nvim_create_autocmd("FocusGained", {
-      callback = force_update_background_value,
-      group = augroup,
-    })
-
-    -- run set_colorscheme on focus
-    vim.api.nvim_create_autocmd("VimResume", {
-      callback = force_update_background_value,
-      group = augroup,
-    })
-
-    set_colorscheme()
+    vim.fn["lumen#init"]()
   end,
 }
