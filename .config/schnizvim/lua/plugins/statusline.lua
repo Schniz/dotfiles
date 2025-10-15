@@ -16,7 +16,7 @@ return {
           active = { underline = true },
           buffers_color = {
             -- active = "lualine_{section}_normal", -- Color for active buffer.
-            inactive = "Conceal", -- Color for inactive buffer.
+            -- inactive = "Conceal", -- Color for inactive buffer.
           },
         },
       },
