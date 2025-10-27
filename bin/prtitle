@@ -6,10 +6,17 @@
 
 import { $ } from "bun";
 
-const { additions, deletions, url, number, title } =
-  await $`gh pr view --json title,number,url,additions,deletions`.json();
+const {
+  additions,
+  deletions,
+  url,
+  number,
+  title,
+  headRepositoryOwner: { login: owner },
+  headRepository: { name: repo },
+} = await $`gh pr view --json title,number,url,additions,deletions,headRepository,headRepositoryOwner`.json();
 
-const text = `<b>#${number} ${title}</b>`;
+const text = `${owner}/${repo} <b>#${number} ${title}</b>`;
 const stats = `+${additions} -${deletions}`;
 const clipboardContent = `:pr: <a href=${JSON.stringify(url)}>${text}</a> ${stats}`;
 
