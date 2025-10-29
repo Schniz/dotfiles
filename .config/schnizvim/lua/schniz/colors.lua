@@ -14,6 +14,7 @@ local function set_dark_colorscheme()
     vim.cmd([[highlight Comment guifg=NvimLightGray3]])
     vim.cmd([[highlight Type guifg=#9cbffe]])
     vim.cmd([[highlight lualine_a_inactive guibg=None guifg=NvimLightGray1 gui=None]])
+    vim.cmd([[highlight link TypeVirtualText Comment]])
   end, 1)
   -- vim.cmd([[highlight Visual guibg=None guifg=None gui=reverse]])
 end
