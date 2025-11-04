@@ -1,22 +1,67 @@
-#!/bin/bash
+#!/usr/bin/env bun
+// vim: ft=typescript
 
-set -e pipefail
+import { $ } from 'bun'
+import { styleText } from 'node:util'
+import ansiEscapes from 'ansi-escapes@7.1.1'
 
-gh api --paginate "/repos/$(gh repo view --json nameWithOwner --jq .nameWithOwner)/pulls/$(gh pr view --json number --jq .number)/comments" | \
-  jq -r '
-  def indent(padding):
-    . | gsub("(?<x>^|\n)"; "\(.x)\(padding)");
+const [{ name, owner: { login: owner } }, { number }] = await Promise.all([
+  $`gh repo view --json name,owner`.json(),
+  $`gh pr view --json number`.json()
+]);
 
-  .[] | {
-    id: "\(if .in_reply_to_id then "\(.in_reply_to_id)/" else "" end)\(.id)"
-    , username: .user.login
-    , message: .body | indent("    ")
-    , hunk: .diff_hunk | indent("    ")
-    , repo_path: .path
-  } | "[@\(.id)] @\(.username):\n\(.message)\non repo file \(.repo_path):\n\(.hunk)\n"
-  '
+const { data } = await $`gh api graphql -F repo=${name} -F owner=${owner} -F number=${number} --paginate -f query='
+  query MyQuery($owner:String!, $repo:String!, $number:Int!, $endCursor:String) {
+    repository(owner:$owner, name:$repo) {
+      pullRequest(number:$number) {    
+        reviewThreads(first: 100, after: $endCursor) {
+          nodes {
+            isResolved
+            path
+            line
+            id
+            comments(last:100) {
+              nodes {
+                author {
+                  login
+                }
+                url
+                bodyText
+                createdAt
+              }
+            }
+          }
+          pageInfo {
+            hasNextPage
+            endCursor
+          }
+        }
+      }
+    }
+  }
+'`.json()
 
-  # }
-  #   "[@\(
-  #     if .in_reply_to_id then "\(.in_reply_to_id)/" else "" end
-  #   )\(.id)] @\(.user.login): \(.body | gsub("\n"; "\n    "))\n\non diff\n\n\(.diff_hunk | gsub("(?<x>^|\n)"; "\(.x)    "))\n"' -r
+let first = true
+for (const thread of data?.repository?.pullRequest?.reviewThreads?.nodes ?? []) {
+  if (thread.isResolved) continue;
+  if (!first) {
+    console.log()
+  }
+  first = false
+  let path = styleText("cyan", styleText("dim", "> ") + thread.path)
+  if (thread.line) {
+    path += ` ${styleText("magenta", `L${thread.line}`)}`
+  }
+  if (thread.comments.nodes[0]) {
+    // path = format(`\u001B[4:5m%s${styleText("reset", "")}`, path)
+    path += `${styleText("dim", "↗")}`
+    path = ansiEscapes.link(path, thread.comments.nodes[0].url)
+  }
+  console.log([
+    path,
+    ...thread.comments.nodes.map(comment => {
+      let author = styleText("green", `${styleText("dim", "<@")}${comment.author.login}${styleText("dim", ">")}`)
+      return `${author} ${comment.bodyText.replace(/\r?\n/g, '\n> ')}`.trim()
+    })
+  ].join("\n"))
+}
