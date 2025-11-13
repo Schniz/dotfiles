@@ -1,0 +1,8 @@
+#!/usr/bin/env bun
+// vim: ft=javascript
+
+import { styleText } from 'node:util'
+
+const styles = (process.argv[2] || '').split(',')
+const words = process.argv.slice(3).join(" ")
+console.log(styleText(styles, words))
