@@ -1,5 +1,6 @@
 return {
   "tpope/vim-fugitive",
+  event = "VeryLazy",
   dependencies = { "tpope/vim-rhubarb", "airblade/vim-gitgutter" },
   enabled = not require("schniz.profile").talking(),
   init = function()

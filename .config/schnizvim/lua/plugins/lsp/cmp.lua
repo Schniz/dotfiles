@@ -1,13 +1,14 @@
 ---@type LazyPluginSpec
 return {
   "hrsh7th/nvim-cmp",
+  event = "InsertEnter",
   dependencies = {
     "onsails/lspkind.nvim",
     "hrsh7th/cmp-path",
     "hrsh7th/cmp-nvim-lsp",
     "saadparwaiz1/cmp_luasnip",
   },
-  init = function()
+  config = function()
     -- Taken from @javivelasco
     local lspkind = require("lspkind")
     local cmp = require("cmp")
@@ -19,7 +20,6 @@ return {
         { name = "path" },
         { name = "copilot" },
         { name = "crates" },
-        { name = "codecompanion" },
         { name = "luasnip" },
       }),
       formatting = {

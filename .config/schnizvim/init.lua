@@ -1,3 +1,8 @@
+-- Enable bytecode cache for faster startup
+if vim.loader then
+  vim.loader.enable()
+end
+
 -- set the leader to ,
 vim.g.mapleader = ","
 vim.g.maplocalleader = "\\"

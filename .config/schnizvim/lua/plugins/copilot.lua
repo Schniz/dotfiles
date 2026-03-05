@@ -1,6 +1,7 @@
 ---@type LazyPluginSpec
 return {
   "zbirenbaum/copilot.lua",
+  event = "InsertEnter",
   dependencies = {
     "zbirenbaum/copilot-cmp",
   },

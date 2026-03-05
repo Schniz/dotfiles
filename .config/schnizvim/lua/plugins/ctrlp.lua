@@ -11,6 +11,49 @@ return {
       },
     },
   },
+  cmd = { "Telescope", "Files", "History", "GFiles", "Buffers", "Rg" },
+  keys = {
+    { "<C-p>", "<cmd>Files<CR>", desc = "Find files" },
+    { "<leader><tab>", "<cmd>Buffers<CR>", desc = "List buffers" },
+    { "<tab>", "<cmd>Buffers<CR>", desc = "List buffers", silent = true },
+    { "<localleader>P", "<cmd>GFiles<CR>", desc = "Git files" },
+    {
+      "<leader>ss",
+      function()
+        local telescope = require("telescope.builtin")
+        local current_word = ""
+        local node = vim.treesitter.get_node()
+        if node then
+          current_word = vim.treesitter.get_node_text(node, vim.api.nvim_get_current_buf(), nil)
+          telescope.grep_string({ search = current_word, word_match = "-w" })
+        end
+      end,
+      desc = "Search word under cursor",
+    },
+    {
+      "<leader>L",
+      function()
+        require("telescope.builtin").diagnostics({ layout_strategy = "vertical" })
+      end,
+      desc = "List diagnostics",
+    },
+    {
+      "<leader>od",
+      function()
+        local telescope = require("telescope.builtin")
+        local previewers = require("telescope.previewers")
+
+        local delta = previewers.new_termopen_previewer({
+          get_command = function(entry)
+            return { "diff-for-file", entry.value }
+          end,
+        })
+
+        telescope.find_files({ find_command = { "dfile-list" }, previewer = delta })
+      end,
+      desc = "Open diff files",
+    },
+  },
   config = function()
     local telescope = require("telescope")
     local actions = require("telescope.actions")
@@ -76,55 +119,21 @@ return {
 
     telescope.load_extension("ui-select")
     telescope.load_extension("nerdy")
-  end,
-  init = function()
-    local telescope = require("telescope.builtin")
-    local opts = {}
 
+    -- Register commands after telescope is loaded
+    local builtin = require("telescope.builtin")
     vim.api.nvim_create_user_command("Files", function()
-      telescope.find_files({ find_command = { "rg", "--files", "--hidden", "--glob=!.git/" } })
-    end, opts)
-    vim.api.nvim_create_user_command("History", telescope.oldfiles, opts)
-    vim.api.nvim_create_user_command("GFiles", telescope.git_files, opts)
-    vim.api.nvim_create_user_command("Buffers", telescope.buffers, opts)
+      builtin.find_files({ find_command = { "rg", "--files", "--hidden", "--glob=!.git/" } })
+    end, {})
+    vim.api.nvim_create_user_command("History", builtin.oldfiles, {})
+    vim.api.nvim_create_user_command("GFiles", builtin.git_files, {})
+    vim.api.nvim_create_user_command("Buffers", builtin.buffers, {})
     vim.api.nvim_create_user_command("Rg", function(args)
       if args.args == "" then
-        telescope.live_grep()
+        builtin.live_grep()
       else
-        telescope.grep_string({ search = args.args })
+        builtin.grep_string({ search = args.args })
       end
-    end, {
-      nargs = "?",
-    })
-
-    vim.keymap.set("n", "<C-p>", ":Files<CR>")
-    vim.keymap.set("n", "<leader><tab>", ":Buffers<CR>")
-    vim.keymap.set("n", "<tab>", ":Buffers<CR>", { silent = true })
-    vim.keymap.set("n", "<localleader>P", ":GFiles<CR>")
-    vim.keymap.set("n", "<leader>ss", function()
-      local current_word = ""
-      local node = vim.treesitter.get_node()
-      if node then
-        current_word = vim.treesitter.get_node_text(node, vim.api.nvim_get_current_buf(), nil)
-        telescope.grep_string({ search = current_word, word_match = "-w" })
-      end
-    end)
-
-    vim.keymap.set("n", "<leader>L", function()
-      telescope.diagnostics({ layout_strategy = "vertical" })
-    end)
-
-    vim.keymap.set("n", "<leader>od", function()
-      local previewers = require("telescope.previewers")
-      local themes = require("telescope.themes")
-
-      local delta = previewers.new_termopen_previewer({
-        get_command = function(entry)
-          return { "diff-for-file", entry.value }
-        end,
-      })
-
-      telescope.find_files({ find_command = { "dfile-list" }, previewer = delta })
-    end)
+    end, { nargs = "?" })
   end,
 }

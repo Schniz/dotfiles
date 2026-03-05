@@ -1,7 +1,5 @@
 --- @param client vim.lsp.Client
 local function setup_lsp_keymaps(client, bufnr)
-  local telescope = require("telescope.builtin")
-
   if client:supports_method("textDocument/documentHighlight") then
     vim.api.nvim_create_autocmd("CursorHold", {
       buffer = bufnr,
@@ -14,8 +12,12 @@ local function setup_lsp_keymaps(client, bufnr)
   end
 
   vim.keymap.set("i", "<c-[>", vim.lsp.buf.signature_help, { buffer = bufnr })
-  vim.keymap.set("n", "<leader>gd", telescope.lsp_definitions, { buffer = bufnr })
-  vim.keymap.set("n", "<leader>gr", telescope.lsp_references, { buffer = bufnr })
+  vim.keymap.set("n", "<leader>gd", function()
+    require("telescope.builtin").lsp_definitions()
+  end, { buffer = bufnr })
+  vim.keymap.set("n", "<leader>gr", function()
+    require("telescope.builtin").lsp_references()
+  end, { buffer = bufnr })
   vim.keymap.set("n", "<leader>t", vim.lsp.buf.hover, { buffer = bufnr })
   vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, { buffer = bufnr })
   vim.keymap.set("n", "<leader>h", function()
@@ -75,6 +77,7 @@ end
 
 return {
   "neovim/nvim-lspconfig",
+  event = { "BufReadPre", "BufNewFile" },
   dependencies = {
     {
       "folke/neodev.nvim",
@@ -159,8 +162,8 @@ return {
           previous_on_attach(client, bufnr)
         end
       end
-      options.on_attach = nil
-      vim.lsp.config(server_name, { settings = options, on_attach = new_on_attach })
+      options.on_attach = new_on_attach
+      vim.lsp.config(server_name, options)
       vim.lsp.enable(server_name)
     end
 

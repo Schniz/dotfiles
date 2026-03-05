@@ -1,6 +1,7 @@
 ---@type LazyPluginSpec
 return {
   "nvim-treesitter/nvim-treesitter",
+  event = { "BufReadPost", "BufNewFile" },
   dependencies = {
     { "JoosepAlviste/nvim-ts-context-commentstring", opts = {} },
     {
