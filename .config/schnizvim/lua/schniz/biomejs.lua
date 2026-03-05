@@ -3,7 +3,7 @@
 local function is_biome_project(bufnr)
   local biome_json = vim.fs.find({ "biome.json", "biome.jsonc" }, {
     upward = true,
-    stop = vim.loop.os_homedir(),
+    stop = vim.uv.os_homedir(),
     path = vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr)),
   })[1]
 

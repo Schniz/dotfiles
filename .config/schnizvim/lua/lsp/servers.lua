@@ -1,15 +1,17 @@
 local servers = {
   ts_ls = {
-    init_options = {
-      maxTsServerMemory = 12288,
-      preferences = {
-        includeInlayEnumMemberValueHints = true,
-        includeInlayFunctionLikeReturnTypeHints = true,
-        includeInlayFunctionParameterTypeHints = true,
-        -- includeInlayParameterNameHints = 'all',
-        -- includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-        includeInlayPropertyDeclarationTypeHints = true,
-        includeInlayVariableTypeHints = true,
+    settings = {
+      init_options = {
+        maxTsServerMemory = 12288,
+        preferences = {
+          includeInlayEnumMemberValueHints = true,
+          includeInlayFunctionLikeReturnTypeHints = true,
+          includeInlayFunctionParameterTypeHints = true,
+          -- includeInlayParameterNameHints = 'all',
+          -- includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+          includeInlayPropertyDeclarationTypeHints = true,
+          includeInlayVariableTypeHints = true,
+        },
       },
     },
     on_attach = function(client, bufnr)
@@ -23,9 +25,11 @@ local servers = {
 
     return {
       capabilities = capabilities,
-      json = {
-        schemas = require("schemastore").json.schemas(),
-        validate = { enable = true },
+      settings = {
+        json = {
+          schemas = require("schemastore").json.schemas(),
+          validate = { enable = true },
+        },
       },
     }
   end,
@@ -43,10 +47,12 @@ local servers = {
   },
 
   lua_ls = {
-    Lua = {
-      workspace = { checkThirdParty = false },
-      telemetry = { enable = false },
-      hint = { enable = true },
+    settings = {
+      Lua = {
+        workspace = { checkThirdParty = false },
+        telemetry = { enable = false },
+        hint = { enable = true },
+      },
     },
   },
 
@@ -55,18 +61,13 @@ local servers = {
   tailwindcss = {},
 
   yamlls = {
-    ["yaml.schemaStore.enable"] = true,
+    settings = {
+      ["yaml.schemaStore.enable"] = true,
+    },
   },
 
   taplo = {},
-
   sqlls = {},
-
-  sourcekit = {
-    cmd = {
-      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/sourcekit-lsp",
-    },
-  },
 
   gopls = {
     settings = {
@@ -89,6 +90,10 @@ local servers = {
   buf_ls = {},
 
   zls = {},
+
+  oxlint = {
+    cmd = { "oxlint", "--lsp" },
+  },
 }
 
 return servers

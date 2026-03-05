@@ -21,7 +21,7 @@ return {
 
       local disable_eslint = vim.fs.find({ "schniz.dontcommit.disable-eslint" }, {
         upward = true,
-        stop = vim.loop.os_homedir(),
+        stop = vim.uv.os_homedir(),
         path = vim.fs.dirname(vim.api.nvim_buf_get_name(params.bufnr)),
       })[1]
 
@@ -35,7 +35,7 @@ return {
     end)
 
     null_ls.setup({
-      debug = true,
+      debug = false,
       sources = {
         formatting.sqlfmt,
         formatting.swiftlint,

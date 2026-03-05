@@ -11,43 +11,29 @@ local function setup_lsp_keymaps(client, bufnr)
     })
   end
 
-  vim.keymap.set("i", "<c-[>", vim.lsp.buf.signature_help, { buffer = bufnr })
+  vim.keymap.set("i", "<c-[>", vim.lsp.buf.signature_help, { buffer = bufnr, desc = "Signature help" })
   vim.keymap.set("n", "<leader>gd", function()
     require("telescope.builtin").lsp_definitions()
-  end, { buffer = bufnr })
+  end, { buffer = bufnr, desc = "Go to definition" })
   vim.keymap.set("n", "<leader>gr", function()
     require("telescope.builtin").lsp_references()
-  end, { buffer = bufnr })
-  vim.keymap.set("n", "<leader>t", vim.lsp.buf.hover, { buffer = bufnr })
-  vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, { buffer = bufnr })
+  end, { buffer = bufnr, desc = "Find references" })
+  vim.keymap.set("n", "<leader>t", vim.lsp.buf.hover, { buffer = bufnr, desc = "Hover documentation" })
+  vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, { buffer = bufnr, desc = "Rename symbol" })
   vim.keymap.set("n", "<leader>h", function()
     vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
-  end, { buffer = bufnr })
-  vim.keymap.set("n", "<leader>a", vim.lsp.buf.code_action, { buffer = bufnr })
+  end, { buffer = bufnr, desc = "Toggle inlay hints" })
+  vim.keymap.set("n", "<leader>a", vim.lsp.buf.code_action, { buffer = bufnr, desc = "Code action" })
 
   vim.keymap.set("n", "]d", function()
-    local position = vim.diagnostic.get_next()
-    -- go to the position
-    if position and position.lnum then
-      vim.api.nvim_win_set_cursor(0, { position.lnum + 1, position.col })
-    else
-      vim.notify("No next diagnostic message", vim.log.levels.WARN, { id = "diagnostic_goto" })
-    end
+    vim.diagnostic.jump({ count = 1 })
   end, {
-    desc = "Go to previous diagnostic message",
-    remap = false,
+    desc = "Go to next diagnostic",
   })
   vim.keymap.set("n", "[d", function()
-    local position = vim.diagnostic.get_prev()
-    -- go to the position
-    if position and position.lnum then
-      vim.api.nvim_win_set_cursor(0, { position.lnum + 1, position.col })
-    else
-      vim.notify("No previous diagnostic message", vim.log.levels.WARN, { id = "diagnostic_goto" })
-    end
+    vim.diagnostic.jump({ count = -1 })
   end, {
-    desc = "Go to next diagnostic message",
-    remap = false,
+    desc = "Go to previous diagnostic",
   })
   vim.keymap.set("n", "<leader>l", vim.diagnostic.open_float, {
     desc = "Open floating diagnostic message",
@@ -83,8 +69,13 @@ return {
       "folke/neodev.nvim",
       opts = {},
     },
-    { "williamboman/mason.nvim" },
-    { "williamboman/mason-lspconfig.nvim" },
+    {
+      "williamboman/mason-lspconfig.nvim",
+      dependencies = { "williamboman/mason.nvim" },
+      opts = {
+        automatic_installation = true,
+      },
+    },
     { "L3MON4D3/LuaSnip" },
     { import = "plugins.lsp" },
     {
@@ -133,11 +124,7 @@ return {
       desc = "LSP: Format document",
     })
 
-    require("mason").setup()
-    require("mason-lspconfig").setup({
-      automatic_installation = true,
-      ensure_installed = {},
-    })
+    -- mason-lspconfig is set up via its own opts in dependencies
 
     for server_name, options in pairs(opts.custom_servers) do
       local configs = require("lspconfig.configs")

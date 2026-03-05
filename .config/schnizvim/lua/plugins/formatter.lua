@@ -1,7 +1,19 @@
 local biomejs = require("schniz.biomejs")
 
 local function biome_or_prettier(bufnr)
-  if biomejs.is_biome_project(bufnr) then
+  local lsp_clients = vim.lsp.get_clients({ bufnr = bufnr })
+  local oxlint_available = false
+
+  for _, client in ipairs(lsp_clients) do
+    if client.name == "oxlint" then
+      oxlint_available = true
+      break
+    end
+  end
+
+  if oxlint_available then
+    return { "oxfmt", "oxlint" }
+  elseif biomejs.is_biome_project(bufnr) then
     return { "biome-check" }
   else
     return { "prettier" }
@@ -29,27 +41,15 @@ local formatters = {
   terraform = { "terraform_fmt" },
 }
 
----@param bufnr buffer_nr
+---@param bufnr number
 local function is_ignored_from_autosave(bufnr)
-  local filename = vim.api.nvim_buf_get_name(bufnr)
-  local basename = vim.fs.basename(filename)
-  local dirname = vim.fs.dirname(filename)
-
   local disable_formatter_file = vim.fs.find({ "schniz.dontcommit.disable-formatter" }, {
     upward = true,
-    stop = vim.loop.os_homedir(),
+    stop = vim.uv.os_homedir(),
     path = vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr)),
   })[1]
 
-  if disable_formatter_file then
-    return true
-  end
-
-  -- if string.match(basename, "%.lua$") and string.match(dirname, "/vercel/proxy/") then
-  --   return true
-  -- end
-
-  return false
+  return disable_formatter_file ~= nil
 end
 
 return {
