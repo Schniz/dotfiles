@@ -39,6 +39,7 @@ if command -v rbenv &> /dev/null; then
 fi
 
 zinit wait lucid for OMZL::history.zsh
+zinit wait lucid for OMZP::direnv
 
 # install completions
 zi ice as"completion"
@@ -63,7 +64,7 @@ bindkey "^X^E" edit-command-line
 export PATH="$HOME/Code/dotfiles/bin:$HOME/Code/fnm/target/debug:$HOME/Code/gpkg/target/debug:$HOME/.gpkg/bin:$HOME/.cargo/bin:/opt/homebrew/bin:/opt/homebrew/opt/util-linux/bin:$PATH:$GOPATH/bin:./node_modules/.bin:../node_modules/.bin:../../node_modules/.bin"
 
 # fnm
-eval "$(fnm env --use-on-cd --version-file-strategy=recursive --corepack-enabled --resolve-engines)"
+eval "$(~/Code/schniz/fnm/target/release/fnm env --shell=zsh --use-on-cd --version-file-strategy=recursive --corepack-enabled --resolve-engines)"
 
 source ~/.dotfiles/aliases
 
@@ -80,17 +81,14 @@ configkube() {
   source <(kubectl completion zsh)
 }
 
-if command -v fzf &> /dev/null; then
-  source <(fzf --zsh)
-fi
-
-if command -v zoxide &> /dev/null; then
-  eval "$(zoxide init zsh)"
-fi
+# fzf and zoxide - load synchronously (fast enough)
+command -v fzf &>/dev/null && source <(fzf --zsh)
+command -v zoxide &>/dev/null && eval "$(zoxide init zsh)"
 
 if [ ! "$TMUX" = "" ]; then export TERM=xterm-256color; fi
 
-source <(starship init zsh)
+# starship - use --print-full-init to avoid subshell
+eval "$(starship init zsh --print-full-init)"
 
 function cdgr() {
   cd $(gitroot)
@@ -126,3 +124,7 @@ export NVIM_APPNAME='schnizvim'
 
 # ni https://github.com/antfu-collective/ni
 export NI_CONFIG_FILE="$HOME/.config/ni/nirc"
+export PATH=$PATH:$HOME/.maestro/bin
+
+# Created by `pipx` on 2026-03-17 15:45:43
+export PATH="$PATH:/Users/schniz/.local/bin"
