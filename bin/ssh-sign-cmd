@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# Git SSH signing wrapper: use 1Password on macOS, fail elsewhere.
+
+if [ "$(uname -s)" = "Darwin" ]; then
+  exec /Applications/1Password.app/Contents/MacOS/op-ssh-sign "$@"
+fi
+
+echo "OS unsupported: $(uname -s)" >&2
+exit 1

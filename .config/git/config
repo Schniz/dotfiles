@@ -9,6 +9,7 @@
 [user]
   name = Gal Schlezinger
   email = gal@spitfire.co.il
+	signingkey = ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDjcbGOWxVMfBId02womhGedGNRdr3yxYPjfhowIw0mZBgLCSeFbzG1LPbICHazxdsdOq1W+/iajPFDtqA4X5muvnO92hFBmPY5q3C7JP71bRo1oko39MmfkHJuCn7JXnXgwQD3ek9Pjzrve9dD9uvhVhcxufw4AgynerSA6lEKcc5/dWLdDgNe5EC/tMvf5QdJX8JRKIBJXYeiH0qf+M9/XHMC7fw/aCTK+Ss07ftpOuZ2Iy97tILUY8Ktkv3OviK7WwpTJPiZz5MON05i/tbu2BPLXQWaQiaYtspQoaPaaVg4HwMn2RrT6wuNWGrOAp4fml/2oHNqj0w8CfplSCdi2s48qTMJgoLDkOw2ufpWG4vGrIPgl6VqwQX6qRxVm3wXyUNxwXqSiLJiDYaeRNWWoXTshfrJRithh9U6QPjXKe7CrCz5d5Zog17Ku8ctn20eEh7+KzTsFxY9ACBH2Ij6vOStvMaUyk8jPNrqqgCIcbAxHHp/OOOaNQ7DYFis6jU=
 
 [alias]
   automerge = !enable-automerge
@@ -44,6 +45,7 @@
 
 [gpg]
   program = /usr/local/bin/gpg
+	format = ssh
 
 [filter "lfs"]
   clean = git-lfs clean -- %f
@@ -73,3 +75,7 @@
 	helper = !/opt/homebrew/bin/gh auth git-credential
 [rerere]
 	enabled = true
+[gpg "ssh"]
+	program = ssh-sign-cmd
+[commit]
+	gpgsign = true
