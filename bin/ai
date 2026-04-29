@@ -1,0 +1,3 @@
+#!/bin/sh
+
+opencode run "you are in a shell session. this is what i am asking you: $*"
