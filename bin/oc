@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# we either take $1 as the dir, or $(pwd):
+workdir=${1:-$(pwd)}
+
+opencode attach --dir="$workdir" http://localhost:4096
