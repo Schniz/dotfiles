@@ -1,5 +1,5 @@
 local servers = {
-  ts_ls = {
+  tsgo = {
     settings = {
       init_options = {
         maxTsServerMemory = 12288,
@@ -39,7 +39,8 @@ local servers = {
       ["rust-analyzer"] = {
         lens = { enable = true },
         procMacro = { enable = true },
-        checkOnSave = {
+        checkOnSave = true,
+        check = {
           command = "clippy",
         },
       },
