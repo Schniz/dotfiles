@@ -1,0 +1,233 @@
+#!/usr/bin/env bun
+
+import { readdir, readFile } from "fs/promises";
+import { join } from "path";
+import { homedir } from "os";
+
+interface TokenData {
+  input: number;
+  output: number;
+  reasoning: number;
+  cache: {
+    read: number;
+    write: number;
+  };
+}
+
+interface MessageData {
+  id: string;
+  role: string;
+  time?: {
+    created: number;
+    completed?: number;
+  };
+  cost?: number;
+  tokens?: TokenData;
+  modelID?: string;
+  providerID?: string;
+}
+
+interface DailyStats {
+  cost: number;
+  input: number;
+  output: number;
+  reasoning: number;
+  cacheRead: number;
+  cacheWrite: number;
+  byModel: Map<string, number>;
+}
+
+const STORAGE_PATH = join(
+  homedir(),
+  ".local/share/opencode/storage/message"
+);
+
+async function* walkJsonFiles(dir: string): AsyncGenerator<string> {
+  try {
+    const entries = await readdir(dir, { withFileTypes: true });
+    for (const entry of entries) {
+      const fullPath = join(dir, entry.name);
+      if (entry.isDirectory()) {
+        yield* walkJsonFiles(fullPath);
+      } else if (entry.isFile() && entry.name.endsWith(".json")) {
+        yield fullPath;
+      }
+    }
+  } catch {
+    // Directory doesn't exist or can't be read
+  }
+}
+
+function formatDate(timestamp: number): string {
+  const date = new Date(timestamp);
+  return date.toISOString().split("T")[0];
+}
+
+function formatNumber(n: number): string {
+  return n.toLocaleString("en-US");
+}
+
+function formatCost(n: number): string {
+  return `$${n.toFixed(2)}`;
+}
+
+function padRight(s: string, len: number): string {
+  return s.padEnd(len);
+}
+
+function padLeft(s: string, len: number): string {
+  return s.padStart(len);
+}
+
+async function main() {
+  const dailyStats = new Map<string, DailyStats>();
+
+  // Read all message files
+  for await (const filePath of walkJsonFiles(STORAGE_PATH)) {
+    try {
+      const content = await readFile(filePath, "utf-8");
+      const msg: MessageData = JSON.parse(content);
+
+      // Only process assistant messages with cost data
+      if (msg.role !== "assistant" || !msg.cost || !msg.time?.created) {
+        continue;
+      }
+
+      const date = formatDate(msg.time.created);
+      
+      if (!dailyStats.has(date)) {
+        dailyStats.set(date, {
+          cost: 0,
+          input: 0,
+          output: 0,
+          reasoning: 0,
+          cacheRead: 0,
+          cacheWrite: 0,
+          byModel: new Map(),
+        });
+      }
+
+      const stats = dailyStats.get(date)!;
+      stats.cost += msg.cost;
+      
+      if (msg.tokens) {
+        stats.input += msg.tokens.input || 0;
+        stats.output += msg.tokens.output || 0;
+        stats.reasoning += msg.tokens.reasoning || 0;
+        stats.cacheRead += msg.tokens.cache?.read || 0;
+        stats.cacheWrite += msg.tokens.cache?.write || 0;
+      }
+
+      if (msg.modelID) {
+        const modelCost = stats.byModel.get(msg.modelID) || 0;
+        stats.byModel.set(msg.modelID, modelCost + msg.cost);
+      }
+    } catch {
+      // Skip files that can't be parsed
+    }
+  }
+
+  if (dailyStats.size === 0) {
+    console.log("No usage data found.");
+    return;
+  }
+
+  // Sort by date descending
+  const sortedDates = [...dailyStats.keys()].sort().reverse();
+
+  // Calculate totals
+  const totals: DailyStats = {
+    cost: 0,
+    input: 0,
+    output: 0,
+    reasoning: 0,
+    cacheRead: 0,
+    cacheWrite: 0,
+    byModel: new Map(),
+  };
+
+  for (const stats of dailyStats.values()) {
+    totals.cost += stats.cost;
+    totals.input += stats.input;
+    totals.output += stats.output;
+    totals.reasoning += stats.reasoning;
+    totals.cacheRead += stats.cacheRead;
+    totals.cacheWrite += stats.cacheWrite;
+    for (const [model, cost] of stats.byModel) {
+      const current = totals.byModel.get(model) || 0;
+      totals.byModel.set(model, current + cost);
+    }
+  }
+
+  // Print header
+  console.log("\nDaily OpenCode Token Usage");
+  console.log("==========================\n");
+
+  const COL_DATE = 12;
+  const COL_COST = 10;
+  const COL_INPUT = 12;
+  const COL_OUTPUT = 10;
+  const COL_CACHE_R = 12;
+  const COL_CACHE_W = 12;
+
+  const header = [
+    padRight("Date", COL_DATE),
+    padLeft("Cost", COL_COST),
+    padLeft("Input", COL_INPUT),
+    padLeft("Output", COL_OUTPUT),
+    padLeft("Cache Read", COL_CACHE_R),
+    padLeft("Cache Write", COL_CACHE_W),
+    "Models",
+  ].join(" | ");
+
+  const separator = [
+    "-".repeat(COL_DATE),
+    "-".repeat(COL_COST),
+    "-".repeat(COL_INPUT),
+    "-".repeat(COL_OUTPUT),
+    "-".repeat(COL_CACHE_R),
+    "-".repeat(COL_CACHE_W),
+    "-".repeat(30),
+  ].join("-+-");
+
+  console.log(header);
+  console.log(separator);
+
+  // Print daily rows
+  for (const date of sortedDates) {
+    const stats = dailyStats.get(date)!;
+    const modelBreakdown = [...stats.byModel.entries()]
+      .map(([model, cost]) => `${model}: ${formatCost(cost)}`)
+      .join(", ");
+
+    const row = [
+      padRight(date, COL_DATE),
+      padLeft(formatCost(stats.cost), COL_COST),
+      padLeft(formatNumber(stats.input), COL_INPUT),
+      padLeft(formatNumber(stats.output), COL_OUTPUT),
+      padLeft(formatNumber(stats.cacheRead), COL_CACHE_R),
+      padLeft(formatNumber(stats.cacheWrite), COL_CACHE_W),
+      modelBreakdown,
+    ].join(" | ");
+
+    console.log(row);
+  }
+
+  console.log(separator);
+
+  // Print totals
+  const totalRow = [
+    padRight("TOTAL", COL_DATE),
+    padLeft(formatCost(totals.cost), COL_COST),
+    padLeft(formatNumber(totals.input), COL_INPUT),
+    padLeft(formatNumber(totals.output), COL_OUTPUT),
+    padLeft(formatNumber(totals.cacheRead), COL_CACHE_R),
+    padLeft(formatNumber(totals.cacheWrite), COL_CACHE_W),
+    "",
+  ].join(" | ");
+
+  console.log(totalRow);
+  console.log();
+}
+
+main().catch(console.error);
