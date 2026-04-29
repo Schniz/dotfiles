@@ -1,0 +1,16 @@
+#!/bin/bash
+
+set -eou pipefail
+
+NAME="${1:-}"
+
+if [ "$NAME" == "" ]; then
+  echo "Name is empty [first arg]" >&2
+  exit 1
+fi
+
+REPO="$(basename "$(gitroot)")"
+
+NEWPATH=~/Code/vercel/features/"$NAME"/"$REPO"
+git worktree add -B "schniz/$NAME" "$NEWPATH"
+echo "$NEWPATH"
