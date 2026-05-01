@@ -1,0 +1,72 @@
+#!/bin/bash
+
+# DM me on telegram
+# $ echo "Hello from agent" | dm-me
+
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+dm-me - send yourself a Telegram DM via a bot
+
+USAGE
+    echo "message" | dm-me
+    dm-me < file.txt
+    dm-me [-h | --help]
+
+DESCRIPTION
+    Reads a message from stdin and sends it to a preconfigured Telegram
+    chat using a bot token. Exits non-zero on empty input or API errors.
+
+SECRETS
+    Bot token and chat id are stored in the macOS login keychain so they
+    don't live in this script. To (re)set them:
+
+        security add-generic-password -a "$USER" \
+            -s dm-me-telegram-token   -w "<bot-token>" -U
+        security add-generic-password -a "$USER" \
+            -s dm-me-telegram-chat-id -w "<chat-id>"   -U
+
+EXAMPLES
+    echo "build finished" | dm-me
+    some-long-task; echo "exit=$?" | dm-me
+EOF
+}
+
+case "${1:-}" in
+  -h|--help)
+    usage
+    exit 0
+    ;;
+  "")
+    ;;
+  *)
+    echo "dm-me: unknown argument '$1'" >&2
+    echo "try: dm-me --help" >&2
+    exit 2
+    ;;
+esac
+
+read_secret() {
+  local name="$1"
+  if ! security find-generic-password -a "$USER" -s "$name" -w 2>/dev/null; then
+    echo "dm-me: missing keychain item '$name' (account=$USER)" >&2
+    exit 1
+  fi
+}
+
+TELEGRAM_TOKEN="$(read_secret dm-me-telegram-token)"
+MY_ID="$(read_secret dm-me-telegram-chat-id)"
+
+message=$(cat)
+
+if [[ -z "$message" ]]; then
+  echo "dm-me: empty message on stdin" >&2
+  exit 1
+fi
+
+curl -sS --fail-with-body \
+  "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
+  --data-urlencode "chat_id=${MY_ID}" \
+  --data-urlencode "text=${message}" \
+  > /dev/null
