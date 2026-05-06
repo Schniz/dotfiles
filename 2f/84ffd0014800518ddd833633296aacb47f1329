@@ -1,0 +1,23 @@
+bin/dm-me
+  d73a4eb60d282b51 13-14,17-23,28-30,42,46-50,54-64,71-79,100-110,112-118
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.4",
+  "base_commit_sha": "2f84ffd0014800518ddd833633296aacb47f1329",
+  "prompts": {
+    "d73a4eb60d282b51": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_205e4827bffeW0hywbzhx899N8",
+        "model": "vercel/anthropic/claude-opus-4.7"
+      },
+      "human_author": "Gal Schlezinger",
+      "messages": [],
+      "total_additions": 69,
+      "total_deletions": 26,
+      "accepted_lines": 59,
+      "overriden_lines": 1
+    }
+  }
+}
