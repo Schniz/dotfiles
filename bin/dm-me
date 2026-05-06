@@ -10,13 +10,23 @@ usage() {
 dm-me - send yourself a Telegram DM via a bot
 
 USAGE
-    echo "message" | dm-me
-    dm-me < file.txt
+    echo "message" | dm-me [--type plain|markdown|html]
+    dm-me [--type plain|markdown|html] < file.txt
     dm-me [-h | --help]
+
+OPTIONS
+    --type plain|markdown|html
+                            Message format. Defaults to markdown.
+                            markdown -> Telegram legacy "Markdown" parse mode
+                            html     -> Telegram "HTML" parse mode
+                            plain    -> no parse mode
 
 DESCRIPTION
     Reads a message from stdin and sends it to a preconfigured Telegram
     chat using a bot token. Exits non-zero on empty input or API errors.
+
+    You should aim to use Markdown (because it's easier), and if it fails,
+    try HTML. Fallback to Plain only if absolutely necessary.
 
 SECRETS
     Bot token and chat id are stored in the macOS login keychain so they
@@ -29,22 +39,44 @@ SECRETS
 
 EXAMPLES
     echo "build finished" | dm-me
-    some-long-task; echo "exit=$?" | dm-me
+    some-long-task; echo "exit=$?" | dm-me --type plain
 EOF
 }
 
-case "${1:-}" in
-  -h|--help)
+type="markdown"
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+  -h | --help)
     usage
     exit 0
     ;;
-  "")
+  --type)
+    if [[ $# -lt 2 ]]; then
+      echo "dm-me: --type requires an argument (plain|markdown)" >&2
+      exit 2
+    fi
+    type="$2"
+    shift 2
+    ;;
+  --type=*)
+    type="${1#--type=}"
+    shift
     ;;
   *)
     echo "dm-me: unknown argument '$1'" >&2
     echo "try: dm-me --help" >&2
     exit 2
     ;;
+  esac
+done
+
+case "$type" in
+plain | markdown | html) ;;
+*)
+  echo "dm-me: invalid --type '$type' (expected plain|markdown|html)" >&2
+  exit 2
+  ;;
 esac
 
 read_secret() {
@@ -65,8 +97,22 @@ if [[ -z "$message" ]]; then
   exit 1
 fi
 
-curl -sS --fail-with-body \
+args=(
+  --data-urlencode "chat_id=${MY_ID}"
+  --data-urlencode "text=${message}"
+)
+
+case "$type" in
+markdown) args+=(--data-urlencode "parse_mode=Markdown") ;;
+html) args+=(--data-urlencode "parse_mode=HTML") ;;
+esac
+
+if ! response=$(curl -sS --fail-with-body \
   "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
-  --data-urlencode "chat_id=${MY_ID}" \
-  --data-urlencode "text=${message}" \
-  > /dev/null
+  "${args[@]}" 2>&1); then
+  echo "dm-me: telegram API call failed" >&2
+  if [[ -n "$response" ]]; then
+    echo "$response" >&2
+  fi
+  exit 1
+fi
