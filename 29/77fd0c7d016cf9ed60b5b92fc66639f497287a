@@ -1,0 +1,33 @@
+.config/tmux/tmux.conf
+  s_8c59c756d11c7d::t_8507b6b5b3ff38 15
+  s_d59170716e9034::t_f8fe16544950b0 142
+  s_8c59c756d11c7d::t_81778aaa7b01d0 144-145
+bin/tmux-select-file
+  s_d59170716e9034::t_be04ede0598b15 1-8,10-28,33,35-43,57-59
+  s_d59170716e9034::t_02bc8e53ea432e 29,31-32,50-51,54-56,60
+  s_d59170716e9034::t_f8aa82f43a45d4 49
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "2977fd0c7d016cf9ed60b5b92fc66639f497287a",
+  "prompts": {},
+  "sessions": {
+    "s_8c59c756d11c7d": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_1e86b4f1dffeXRAbcU2tDAp8KC",
+        "model": "anthropic/claude-opus-4.7"
+      },
+      "human_author": "Gal Schlezinger <gal@spitfire.co.il>"
+    },
+    "s_d59170716e9034": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_1de53dd20ffeYCY4cijoqGGktd",
+        "model": "anthropic/claude-opus-4.7"
+      },
+      "human_author": "Gal Schlezinger <gal@spitfire.co.il>"
+    }
+  }
+}
