@@ -1,0 +1,60 @@
+#!/bin/bash
+
+set -euo pipefail
+
+# the workdir we will start the fzf on
+cwd=""
+# the pane to write back the result
+pane=""
+spawn_fzf=1
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+  --cwd)
+    cwd="$2"
+    shift 2
+    ;;
+  --cwd=*)
+    cwd="${1#*=}"
+    shift
+    ;;
+  --pane)
+    pane="$2"
+    shift 2
+    ;;
+  --pane=*)
+    pane="${1#*=}"
+    shift
+    ;;
+  --inner)
+    spawn_fzf=0
+    shift
+    ;;
+  -h | --help)
+    echo "usage: $(basename "$0") [--cwd <path>] [--pane <pane_id>]"
+    exit 0
+    ;;
+  *)
+    echo "unknown argument: $1" >&2
+    exit 1
+    ;;
+  esac
+done
+
+if [ -z "$cwd" ]; then
+  cwd=$PWD
+fi
+
+if [ -z "$pane" ]; then
+  pane=$(tmux display-message -p '#{pane_id}')
+fi
+
+if [ "$spawn_fzf" -eq 0 ]; then
+  sel=$(fzf -m --height=100% --header="Select file(s)" --preview='bat {} --color=always -p' --preview-label='CONTENT' | tr '\n' ' ') || exit 0
+  sel="${sel% }"
+  [ -n "$sel" ] && tmux send-keys -t "$pane" -l -- "$sel"
+  exit 0
+fi
+
+tmux display-popup -E -w 80% -h 70% -d "$cwd" \
+  "$0" --inner --cwd "$cwd" --pane "$pane"
