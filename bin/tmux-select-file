@@ -50,7 +50,7 @@ if [ -z "$pane" ]; then
 fi
 
 if [ "$spawn_fzf" -eq 0 ]; then
-  sel=$(fzf -m --height=100% --header="Select file(s)" --preview='bat {} --color=always -p' --preview-label='CONTENT' | tr '\n' ' ') || exit 0
+  sel=$(fd --color=always | fzf --ansi -m --height=100% --header="Select file(s)" --preview='bat {} --color=always -p' --preview-label='CONTENT' | tr '\n' ' ') || exit 0
   sel="${sel% }"
   [ -n "$sel" ] && tmux send-keys -t "$pane" -l -- "$sel"
   exit 0
