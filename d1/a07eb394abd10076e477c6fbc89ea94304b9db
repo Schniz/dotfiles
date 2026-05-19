@@ -1,0 +1,37 @@
+bin/tmux-select-file
+  s_4e941e3c87860d::t_73fc6a462afa89 97,106
+  s_4e941e3c87860d::t_c387a70ea4f733 5-10,105
+  s_4e941e3c87860d::t_1e514b1d1c1a15 99-104,110
+  s_4e941e3c87860d::t_8b62057de62a10 112
+  s_4e941e3c87860d::t_bf93b03bde8728 69,75,78,85-86
+  s_4e941e3c87860d::t_5f1b343d5103a1 96
+  s_4e941e3c87860d::t_91fd08c6e95f2a 41-44
+  s_4e941e3c87860d::t_4cdd702a03a3ea 16,40,45-51,67-68,70-74,76-77,79-84,87-88
+  s_4e941e3c87860d::t_7abf376f9af166 111
+  s_4e941e3c87860d::t_2d66f05bdac526 98,107-109,113
+.config/tmux/tmux.conf
+  s_4e941e3c87860d::t_c78675fa3b62f9 143
+  s_4e941e3c87860d::t_133c57eb8de7d3 144
+bin/tmux-select-file_cycle-mode
+  s_4e941e3c87860d::t_32cf63bd8dc7b4 51
+  s_4e941e3c87860d::t_2d66f05bdac526 13,19-20,22-23,25-26,28-38,40-41,43-44,46-50,52-53,69-88,93,105-116,119-120,123,126,135
+  s_4e941e3c87860d::t_ed227af47eeb17 5-10
+  s_4e941e3c87860d::t_7abf376f9af166 1-4,11-12,18,54-68,89-92,94-104,117-118,121-122,124-125,127-134
+  s_4e941e3c87860d::t_15e5b61a7d4c30 15-17,21,24,27,39,42,45
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.9",
+  "base_commit_sha": "d1a07eb394abd10076e477c6fbc89ea94304b9db",
+  "prompts": {},
+  "sessions": {
+    "s_4e941e3c87860d": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_1c4584ecdffeWcJzn4lZAHZG5M",
+        "model": "openai/gpt-5.5"
+      },
+      "human_author": "Gal Schlezinger <gal@spitfire.co.il>"
+    }
+  }
+}
