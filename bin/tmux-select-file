@@ -2,11 +2,18 @@
 
 set -euo pipefail
 
+if [ -n "${PATH:-}" ]; then
+  export PATH="$PATH:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+else
+  export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+fi
+
 # the workdir we will start the fzf on
 cwd=""
 # the pane to write back the result
 pane=""
 spawn_fzf=1
+fd_mode=""
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -30,6 +37,18 @@ while [ $# -gt 0 ]; do
     spawn_fzf=0
     shift
     ;;
+  --spawn-fd)
+    if [ $# -lt 2 ]; then
+      echo "missing mode for --spawn-fd" >&2
+      exit 1
+    fi
+    fd_mode="$2"
+    shift 2
+    ;;
+  --spawn-fd=*)
+    fd_mode="${1#*=}"
+    shift
+    ;;
   -h | --help)
     echo "usage: $(basename "$0") [--cwd <path>] [--pane <pane_id>]"
     exit 0
@@ -45,12 +64,53 @@ if [ -z "$cwd" ]; then
   cwd=$PWD
 fi
 
+if [ -n "$fd_mode" ]; then
+  cd "$cwd"
+  fd_args=(--hidden --exclude .git --color=always)
+
+  case "$fd_mode" in
+  all)
+    ;;
+  dirs)
+    fd_args+=(--type d)
+    ;;
+  files)
+    fd_args+=(--type f)
+    ;;
+  *)
+    echo "unknown fd mode: $fd_mode" >&2
+    exit 1
+    ;;
+  esac
+
+  fd "${fd_args[@]}"
+
+  exit 0
+fi
+
 if [ -z "$pane" ]; then
   pane=$(tmux display-message -p '#{pane_id}')
 fi
 
 if [ "$spawn_fzf" -eq 0 ]; then
-  sel=$(fd --color=always | fzf --ansi -m --height=100% --header="Select file(s)" --preview='bat {} --color=always -p' --preview-label='CONTENT' | tr '\n' ' ') || exit 0
+  script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+  selector="$script_dir/tmux-select-file"
+  cycle_helper="$script_dir/tmux-select-file_cycle-mode"
+  if eza_cmd=$(command -v eza); then
+    dir_preview_cmd="$(printf '%q' "$eza_cmd") -la --color=always"
+  else
+    ls_cmd=$(command -v ls)
+    dir_preview_cmd="$(printf '%q' "$ls_cmd") -la"
+  fi
+  bat_cmd=$(command -v bat)
+  spawn_fd_cmd="$(printf '%q' "$selector") --cwd $(printf '%q' "$cwd") --spawn-fd"
+  cycle_mode_cmd="$(printf '%q' "$cycle_helper") --cwd $(printf '%q' "$cwd") --current \"\$FZF_PROMPT\""
+  initial_prompt=$("$cycle_helper" --prompt all)
+  initial_header=$("$cycle_helper" --header all)
+  preview="path={}; if [ -d \"\$path\" ]; then $dir_preview_cmd \"\$path\"; else $(printf '%q' "$bat_cmd") \"\$path\" --color=always -p; fi"
+  cycle_modes="ctrl-f:transform:$cycle_mode_cmd"
+
+  sel=$($spawn_fd_cmd all | fzf --ansi -m --height=100% --prompt="$initial_prompt" --header="$initial_header" --bind="$cycle_modes" --preview="$preview" --preview-label='CONTENT' | tr '\n' ' ') || exit 0
   sel="${sel% }"
   [ -n "$sel" ] && tmux send-keys -t "$pane" -l -- "$sel"
   exit 0

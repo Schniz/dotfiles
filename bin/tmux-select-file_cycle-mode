@@ -1,0 +1,135 @@
+#!/bin/bash
+
+set -euo pipefail
+
+if [ -n "${PATH:-}" ]; then
+  export PATH="$PATH:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+else
+  export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+fi
+
+cwd=""
+current=""
+render=""
+CYCLE_SHORTCUT="󰘴f"
+ALL_PROMPT="󰉋 󰈔 › "
+DIRS_PROMPT="󰉋   › "
+FILES_PROMPT="  󰈔 › "
+
+mode_from_current() {
+  case "$1" in
+  all | "$ALL_PROMPT")
+    echo all
+    ;;
+  dirs | "$DIRS_PROMPT")
+    echo dirs
+    ;;
+  files | "$FILES_PROMPT")
+    echo files
+    ;;
+  *)
+    echo all
+    ;;
+  esac
+}
+
+prompt_for() {
+  case "$1" in
+  all)
+    printf '%s' "$ALL_PROMPT"
+    ;;
+  dirs)
+    printf '%s' "$DIRS_PROMPT"
+    ;;
+  files)
+    printf '%s' "$FILES_PROMPT"
+    ;;
+  esac
+}
+
+header_for() {
+  printf '%s to switch mode' "$CYCLE_SHORTCUT"
+}
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+  --cwd)
+    cwd="$2"
+    shift 2
+    ;;
+  --cwd=*)
+    cwd="${1#*=}"
+    shift
+    ;;
+  --current)
+    current="$2"
+    shift 2
+    ;;
+  --current=*)
+    current="${1#*=}"
+    shift
+    ;;
+  --prompt)
+    render="prompt"
+    current="$2"
+    shift 2
+    ;;
+  --prompt=*)
+    render="prompt"
+    current="${1#*=}"
+    shift
+    ;;
+  --header)
+    render="header"
+    current="$2"
+    shift 2
+    ;;
+  --header=*)
+    render="header"
+    current="${1#*=}"
+    shift
+    ;;
+  -h | --help)
+    echo "usage: $(basename "$0") [--cwd <path>] --current <mode>"
+    exit 0
+    ;;
+  *)
+    echo "unknown argument: $1" >&2
+    exit 1
+    ;;
+  esac
+done
+
+if [ -z "$cwd" ]; then
+  cwd=$PWD
+fi
+
+current_mode=$(mode_from_current "$current")
+
+if [ "$render" = prompt ]; then
+  prompt_for "$current_mode"
+  exit 0
+fi
+
+if [ "$render" = header ]; then
+  header_for "$current_mode"
+  exit 0
+fi
+
+case "$current_mode" in
+all)
+  next=dirs
+  ;;
+dirs)
+  next=files
+  ;;
+files)
+  next=all
+  ;;
+esac
+
+script_dir=$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+selector="$script_dir/tmux-select-file"
+reload_cmd="$(printf '%q' "$selector") --cwd $(printf '%q' "$cwd") --spawn-fd $next"
+
+printf 'change-prompt(%s)+change-header(%s)+reload(%s)\n' "$(prompt_for "$next")" "$(header_for "$next")" "$reload_cmd"
