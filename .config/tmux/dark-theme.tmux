@@ -1,5 +1,10 @@
 set -g status-bg '#44475a'
 
+set -g status-left ""
+set -g status-right ""
+setw -g window-status-format ""
+setw -g window-status-current-format ""
+
 set -g @nova-segment-mode-colors "black #bb5566"
 set -g @nova-segment-whoami-colors "black #bb5566"
 
