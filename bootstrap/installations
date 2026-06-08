@@ -46,6 +46,7 @@ brew install \
   git-secret \
   watchexec \
   cormacrelf/tap/dark-notify \
+  tree-sitter-cli \
   xcode-build-server
 
 brew install --cask \
