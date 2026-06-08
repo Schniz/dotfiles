@@ -2,6 +2,7 @@
 return {
   "zbirenbaum/copilot.lua",
   event = "InsertEnter",
+  cmd = "Copilot",
   dependencies = {
     "zbirenbaum/copilot-cmp",
   },

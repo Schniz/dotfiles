@@ -116,8 +116,10 @@ return {
       return orig_util_open_floating_preview(contents, syntax, opts, ...)
     end
 
-    vim.lsp.handlers["textDocument/signatureHelp"] =
-      vim.lsp.with(vim.lsp.handlers.signature_help, { focus = false, anchor_bias = "above" })
+    vim.lsp.handlers["textDocument/signatureHelp"] = function(err, result, ctx, config)
+      config = vim.tbl_extend("force", config or {}, { focus = false, anchor_bias = "above" })
+      return vim.lsp.handlers.signature_help(err, result, ctx, config)
+    end
 
     vim.api.nvim_create_user_command("LspFormat", function(_)
       vim.lsp.buf.format({ async = true })
@@ -155,7 +157,7 @@ return {
       vim.lsp.enable(server_name)
     end
 
-    vim.lsp.set_log_level("off")
+    vim.lsp.log.set_level("off")
   end,
   opts = {
     ensure_installed = {

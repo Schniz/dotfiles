@@ -32,7 +32,7 @@ vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
 vim.opt.undofile = true
 -- set foldmethod=expr foldexpr=nvim_treesitter#foldexpr() foldlevel=9999
 vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.opt.foldlevel = 9999
 -- " Prevent Vim from clobbering the scrollback buffer. See
 -- " http://www.shallowsky.com/linux/noaltscreen.html

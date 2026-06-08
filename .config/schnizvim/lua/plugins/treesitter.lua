@@ -1,98 +1,126 @@
 ---@type LazyPluginSpec
+local languages = {
+  "go",
+  "html",
+  "javascript",
+  "jsdoc",
+  "lua",
+  "markdown",
+  "markdown_inline",
+  "prisma",
+  "python",
+  "rust",
+  "toml",
+  "tsx",
+  "typescript",
+  "vim",
+  "vimdoc",
+  "yaml",
+}
+
 return {
   "nvim-treesitter/nvim-treesitter",
-  event = { "BufReadPost", "BufNewFile" },
+  branch = "main",
+  lazy = false,
   dependencies = {
-    { "JoosepAlviste/nvim-ts-context-commentstring", opts = {} },
+    {
+      "JoosepAlviste/nvim-ts-context-commentstring",
+      opts = { enable_autocmd = false },
+    },
     {
       "nvim-treesitter/nvim-treesitter-context",
       enabled = not require("schniz.profile").talking(),
       opts = { max_lines = 3, multiline_threshold = 1 },
     },
-    "nvim-treesitter/nvim-treesitter-textobjects",
+    {
+      "nvim-treesitter/nvim-treesitter-textobjects",
+      branch = "main",
+      config = function()
+        require("nvim-treesitter-textobjects").setup({
+          move = {
+            set_jumps = true,
+          },
+          select = {
+            lookahead = true,
+          },
+        })
+
+        local select = require("nvim-treesitter-textobjects.select")
+        vim.keymap.set({ "x", "o" }, "af", function()
+          select.select_textobject("@function.outer", "textobjects")
+        end, { desc = "Select outer function" })
+        vim.keymap.set({ "x", "o" }, "if", function()
+          select.select_textobject("@function.inner", "textobjects")
+        end, { desc = "Select inner function" })
+        vim.keymap.set({ "x", "o" }, "aa", function()
+          select.select_textobject("@assignment.outer", "textobjects")
+        end, { desc = "Select outer assignment" })
+        vim.keymap.set({ "x", "o" }, "ia", function()
+          select.select_textobject("@assignment.inner", "textobjects")
+        end, { desc = "Select inner assignment" })
+
+        local move = require("nvim-treesitter-textobjects.move")
+        local item = { "@function.outer", "@assignment.outer" }
+        vim.keymap.set({ "n", "x", "o" }, "]]", function()
+          move.goto_next_start(item, "textobjects")
+        end, { desc = "Next item start" })
+        vim.keymap.set({ "n", "x", "o" }, "[[", function()
+          move.goto_previous_start(item, "textobjects")
+        end, { desc = "Previous item start" })
+      end,
+    },
     -- non-ts syntax highlights
     { "isobit/vim-caddyfile" },
   },
   build = function()
-    vim.cmd(":TSUpdate")
+    require("nvim-treesitter").install(languages):wait(300000)
+    require("nvim-treesitter").update(languages):wait(300000)
+  end,
+  init = function()
+    vim.api.nvim_create_autocmd("User", {
+      pattern = "TSUpdate",
+      group = vim.api.nvim_create_augroup("SchnizTreesitterParsers", { clear = true }),
+      callback = function()
+        local parsers = require("nvim-treesitter.parsers")
+        parsers.http = {
+          install_info = {
+            url = "https://github.com/NTBBloodbath/tree-sitter-http",
+            files = { "src/parser.c" },
+            branch = "main",
+          },
+        }
+        parsers.plantuml = {
+          install_info = {
+            url = "https://github.com/lyndsysimon/tree-sitter-plantuml",
+            files = { "src/parser.c" },
+            branch = "main",
+          },
+        }
+        vim.treesitter.language.register("plantuml", "plantuml")
+      end,
+    })
   end,
   config = function()
-    ---@diagnostic disable-next-line: missing-fields
-    require("nvim-treesitter.configs").setup({
-      ensure_installed = {
-        "typescript",
-        "vimdoc",
-        "javascript",
-        "rust",
-        "lua",
+    vim.api.nvim_create_autocmd("FileType", {
+      group = vim.api.nvim_create_augroup("SchnizTreesitterStart", { clear = true }),
+      pattern = {
         "go",
-        "tsx",
-        "vim",
-        "python",
-        "yaml",
-        "toml",
-        "prisma",
+        "html",
+        "javascript",
+        "javascriptreact",
         "jsdoc",
+        "markdown",
+        "python",
+        "toml",
+        "typescript",
+        "typescriptreact",
+        "vim",
+        "vimdoc",
+        "yaml",
       },
-      ignore_install = { "phpdoc" }, -- List of parsers to ignore installing
-      highlight = {
-        enable = true, -- false will disable the whole extension
-        disable = { "c", "rust", "lua" }, -- list of language that will be disabled
-        -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-        -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-        -- Using this option may slow down your editor, and you may see some duplicate highlights.
-        -- Instead of true it can also be a list of languages
-        additional_vim_regex_highlighting = false,
-      },
-      textobjects = {
-        move = {
-          enable = true,
-          set_jumps = true,
-          goto_next_start = {
-            ["]]"] = {
-              query = { "@function.outer", "@assignment.outer" },
-              desc = "Next item start",
-            },
-          },
-          goto_previous_start = {
-            ["[["] = {
-              query = { "@function.outer", "@assignment.outer" },
-              desc = "Previous item start",
-            },
-          },
-        },
-        select = {
-          enable = true,
-          -- Automatically jump forward to textobj, similar to targets.vim
-          lookahead = true,
-          keymaps = {
-            -- You can use the capture groups defined in textobjects.scm
-            ["af"] = "@function.outer",
-            ["if"] = "@function.inner",
-            ["aa"] = "@assignment.outer",
-            ["ia"] = "@assignment.inner",
-          },
-        },
-      },
+      callback = function()
+        pcall(vim.treesitter.start)
+      end,
     })
-
-    local parser_configs = require("nvim-treesitter.parsers").get_parser_configs()
-    parser_configs.http = {
-      install_info = {
-        url = "https://github.com/NTBBloodbath/tree-sitter-http",
-        files = { "src/parser.c" },
-        branch = "main",
-      },
-    }
-    ---@type ParserInfo
-    parser_configs.plantuml = {
-      filetype = "plantuml",
-      maintainers = {},
-      install_info = {
-        url = "https://github.com/lyndsysimon/tree-sitter-plantuml",
-        files = { "src/parser.c" },
-        branch = "main",
-      },
-    }
   end,
 }
