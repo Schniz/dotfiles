@@ -1,0 +1,19 @@
+.config/tmux/dark-theme.tmux
+  s_326195564d6922::t_84d3f205d6e626 3-7
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "1de6b2a2530124cc09fa1e24b2b58d90a7815ea1",
+  "prompts": {},
+  "sessions": {
+    "s_326195564d6922": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_16d0a130bffe332m8DMaGr4UK2",
+        "model": "openai/gpt-5.5"
+      },
+      "human_author": "Gal Schlezinger <gal@spitfire.co.il>"
+    }
+  }
+}
