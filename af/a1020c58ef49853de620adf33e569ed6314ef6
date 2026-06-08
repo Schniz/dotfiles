@@ -1,0 +1,38 @@
+.config/schnizvim/lua/plugins/lsp.lua
+  s_7ef1b9c1e5d8a4::t_2afbbdeecc1104 119-122
+  s_7ef1b9c1e5d8a4::t_87494ab0588594 160
+.config/schnizvim/lua/schniz/colors.lua
+  s_dbd4dc76af1a1f::t_3aaf3ce9e071bf 14-16,33-35
+.config/schnizvim/lazy-lock.json
+  s_dbd4dc76af1a1f::t_0562e64165d9ba 34
+.config/schnizvim/lua/global_settings.lua
+  s_dbd4dc76af1a1f::t_28ca75553dbdbe 35
+.config/schnizvim/lua/plugins/treesitter.lua
+  s_dbd4dc76af1a1f::t_59ea981f3f0b11 2-20,76-78
+  s_dbd4dc76af1a1f::t_28ca75553dbdbe 24,35-71,79-101,104-106,108-112,115-119,121-123
+  s_7ef1b9c1e5d8a4::t_2afbbdeecc1104 26-29
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "afa1020c58ef49853de620adf33e569ed6314ef6",
+  "prompts": {},
+  "sessions": {
+    "s_7ef1b9c1e5d8a4": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_166aa9d56ffe6SzzByuQd5KHSv",
+        "model": "openai/gpt-5.5"
+      },
+      "human_author": "Gal Schlezinger <gal@spitfire.co.il>"
+    },
+    "s_dbd4dc76af1a1f": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_156c5d378ffe2yL7yl17M14o0z",
+        "model": "openai/gpt-5.5"
+      },
+      "human_author": "Gal Schlezinger <gal@spitfire.co.il>"
+    }
+  }
+}
