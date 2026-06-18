@@ -17,16 +17,16 @@ USAGE
 OPTIONS
     --type plain|markdown|html
                             Message format. Defaults to markdown.
-                            markdown -> Telegram legacy "Markdown" parse mode
-                            html     -> Telegram "HTML" parse mode
+                            markdown -> Telegram Rich Markdown message
+                            html     -> Telegram Rich HTML message
                             plain    -> no parse mode
 
 DESCRIPTION
     Reads a message from stdin and sends it to a preconfigured Telegram
     chat using a bot token. Exits non-zero on empty input or API errors.
 
-    You should aim to use Markdown (because it's easier), and if it fails,
-    try HTML. Fallback to Plain only if absolutely necessary.
+    You should aim to use Rich Markdown (because it's easier), and if it fails,
+    try Rich HTML. Fallback to Plain only if absolutely necessary.
 
 SECRETS
     Bot token and chat id are stored in the macOS login keychain so they
@@ -53,7 +53,7 @@ while [[ $# -gt 0 ]]; do
     ;;
   --type)
     if [[ $# -lt 2 ]]; then
-      echo "dm-me: --type requires an argument (plain|markdown)" >&2
+      echo "dm-me: --type requires an argument (plain|markdown|html)" >&2
       exit 2
     fi
     type="$2"
@@ -97,18 +97,27 @@ if [[ -z "$message" ]]; then
   exit 1
 fi
 
-args=(
-  --data-urlencode "chat_id=${MY_ID}"
-  --data-urlencode "text=${message}"
-)
+endpoint="sendMessage"
+args=(--data-urlencode "chat_id=${MY_ID}")
 
 case "$type" in
-markdown) args+=(--data-urlencode "parse_mode=Markdown") ;;
-html) args+=(--data-urlencode "parse_mode=HTML") ;;
+plain)
+  args+=(--data-urlencode "text=${message}")
+  ;;
+markdown | html)
+  if ! command -v jq >/dev/null 2>&1; then
+    echo "dm-me: jq is required for rich $type messages" >&2
+    exit 1
+  fi
+
+  endpoint="sendRichMessage"
+  rich_message=$(jq -nc --arg type "$type" --arg content "$message" '{($type): $content}')
+  args+=(--data-urlencode "rich_message=${rich_message}")
+  ;;
 esac
 
 if ! response=$(curl -sS --fail-with-body \
-  "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
+  "https://api.telegram.org/bot${TELEGRAM_TOKEN}/${endpoint}" \
   "${args[@]}" 2>&1); then
   echo "dm-me: telegram API call failed" >&2
   if [[ -n "$response" ]]; then
