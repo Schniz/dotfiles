@@ -1,5 +1,14 @@
+const terminalBell = () => process.stdout.write("\x07");
+
+/**
+  * @type {import('@opencode-ai/plugin').Plugin}
+  */
 export const NotificationPlugin = async ({ $, client }) => {
   const soundPath = "/System/Library/Sounds/Submarine.aiff";
+  const notify = async () => {
+    terminalBell();
+    await $`afplay ${soundPath}`;
+  };
 
   // Check if a session is a main (non-subagent) session
   const isMainSession = async (sessionID) => {
@@ -19,13 +28,13 @@ export const NotificationPlugin = async ({ $, client }) => {
       if (event.type === "session.idle") {
         const sessionID = event.properties.sessionID;
         if (await isMainSession(sessionID)) {
-          await $`afplay ${soundPath}`;
+          await notify();
         }
       }
 
       // Permission prompt created
       if (event.type === "permission.asked") {
-        await $`afplay ${soundPath}`;
+        await notify();
       }
     },
   };
