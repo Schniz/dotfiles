@@ -1,0 +1,19 @@
+.config/opencode/plugins/boop.js
+  s_56496b3990b2b4::t_6e13beecb40f18 8-11,31,37
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.10",
+  "base_commit_sha": "08a3854326cf35f5c0f01dda2ef2a8c7dfbca7e7",
+  "prompts": {},
+  "sessions": {
+    "s_56496b3990b2b4": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_123fb465cffe7RhD3lFZeQ2xBc",
+        "model": "openai/gpt-5.5"
+      },
+      "human_author": "Gal Schlezinger <gal@spitfire.co.il>"
+    }
+  }
+}
