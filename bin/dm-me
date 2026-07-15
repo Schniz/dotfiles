@@ -10,8 +10,9 @@ usage() {
 dm-me - send yourself a Telegram DM via a bot
 
 USAGE
-    echo "message" | dm-me [--type plain|markdown|html]
-    dm-me [--type plain|markdown|html] < file.txt
+    echo "message" | dm-me [--type plain|markdown|html] [--topic ID]
+    dm-me [--type plain|markdown|html] [--topic ID] < file.txt
+    dm-me --create-topic "TITLE"
     dm-me [-h | --help]
 
 OPTIONS
@@ -20,6 +21,8 @@ OPTIONS
                             markdown -> Telegram Rich Markdown message
                             html     -> Telegram Rich HTML message
                             plain    -> no parse mode
+    --topic ID              Send the message to a topic in the configured forum.
+    --create-topic TITLE    Create a topic in the configured forum and print its ID.
 
 DESCRIPTION
     Reads a message from stdin and sends it to a preconfigured Telegram
@@ -29,21 +32,29 @@ DESCRIPTION
     try Rich HTML. Fallback to Plain only if absolutely necessary.
 
 SECRETS
-    Bot token and chat id are stored in the macOS login keychain so they
+    Bot token, chat id, and forum id are stored in the macOS login keychain so they
     don't live in this script. To (re)set them:
 
         security add-generic-password -a "$USER" \
             -s dm-me-telegram-token   -w "<bot-token>" -U
         security add-generic-password -a "$USER" \
             -s dm-me-telegram-chat-id -w "<chat-id>"   -U
+        security add-generic-password -a "$USER" \
+            -s dm-me-telegram-forum-id -w "<forum-id>" -U
 
 EXAMPLES
     echo "build finished" | dm-me
     some-long-task; echo "exit=$?" | dm-me --type plain
+    topic_id=$(dm-me --create-topic "Deploys")
+    echo "deploy finished" | dm-me --topic "$topic_id"
 EOF
 }
 
 type="markdown"
+topic=""
+create_topic=""
+topic_set=false
+create_topic_set=false
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -63,6 +74,30 @@ while [[ $# -gt 0 ]]; do
     type="${1#--type=}"
     shift
     ;;
+  --topic | --create-topic)
+    if [[ $# -lt 2 ]]; then
+      echo "dm-me: $1 requires an argument" >&2
+      exit 2
+    fi
+    if [[ "$1" == "--topic" ]]; then
+      topic="$2"
+      topic_set=true
+    else
+      create_topic="$2"
+      create_topic_set=true
+    fi
+    shift 2
+    ;;
+  --topic=*)
+    topic="${1#--topic=}"
+    topic_set=true
+    shift
+    ;;
+  --create-topic=*)
+    create_topic="${1#--create-topic=}"
+    create_topic_set=true
+    shift
+    ;;
   *)
     echo "dm-me: unknown argument '$1'" >&2
     echo "try: dm-me --help" >&2
@@ -79,6 +114,21 @@ plain | markdown | html) ;;
   ;;
 esac
 
+if $topic_set && $create_topic_set; then
+  echo "dm-me: --topic and --create-topic cannot be used together" >&2
+  exit 2
+fi
+
+if $topic_set && [[ ! "$topic" =~ ^[0-9]+$ ]]; then
+  echo "dm-me: invalid --topic '$topic' (expected a numeric topic ID)" >&2
+  exit 2
+fi
+
+if $create_topic_set && [[ -z "$create_topic" ]]; then
+  echo "dm-me: --create-topic requires a non-empty title" >&2
+  exit 2
+fi
+
 read_secret() {
   local name="$1"
   if ! security find-generic-password -a "$USER" -s "$name" -w 2>/dev/null; then
@@ -89,6 +139,43 @@ read_secret() {
 
 TELEGRAM_TOKEN="$(read_secret dm-me-telegram-token)"
 MY_ID="$(read_secret dm-me-telegram-chat-id)"
+FORUM_ID="$(read_secret dm-me-telegram-forum-id)"
+
+if $create_topic_set; then
+  if ! command -v jq >/dev/null 2>&1; then
+    echo "dm-me: jq is required to create a topic" >&2
+    exit 1
+  fi
+
+  if ! response=$(curl -sS \
+    "https://api.telegram.org/bot${TELEGRAM_TOKEN}/createForumTopic" \
+    --data-urlencode "chat_id=${FORUM_ID}" \
+    --data-urlencode "name=${create_topic}" 2>&1); then
+    echo "dm-me: telegram API request failed" >&2
+    if [[ -n "$response" ]]; then
+      echo "$response" >&2
+    fi
+    exit 1
+  fi
+
+  if [[ "$(jq -r '.ok // false' <<<"$response")" != "true" ]]; then
+    description=$(jq -r '.description // "unknown Telegram API error"' <<<"$response")
+    echo "dm-me: failed to create topic: $description" >&2
+    if [[ "$description" == *"not enough rights"* ]]; then
+      echo "dm-me: promote the bot to forum administrator and grant it Manage Topics" >&2
+    fi
+    exit 1
+  fi
+
+  if ! topic_id=$(jq -er '.result.message_thread_id' <<<"$response"); then
+    echo "dm-me: telegram response did not contain a topic ID" >&2
+    echo "$response" >&2
+    exit 1
+  fi
+
+  echo "$topic_id"
+  exit 0
+fi
 
 message=$(cat)
 
@@ -98,7 +185,11 @@ if [[ -z "$message" ]]; then
 fi
 
 endpoint="sendMessage"
-args=(--data-urlencode "chat_id=${MY_ID}")
+if $topic_set; then
+  args=(--data-urlencode "chat_id=${FORUM_ID}" --data-urlencode "message_thread_id=${topic}")
+else
+  args=(--data-urlencode "chat_id=${MY_ID}")
+fi
 
 case "$type" in
 plain)
