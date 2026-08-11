@@ -1,6 +1,7 @@
 # vim: ft=ghostty
 
-theme = dark:Monokai Pro,light:GitHub Light High Contrast
+# theme = dark:Monokai Pro,light:GitHub Light High Contrast
+theme = Monokai Pro
 
 # background-opacity = 0.95
 background-blur-radius = 10
