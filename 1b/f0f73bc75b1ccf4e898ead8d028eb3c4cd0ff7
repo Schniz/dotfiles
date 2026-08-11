@@ -1,0 +1,14 @@
+.config/ghostty/config
+  h_3ceb785fe0a1f8 3-4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "1bf0f73bc75b1ccf4e898ead8d028eb3c4cd0ff7",
+  "prompts": {},
+  "humans": {
+    "h_3ceb785fe0a1f8": {
+      "author": "Gal Schlezinger <gal@spitfire.co.il>"
+    }
+  }
+}
