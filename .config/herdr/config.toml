@@ -1,0 +1,79 @@
+onboarding = false
+[ui]
+agent_panel_sort = "spaces"
+pane_gaps = false
+
+show_agent_labels_on_pane_borders = false
+[keys]
+# Keep the tmux prefix during the transition.
+prefix = "ctrl+s"
+reload_config = "prefix+r"
+
+# Tabs (tmux windows).
+new_tab = ["prefix+c", "alt+c"]
+previous_tab = ["prefix+p", "alt+b"]
+next_tab = ["prefix+n", "alt+n"]
+switch_tab = "prefix+1..9"
+
+# Panes. Herdr calls a left/right split "vertical" and a top/bottom split
+# "horizontal"; the bindings retain the existing tmux muscle memory.
+focus_pane_left = ["prefix+h", "alt+h"]
+focus_pane_down = ["prefix+j", "alt+j"]
+focus_pane_up = ["prefix+k", "alt+k"]
+focus_pane_right = ["prefix+l", "alt+l"]
+cycle_pane_next = ["prefix+tab", "alt+t"]
+cycle_pane_previous = ["prefix+shift+tab", "alt+shift+t"]
+split_vertical = ["prefix+v", "prefix+percent", "alt+d"]
+split_horizontal = [
+  "prefix+minus",
+  "prefix+double_quote",
+  "prefix+shift+d",
+  "alt+shift+d",
+]
+close_pane = ["prefix+x", "alt+w"]
+zoom = ["prefix+z", "alt+semicolon"]
+
+[[keys.command]]
+key = "prefix+ctrl+semicolon"
+type = "popup"
+command = "$HOME/.config/herdr/commands/select-workspace"
+description = "select workspace"
+width = "90%"
+height = "80%"
+
+[[keys.command]]
+key = "prefix+semicolon"
+type = "popup"
+command = "$HOME/.config/herdr/commands/select-workspace"
+description = "select workspace"
+width = "90%"
+height = "80%"
+
+[[keys.command]]
+key = "prefix+ctrl+f"
+type = "popup"
+command = "$HOME/.config/herdr/commands/select-file"
+description = "select file"
+width = "90%"
+height = "80%"
+
+[[keys.command]]
+key = "prefix+ctrl+r"
+type = "popup"
+command = "$HOME/.config/herdr/commands/select-file --cwd ~/Code/Schniz/research --full-path"
+description = "select file"
+width = "90%"
+height = "80%"
+
+[[keys.command]]
+key = "prefix+q"
+type = "plugin_action"
+command = "rmarganti.herdr-pluck.pluck"
+description = "pluck visible token"
+
+[ui.toast]
+delivery = "herdr"
+delay_seconds = 1
+
+[ui.toast.herdr]
+position = "top-right"

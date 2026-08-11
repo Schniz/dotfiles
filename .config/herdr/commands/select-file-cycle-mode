@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+export PATH="${PATH:+$PATH:}/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+
+cwd="${1:?cwd required}"
+current="${2:-all}"
+
+case "$current" in
+  all) next=dirs; prompt='dirs> '; fd_args=(--type d) ;;
+  dirs) next=files; prompt='files> '; fd_args=(--type f) ;;
+  files) next=all; prompt='all> '; fd_args=() ;;
+  *) exit 1 ;;
+esac
+
+selector="$(printf '%q' "$HOME/.config/herdr/commands/select-file")"
+reload="$selector --cwd $(printf '%q' "$cwd") --spawn-fd $next"
+printf 'change-prompt(%s)+change-header(ctrl-f: %s)+reload(%s)\n' "$prompt" "$next" "$reload"

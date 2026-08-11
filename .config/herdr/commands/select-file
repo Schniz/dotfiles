@@ -1,0 +1,103 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+export PATH="${PATH:+$PATH:}/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+
+cwd=''
+pane_id=''
+fd_mode=''
+full_path=''
+
+while (($#)); do
+  case "$1" in
+  --cwd)
+    cwd="$2"
+    shift 2
+    ;;
+  --cwd=*)
+    cwd="${1#*=}"
+    shift
+    ;;
+  --pane)
+    pane_id="$2"
+    shift 2
+    ;;
+  --pane=*)
+    pane_id="${1#*=}"
+    shift
+    ;;
+  --spawn-fd)
+    fd_mode="$2"
+    shift 2
+    ;;
+  --spawn-fd=*)
+    fd_mode="${1#*=}"
+    shift
+    ;;
+  --full-path)
+    full_path="$cwd/"
+    shift
+    ;;
+  *)
+    echo "unknown argument: $1" >&2
+    exit 1
+    ;;
+  esac
+done
+
+if [[ -n "$fd_mode" ]]; then
+  cd "$cwd"
+  args=(--hidden --exclude .git --color=always)
+  case "$fd_mode" in
+  all) ;;
+  dirs) args+=(--type d) ;;
+  files) args+=(--type f) ;;
+  *)
+    echo "unknown fd mode: $fd_mode" >&2
+    exit 1
+    ;;
+  esac
+  fd "${args[@]}"
+  exit 0
+fi
+
+snapshot="$(herdr api snapshot)"
+pane_id="${pane_id:-$(jq -r '.result.snapshot.focused_pane_id' <<<"$snapshot")}"
+cwd="${cwd:-$(jq -r --arg pane_id "$pane_id" '.result.snapshot.panes[] | select(.pane_id == $pane_id) | .foreground_cwd // .cwd' <<<"$snapshot")}"
+[[ -n "$pane_id" && "$pane_id" != null ]] || {
+  echo 'could not determine the focused Herdr pane' >&2
+  exit 1
+}
+[[ -d "$cwd" ]] || {
+  echo "focused pane cwd is not a directory: $cwd" >&2
+  exit 1
+}
+
+if eza_cmd="$(command -v eza)"; then
+  dir_preview="$(printf '%q' "$eza_cmd") -la --color=always"
+else
+  dir_preview="$(printf '%q' "$(command -v ls)") -la"
+fi
+if bat_cmd="$(command -v bat)"; then
+  file_preview="$(printf '%q' "$bat_cmd") --color=always -p"
+else
+  file_preview="$(printf '%q' "$(command -v sed)") -n '1,200p'"
+fi
+
+selector="$HOME/.config/herdr/commands/select-file"
+cycler="$HOME/.config/herdr/commands/select-file-cycle-mode"
+spawn_fd="$(printf '%q' "$selector") --cwd $(printf '%q' "$cwd") --spawn-fd"
+cycle_mode="$(printf '%q' "$cycler") $(printf '%q' "$cwd") \"\$FZF_PROMPT\""
+preview="path={}; if [ -d \"\$path\" ]; then $dir_preview \"\$path\"; else $file_preview \"\$path\"; fi"
+
+selection="$(
+  "$selector" --cwd "$cwd" --spawn-fd all |
+    fzf --ansi --multi --height=100% --prompt='all> ' \
+      --header='ctrl-f: directories' \
+      --bind="ctrl-f:transform:$cycle_mode" \
+      --preview="$preview" --preview-label='CONTENT'
+)" || exit 0
+
+selection="${selection//$'\n'/ }"
+[[ -n "$selection" ]] && herdr pane send-text "$pane_id" "$full_path$selection" >/dev/null

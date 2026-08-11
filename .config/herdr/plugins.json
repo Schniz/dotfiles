@@ -1,0 +1,57 @@
+[
+  {
+    "plugin_id": "rmarganti.herdr-pluck",
+    "name": "Herdr Pluck",
+    "version": "0.3.0",
+    "min_herdr_version": "0.7.4",
+    "description": "Inline keyboard hints for copying visible tokens or opening URLs from Herdr panes",
+    "manifest_path": "/Users/schniz/.config/herdr/plugins/github/rmarganti.herdr-pluck-9cc46c9a5509/herdr-plugin.toml",
+    "plugin_root": "/Users/schniz/.config/herdr/plugins/github/rmarganti.herdr-pluck-9cc46c9a5509",
+    "enabled": true,
+    "platforms": [
+      "linux",
+      "macos"
+    ],
+    "build": [
+      {
+        "command": [
+          "./scripts/install-binary.sh"
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "open-url",
+        "title": "Open visible URL",
+        "contexts": [
+          "pane",
+          "workspace"
+        ],
+        "command": [
+          "./bin/herdr-pluck",
+          "open-url"
+        ]
+      },
+      {
+        "id": "pluck",
+        "title": "Pluck visible token",
+        "contexts": [
+          "pane",
+          "workspace"
+        ],
+        "command": [
+          "./bin/herdr-pluck",
+          "open"
+        ]
+      }
+    ],
+    "source": {
+      "kind": "github",
+      "owner": "rmarganti",
+      "repo": "herdr-pluck",
+      "resolved_commit": "29e12ea85d1ed948d329d4e0884d79c6fa938144",
+      "managed_path": "/Users/schniz/.config/herdr/plugins/github/rmarganti.herdr-pluck-9cc46c9a5509",
+      "installed_unix_ms": 1785465573434
+    }
+  }
+]

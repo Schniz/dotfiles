@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+workspace_id="$(
+  herdr api snapshot |
+    jq -r '
+      .result.snapshot as $snapshot
+      | $snapshot.workspaces[] as $workspace
+      | ([
+          $snapshot.panes[]
+          | select(
+              .workspace_id == $workspace.workspace_id
+              and .tab_id == $workspace.active_tab_id
+            )
+        ]) as $panes
+      | ($panes | map(select(.focused)) | .[0]) as $focused_pane
+      | ($focused_pane // $panes[0] // {}) as $pane
+      | [
+          $workspace.workspace_id,
+          (if $workspace.focused then "*" else " " end),
+          $workspace.label,
+          ($pane.foreground_cwd // $pane.cwd // ""),
+          ($pane.terminal_title_stripped // $pane.terminal_title // ""),
+          $workspace.agent_status
+        ]
+      | @tsv
+    ' |
+    awk -F '\t' '{
+      printf "%s\t\033[0;35m%s\t\033[1;37m%s\033[0;37m:\033[1;33m%s\t\033[0;37m\033[02;36m%s\033[0;37m\t%s\n", $1, $2, $3, $4, $5, $6
+    }' |
+    fzf --tmux --ansi \
+      --header 'select a herdr workspace' \
+      --delimiter $'\t' \
+      --with-nth=2.. \
+      --accept-nth=1
+)" || exit 0
+
+[[ -n "$workspace_id" ]] && herdr workspace focus "$workspace_id" >/dev/null
