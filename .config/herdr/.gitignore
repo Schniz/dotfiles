@@ -1,3 +1,4 @@
 *.sock
 *.log
 plugins/github
+session.json

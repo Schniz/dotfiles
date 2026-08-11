@@ -42,6 +42,14 @@ width = "90%"
 height = "80%"
 
 [[keys.command]]
+key = "prefix+m"
+type = "popup"
+command = "$HOME/.config/herdr/commands/select-agent"
+description = "select agent"
+width = "90%"
+height = "80%"
+
+[[keys.command]]
 key = "prefix+semicolon"
 type = "popup"
 command = "$HOME/.config/herdr/commands/select-workspace"
@@ -61,6 +69,14 @@ height = "80%"
 key = "prefix+ctrl+r"
 type = "popup"
 command = "$HOME/.config/herdr/commands/select-file --cwd ~/Code/Schniz/research --full-path"
+description = "select file"
+width = "90%"
+height = "80%"
+
+[[keys.command]]
+key = "prefix+shift+f"
+type = "popup"
+command = "$HOME/.config/herdr/commands/select-file --cwd ~/Code --full-path"
 description = "select file"
 width = "90%"
 height = "80%"

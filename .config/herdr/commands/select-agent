@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+print_agents() {
+  herdr agent list |
+    jq -r --arg home "$HOME" '
+      .result.agents[]
+      | [
+          .pane_id,
+          (if .focused then "*" else " " end),
+          .agent,
+          .agent_status,
+          ((.foreground_cwd // .cwd // "") | if startswith($home + "/Code/vercel/") then "▲/" + .[($home + "/Code/vercel/") | length:] elif startswith($home) then "~" + .[$home | length:] else . end),
+          (if (.title // "") != "" then .title else (.terminal_title_stripped // .terminal_title // "") end)
+        ]
+      | @tsv
+    ' |
+    awk -F '\t' '
+      function display_width(value, copy) {
+        copy = value
+        gsub(/▲/, "x", copy)
+        return length(copy)
+      }
+
+      {
+        pane_id[NR] = $1
+        state[NR] = $2 $4
+        agent[NR] = $3
+        cwd[NR] = $5
+        title[NR] = $6
+        max_cwd_width = (display_width($5) > max_cwd_width ? display_width($5) : max_cwd_width)
+      }
+
+      END {
+        for (i = 1; i <= NR; i++) {
+          printf "%s\t\033[0;35m%-8.8s\033[0;37m  \033[02m%s%*s\033[0;37m  \033[1;37m%s\033[0;37m  \033[02m%s\033[0;37m\n", pane_id[i], state[i], cwd[i], max_cwd_width - display_width(cwd[i]), "", title[i], agent[i]
+        }
+      }
+    '
+}
+
+case "${1:-}" in
+'') ;;
+--print)
+  print_agents
+  exit 0
+  ;;
+*)
+  echo "usage: $0 [--print]" >&2
+  exit 2
+  ;;
+esac
+
+pane_id="$(
+  print_agents |
+    fzf --tmux --ansi \
+      --header 'select a Herdr agent' \
+      --delimiter $'\t' \
+      --with-nth=2.. \
+      --accept-nth=1
+)" || exit 0
+
+[[ -n "$pane_id" ]] && herdr agent focus "$pane_id" > /dev/null
