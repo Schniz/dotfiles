@@ -1,0 +1,18 @@
+.config/herdr/.gitignore
+  h_3ceb785fe0a1f8 4
+.config/herdr/commands/select-agent
+  h_3ceb785fe0a1f8 1-64
+.config/herdr/config.toml
+  h_3ceb785fe0a1f8 44-51,76-83
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "ebe844191b13b6af77df870ffac21160f185fd8b",
+  "prompts": {},
+  "humans": {
+    "h_3ceb785fe0a1f8": {
+      "author": "Gal Schlezinger <gal@spitfire.co.il>"
+    }
+  }
+}
