@@ -1,0 +1,26 @@
+.config/herdr/.gitignore
+  h_3ceb785fe0a1f8 1-3
+.config/herdr/commands/select-file
+  h_3ceb785fe0a1f8 1-103
+.config/herdr/commands/select-file-cycle-mode
+  h_3ceb785fe0a1f8 1-19
+.config/herdr/commands/select-workspace
+  h_3ceb785fe0a1f8 1-39
+.config/herdr/config.toml
+  h_3ceb785fe0a1f8 1-79
+.config/herdr/plugins.json
+  h_3ceb785fe0a1f8 1-57
+.config/herdr/release-notes.json
+  h_3ceb785fe0a1f8 1-5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "968005717e8829549461061e1b1e7f64459aa997",
+  "prompts": {},
+  "humans": {
+    "h_3ceb785fe0a1f8": {
+      "author": "Gal Schlezinger <gal@spitfire.co.il>"
+    }
+  }
+}
