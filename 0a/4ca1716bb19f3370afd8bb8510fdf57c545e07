@@ -1,0 +1,14 @@
+.config/opencode/AGENTS.md
+  h_3ceb785fe0a1f8 7,11-17,26-30
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "0a4ca1716bb19f3370afd8bb8510fdf57c545e07",
+  "prompts": {},
+  "humans": {
+    "h_3ceb785fe0a1f8": {
+      "author": "Gal Schlezinger <gal@spitfire.co.il>"
+    }
+  }
+}
