@@ -23,6 +23,15 @@ print_agents() {
         return length(copy)
       }
 
+      function state_color(status, normalized) {
+        normalized = tolower(status)
+        gsub(/^[*[:space:]]+|[[:space:]]+$/, "", normalized)
+        if (normalized == "error" || normalized == "failed") return "\033[0;31m"
+        if (normalized == "working") return "\033[0;33m"
+        if (normalized == "idle") return "\033[0;32m"
+        return "\033[0;35m"
+      }
+
       {
         pane_id[NR] = $1
         state[NR] = $2 $4
@@ -34,7 +43,7 @@ print_agents() {
 
       END {
         for (i = 1; i <= NR; i++) {
-          printf "%s\t\033[0;35m%-8.8s\033[0;37m  \033[02m%s%*s\033[0;37m  \033[1;37m%s\033[0;37m  \033[02m%s\033[0;37m\n", pane_id[i], state[i], cwd[i], max_cwd_width - display_width(cwd[i]), "", title[i], agent[i]
+          printf "%s\t%s%-8.8s\033[0;37m  \033[02m%s%*s\033[0;37m  \033[1;37m%s\033[0;37m  \033[02m%s\033[0;37m\n", pane_id[i], state_color(state[i]), state[i], cwd[i], max_cwd_width - display_width(cwd[i]), "", title[i], agent[i]
         }
       }
     '

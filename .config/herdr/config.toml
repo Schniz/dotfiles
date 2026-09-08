@@ -3,6 +3,20 @@ onboarding = false
 agent_panel_sort = "spaces"
 pane_gaps = false
 
+sidebar.agents.rows = [
+  [
+    "state_icon",
+    "workspace",
+    "tab",
+  ],
+  [
+    "$session_title",
+  ],
+  [
+    "$work_status",
+  ],
+]
+
 show_agent_labels_on_pane_borders = false
 [keys]
 # Keep the tmux prefix during the transition.
@@ -14,6 +28,8 @@ new_tab = ["prefix+c", "alt+c"]
 previous_tab = ["prefix+p", "alt+b"]
 next_tab = ["prefix+n", "alt+n"]
 switch_tab = "prefix+1..9"
+
+remove_worktree = ["prefix+shift+ctrl+g"]
 
 # Panes. Herdr calls a left/right split "vertical" and a top/bottom split
 # "horizontal"; the bindings retain the existing tmux muscle memory.
@@ -82,7 +98,7 @@ width = "90%"
 height = "80%"
 
 [[keys.command]]
-key = "prefix+q"
+key = "prefix+shift+u"
 type = "plugin_action"
 command = "rmarganti.herdr-pluck.pluck"
 description = "pluck visible token"
