@@ -11,19 +11,34 @@ local function setup_lsp_keymaps(client, bufnr)
     })
   end
 
-  vim.keymap.set("i", "<c-[>", vim.lsp.buf.signature_help, { buffer = bufnr, desc = "Signature help" })
+  vim.keymap.set(
+    "i",
+    "<c-[>",
+    vim.lsp.buf.signature_help,
+    { buffer = bufnr, desc = "Signature help" }
+  )
   vim.keymap.set("n", "<leader>gd", function()
     require("telescope.builtin").lsp_definitions()
   end, { buffer = bufnr, desc = "Go to definition" })
   vim.keymap.set("n", "<leader>gr", function()
     require("telescope.builtin").lsp_references()
   end, { buffer = bufnr, desc = "Find references" })
-  vim.keymap.set("n", "<leader>t", vim.lsp.buf.hover, { buffer = bufnr, desc = "Hover documentation" })
+  vim.keymap.set(
+    "n",
+    "<leader>t",
+    vim.lsp.buf.hover,
+    { buffer = bufnr, desc = "Hover documentation" }
+  )
   vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, { buffer = bufnr, desc = "Rename symbol" })
   vim.keymap.set("n", "<leader>h", function()
     vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
   end, { buffer = bufnr, desc = "Toggle inlay hints" })
-  vim.keymap.set("n", "<leader>a", vim.lsp.buf.code_action, { buffer = bufnr, desc = "Code action" })
+  vim.keymap.set(
+    "n",
+    "<leader>a",
+    vim.lsp.buf.code_action,
+    { buffer = bufnr, desc = "Code action" }
+  )
 
   vim.keymap.set("n", "]d", function()
     vim.diagnostic.jump({ count = 1 })
@@ -106,6 +121,10 @@ return {
       -- using twoslash queries in typescript
       "marilari88/twoslash-queries.nvim",
     },
+    {
+      -- For github pull request reviews
+      "toziegler/prlsp",
+    },
   },
   config = function(_, opts)
     -- Configure floating window borders globally
@@ -156,6 +175,13 @@ return {
       vim.lsp.config(server_name, options)
       vim.lsp.enable(server_name)
     end
+
+    vim.lsp.config("prlsp", {
+      cmd = { "prlsp" }, -- Name of LSP executable or path
+      root_markers = { ".git" },
+    })
+
+    vim.lsp.enable({ "prlsp" })
 
     vim.lsp.log.set_level("off")
   end,

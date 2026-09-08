@@ -48,9 +48,24 @@ end, { silent = true, desc = "Show diagnostics float" })
 vim.keymap.set("c", "<C-a>", "<Home>", { desc = "Go to start of line" })
 vim.keymap.set("c", "<C-e>", "<End>", { desc = "Go to end of line" })
 
-vim.keymap.set("v", "<leader>yr", function()
+local function yank_range(opts)
+  opts = opts or {}
   local l1, l2 = vim.fn.line("v"), vim.fn.line(".")
-  local path = vim.fn.expand("%:~:.")
+  local path = ""
+  if opts.from_git_root then
+    local absolute_path = vim.fn.expand("%:p")
+    local git_root = vim.fn.systemlist({
+      "git",
+      "-C",
+      vim.fn.fnamemodify(absolute_path, ":h"),
+      "rev-parse",
+      "--show-toplevel",
+    })[1]
+    path = vim.v.shell_error == 0 and vim.fs.relpath(git_root, absolute_path)
+      or vim.fn.expand("%:~:.")
+  else
+    path = vim.fn.expand("%:~:.")
+  end
   local lines = tostring(l1)
   if l1 ~= l2 then
     lines = ("%d-%d"):format(math.min(l1, l2), math.max(l1, l2))
@@ -62,7 +77,18 @@ vim.keymap.set("v", "<leader>yr", function()
     "info",
     { title = "yanked", id = "yank", ft = "markdown" }
   )
+end
+
+vim.keymap.set("v", "<leader>yr", function()
+  yank_range()
 end, {
   silent = true,
   desc = "Yank relative path + selected line range",
+})
+
+vim.keymap.set("v", "<leader>yR", function()
+  yank_range({ from_git_root = true })
+end, {
+  silent = true,
+  desc = "Yank Git-root-relative path + selected line range",
 })
