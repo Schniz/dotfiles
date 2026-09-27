@@ -2,6 +2,31 @@
 
 # Git SSH signing wrapper: use 1Password on macOS, fail elsewhere.
 
+# When the screen is locked, 1Password cannot prompt for Touch ID. Use the
+# dedicated AI-agent key so Git can still create commits in that state.
+if [ "$(uname -s)" = "Darwin" ] &&
+  [ -f "$HOME/.ssh/ai_agent_id_ed25519" ] &&
+  ioreg -n Root -d1 2>/dev/null | grep -q '"IOConsoleLocked" = Yes'; then
+  if [ "$1" != -Y ] || [ "$2" != sign ]; then
+    exec ssh-keygen "$@"
+  fi
+  # Git supplies -f with the 1Password public key; replace it with the agent key.
+  if [ "$1" = -Y ] && [ "$2" = sign ] && [ "$3" = -n ] &&
+    [ "$4" = git ] && [ "$5" = -f ]; then
+    shift 6
+    # Git adds -U when its signing key is an inline public key. A private
+    # key on disk does not use the agent, so drop that flag.
+    if [ "$#" -eq 2 ] && [ "$1" = -U ]; then
+      shift
+    fi
+    if [ "$#" -eq 1 ]; then
+      exec ssh-keygen -Y sign -n git -f "$HOME/.ssh/ai_agent_id_ed25519" "$1"
+    fi
+  fi
+  echo "Unexpected Git SSH signing arguments" >&2
+  exit 1
+fi
+
 if [ "$(uname -s)" = "Darwin" ]; then
   exec /Applications/1Password.app/Contents/MacOS/op-ssh-sign "$@"
 fi
