@@ -1,0 +1,7 @@
+function screenshell() {
+  if [[ -z "$STARSHIP_CONFIG" ]]; then
+    export STARSHIP_CONFIG="$HOME/.config/starship-screenshot.toml"
+  else
+    unset STARSHIP_CONFIG
+  fi
+}

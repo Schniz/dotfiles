@@ -4,7 +4,7 @@ set -e
 
 ./bootstrap/homebrew
 ./bootstrap/installations
-(cd .config && stow .)
+./bootstrap/links
 
 macos-defaults apply ./macos-defaults
 /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u

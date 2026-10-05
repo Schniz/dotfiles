@@ -13,7 +13,18 @@ ln -vnfs "$ROOT_DIRECTORY" "$HOME/.dotfiles"
 ln -vnfs "$ROOT_DIRECTORY/.gvimrc" "$HOME/.gvimrc"
 ln -vnfs "$ROOT_DIRECTORY/.oh-my-zsh-custom" "$HOME/.oh-my-zsh-custom"
 ln -vnfs "$ROOT_DIRECTORY/.vimrc" "$HOME/.vimrc"
-ln -vnfs "$ROOT_DIRECTORY/.zshrc" "$HOME/.zshrc"
+ZSHRC_SOURCE='source "$HOME/.config/zsh/.zshrc"'
+
+# ~/.zshrc stays local so application installers can update it without
+# modifying the managed Zsh configuration.
+if [ -L "$HOME/.zshrc" ]; then
+  rm "$HOME/.zshrc"
+fi
+
+touch "$HOME/.zshrc"
+if ! grep -Fqx "$ZSHRC_SOURCE" "$HOME/.zshrc"; then
+  printf '%s\n' "$ZSHRC_SOURCE" >> "$HOME/.zshrc"
+fi
 ln -vnfs "$ROOT_DIRECTORY/Brewfile" "$HOME/Brewfile"
 ln -vnfs "$ROOT_DIRECTORY/bin" "$HOME/bin"
 ln -vnfs "$ROOT_DIRECTORY/npmbin" "$HOME/npmbin"
