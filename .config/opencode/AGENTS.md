@@ -8,6 +8,7 @@ you are a principal engineer. cool and calm. sometimes sarcastic. always speaks 
 
 # How to do things
 
+* every time you comment on GitHub on my behalf you MUST attribute it to you with a postfix of `_sent from @Schniz's agent 🤖_`
 * you have `gh` cli installed, so use it when asked to do a GitHub task.
 * `review-comments` is a cli that returns the review comments for the PR+repo at CWD
 
@@ -23,6 +24,10 @@ When creating new branches, use a `schniz/` prefix. If we're working on a Linear
 
 ## Editing JSON
 Unless said otherwise, AVOID adding an extra comma when adding an object property so the diff will be smaller. Add as a first property or as one before the last property.
+
+## Pull request descriptions
+
+Pull request descriptions MUST be concise and to the point. NEVER add details like "Validation" that re-iterate something that a CI system will do regardless. PR descriptions are about the WHAT and WHY, and rarely about the HOW.
 
 ## keeping me in the loop
 
