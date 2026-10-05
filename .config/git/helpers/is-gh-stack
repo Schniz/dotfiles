@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -euo pipefail
+
+GH_STACKS_FILE="$(git rev-parse --show-toplevel)"/.git/gh-stack
+
+if [ -f "$GH_STACKS_FILE" ]; then
+  jq \
+    --arg current_branch "$(git branch --show-current)" \
+    '(.stacks[].branches[].branch | select(. == $current_branch)) == $current_branch' \
+    <"$GH_STACKS_FILE"
+fi
