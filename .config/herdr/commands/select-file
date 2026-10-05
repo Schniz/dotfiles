@@ -92,11 +92,11 @@ cycle_mode="$(printf '%q' "$cycler") $(printf '%q' "$cwd") \"\$FZF_PROMPT\""
 preview="path={}; if [ -d \"\$path\" ]; then $dir_preview \"\$path\"; else $file_preview \"\$path\"; fi"
 
 selection="$(
-  "$selector" --cwd "$cwd" --spawn-fd all |
-    fzf --ansi --multi --height=100% --prompt='all> ' \
-      --header='ctrl-f: directories' \
-      --bind="ctrl-f:transform:$cycle_mode" \
-      --preview="$preview" --preview-label='CONTENT'
+  fzf --ansi --multi --height=100% --prompt='all> ' \
+    --header='ctrl-f: directories' \
+    --bind="ctrl-f:transform:$cycle_mode" \
+    --preview="$preview" --preview-label='CONTENT' \
+    < <("$selector" --cwd "$cwd" --spawn-fd all)
 )" || exit 0
 
 selection="${selection//$'\n'/ }"

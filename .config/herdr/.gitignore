@@ -1,4 +1,7 @@
 *.sock
+*.sock.*
 *.log
 plugins/github
 session.json
+release-notes.json
+/session-snapshots/
