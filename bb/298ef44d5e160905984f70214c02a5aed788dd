@@ -1,0 +1,18 @@
+.config/schnizvim/lazy-lock.json
+  h_3ceb785fe0a1f8 3,7,9-11,16-17,21-25,30,32-34,36-37,40-41,44-46,50
+.config/schnizvim/lua/lsp/servers.lua
+  h_3ceb785fe0a1f8 2,70-72,83-86
+.config/schnizvim/lua/plugins/copilot.lua
+  h_3ceb785fe0a1f8 18-21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "bb298ef44d5e160905984f70214c02a5aed788dd",
+  "prompts": {},
+  "humans": {
+    "h_3ceb785fe0a1f8": {
+      "author": "Gal Schlezinger <gal@spitfire.co.il>"
+    }
+  }
+}
