@@ -15,6 +15,10 @@ return {
     -- use fnm to find the node binary (`fnm exec --using=default "$@"`)
     -- ../../../../bin/default-node
     copilot_node_command = "default-node",
+    server_opts_overrides = {
+      -- Avoid Neovim's incremental-sync assertion (neovim/neovim#33224).
+      flags = { allow_incremental_sync = false },
+    },
     filetypes = {
       ["*"] = true,
     },

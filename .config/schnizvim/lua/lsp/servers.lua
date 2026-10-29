@@ -1,5 +1,5 @@
 local servers = {
-  tsgo = {
+  tsc = {
     settings = {
       init_options = {
         maxTsServerMemory = 12288,
@@ -67,7 +67,9 @@ local servers = {
     },
   },
 
-  taplo = {},
+  taplo = {
+    root_markers = { ".taplo.toml", "taplo.toml", ".git" },
+  },
   sqlls = {},
 
   gopls = {
@@ -78,7 +80,10 @@ local servers = {
     },
   },
 
-  copilot = {},
+  copilot = {
+    -- Also applied in plugins/copilot.lua for the plugin-managed client.
+    flags = { allow_incremental_sync = false },
+  },
 
   terraformls = {},
 
